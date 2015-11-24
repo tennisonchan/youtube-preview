@@ -8,9 +8,12 @@ var Preview = {
   cache: {},
   initialize: function() {
     console.log("Preview.init");
-    $("a[href^='/watch']")
-      .mouseenter(this.mouseEnterEvent)
-      .mouseleave(this.mouseLeaveEvent);
+    $(document)
+      .off('mouseenter mouseleave')
+      .on({
+        mouseenter: Preview.mouseEnterEvent,
+        mouseleave: Preview.mouseLeaveEvent
+      }, "a[href^='/watch']");
   },
   mouseEnterEvent: function() {
     var obj = $(this);
