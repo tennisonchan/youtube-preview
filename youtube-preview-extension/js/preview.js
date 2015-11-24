@@ -21,7 +21,9 @@ var Preview = {
     Preview.el = obj.find("img").get(0);
     var thumb = obj.find(".yt-thumb, .yt-uix-simple-thumb-wrap");
     if (Preview.cache[Preview.id]) {
-      Preview.loadStoryboard(Preview.cache[Preview.id], thumb);
+      var storyboard = Preview.cache[Preview.id];
+      storyboard.count = 0;
+      Preview.loadStoryboard(storyboard, thumb);
     } else {
       $.ajax({
         dataType: "html",
