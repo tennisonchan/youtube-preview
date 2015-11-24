@@ -108,7 +108,7 @@ var Preview = {
       left: -1 * storyboard.frameWidth * (storyboard.count % storyboard.col),
       top: -1 * storyboard.frameheight * (Math.floor((storyboard.count / storyboard.row)) % storyboard.row)
     });
-    storyboard.count += 1;
+    storyboard.count = (storyboard.count + 1) % storyboard.totalFrames;
     if (Preview.id === storyboard.id) {
       setTimeout(function(){ Preview.framesPlaying(storyboard); }, Preview.interval);
     }
