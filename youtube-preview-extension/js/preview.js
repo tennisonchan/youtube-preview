@@ -5,23 +5,24 @@
 var Preview = {
   currentPage: 0,
   interval: 200,
-  mouseover: false,
   initialize: function() {
     $("a[href^='/watch']")
       .mouseenter(this.mouseEnterEvent)
       .mouseleave(this.mouseLeaveEvent);
   },
   mouseEnterEvent: function() {
-    Preview.mouseover = true;
     var obj = $(this);
+    Preview.id = obj.attr("href");
     $.ajax({
       dataType: "html",
       url: obj.attr("href"),
       success: function(html) {
-        var l2 = Preview.getStoryboardDetails(html)[2];
-        var width = l2.width, height = l2.height;
         var el = obj.find("img").get(0);
+        if (!el) return false;
         var thumb = obj.find(".yt-thumb");
+        var l2 = Preview.getStoryboardDetails(html)[2];
+        l2.id = this.url;
+        var width = l2.width, height = l2.height;
         if (thumb.length) {
           l2.width = thumb.width();
           l2.height = thumb.height();
@@ -35,14 +36,16 @@ var Preview = {
             height: (l2.height * this.naturalHeight / height),
             position: "relative"
           });
-          setTimeout(function(){ Preview.framesPlaying(el, l2); }, Preview.interval);
+          if (Preview.id === l2.id) {
+            setTimeout(function(){ Preview.framesPlaying(el, l2); }, Preview.interval);
+          }
         };
       }
     });
   },
   mouseLeaveEvent: function(){
     console.log("mouseleave");
-    Preview.mouseover = false;
+    Preview.id = null;
   },
   getStoryboardDetails: function(data) {
     var l = {}, url;
@@ -63,7 +66,9 @@ var Preview = {
       Preview.currentPage = data.page();
       el.src = data.url();
       el.onload = function() {
-        setTimeout(function(){ Preview.framesPlaying(el, data); }, Preview.interval);
+        if (Preview.id === data.id) {
+          setTimeout(function(){ Preview.framesPlaying(el, data); }, Preview.interval);
+        }
       };
       return false;
     }
@@ -73,7 +78,7 @@ var Preview = {
       top: -1 * data.height * (Math.floor((data.count / data.row)) % data.row)
     });
     data.count += 1;
-    if(Preview.mouseover) {
+    if (Preview.id === data.id) {
       setTimeout(function(){ Preview.framesPlaying(el, data); }, Preview.interval);
     }
   }
