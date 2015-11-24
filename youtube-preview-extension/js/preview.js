@@ -5,6 +5,7 @@
 var Preview = {
   currentPage: 0,
   interval: 200,
+  cache: {},
   initialize: function() {
     $("a[href^='/watch']")
       .mouseenter(this.mouseEnterEvent)
@@ -12,74 +13,84 @@ var Preview = {
   },
   mouseEnterEvent: function() {
     var obj = $(this);
+    Preview.el = obj.find("img").get(0);
     Preview.id = obj.attr("href");
-    $.ajax({
-      dataType: "html",
-      url: obj.attr("href"),
-      success: function(html) {
-        var el = obj.find("img").get(0);
-        if (!el) return false;
-        var thumb = obj.find(".yt-thumb");
-        var l2 = Preview.getStoryboardDetails(html)[2];
-        l2.id = this.url;
-        var width = l2.width, height = l2.height;
-        if (thumb.length) {
-          l2.width = thumb.width();
-          l2.height = thumb.height();
-          thumb.css({ width: l2.width, height: l2.height, overflow: "hidden" });
+    var thumb = obj.find(".yt-thumb");
+    if (Preview.cache[Preview.id]) {
+      Preview.loadStoryboard(Preview.cache[Preview.id], thumb);
+    } else {
+      $.ajax({
+        dataType: "html",
+        url: Preview.id,
+        success: function(html) {
+          var storyboard = Preview.getStoryboardDetails(html)[2];
+          storyboard.id = this.url;
+          Preview.cache[storyboard.id] = storyboard;
+          Preview.loadStoryboard(storyboard, thumb);
         }
-
-        el.src = l2.url();
-        el.onload = function(e) {
-          $(el).css({
-            width: (l2.width * this.naturalWidth / width),
-            height: (l2.height * this.naturalHeight / height),
-            position: "relative"
-          });
-          if (Preview.id === l2.id) {
-            setTimeout(function(){ Preview.framesPlaying(el, l2); }, Preview.interval);
-          }
-        };
-      }
-    });
+      });
+    }
   },
-  mouseLeaveEvent: function(){
+  mouseLeaveEvent: function() {
     console.log("mouseleave");
     Preview.id = null;
+    Preview.el = null;
   },
-  getStoryboardDetails: function(data) {
-    var l = {}, url;
+  loadStoryboard: function(storyboard, thumb) {
+    if (!Preview.el) return false;
+    if (thumb) {
+      storyboard.frameWidth = thumb.width();
+      storyboard.frameheight = thumb.height();
+      thumb.css({
+        width: storyboard.frameWidth,
+        height: storyboard.frameheight,
+        overflow: "hidden"
+      });
+    }
+    Preview.loadPreviewImg(storyboard);
+  },
+  getStoryboardDetails: function(html) {
+    var storyboards = {}, url;
     var getStoryboardRegExp = new RegExp("\"storyboard_spec\": ?\"(.*?)\"", "g");
-    var storyboard_spec = getStoryboardRegExp.exec(data);
+    var storyboard_spec = getStoryboardRegExp.exec(html);
     var result = storyboard_spec[1].split("|");
     url = result.shift();
 
     for(var i = 1; i < result.length; i++){
-      l[i] = new Preview.Storyboard(result[i], url);
+      storyboards[i] = new Preview.Storyboard(result[i], url);
     }
-    console.log("l", l);
+    console.log("l", storyboards);
 
-    return l;
+    return storyboards;
   },
-  framesPlaying: function (el, data) {
-    if (data.page() !== Preview.currentPage) {
-      Preview.currentPage = data.page();
-      el.src = data.url();
-      el.onload = function() {
-        if (Preview.id === data.id) {
-          setTimeout(function(){ Preview.framesPlaying(el, data); }, Preview.interval);
-        }
-      };
+  loadPreviewImg: function(storyboard) {
+    if (!Preview.el) return false;
+    Preview.el.src = storyboard.url();
+    Preview.el.onload = function() {
+      $(Preview.el).css({
+        width: (storyboard.frameWidth * this.naturalWidth / storyboard.width),
+        height: (storyboard.frameheight * this.naturalHeight / storyboard.height),
+        position: "relative"
+      });
+      if (Preview.id === storyboard.id) {
+        setTimeout(function(){ Preview.framesPlaying(storyboard); }, Preview.interval);
+      }
+    };
+  },
+  framesPlaying: function (storyboard) {
+    if (storyboard.page() !== Preview.currentPage) {
+      Preview.currentPage = storyboard.page();
+      Preview.loadPreviewImg(storyboard);
       return false;
     }
 
-    $(el).css({
-      left: -1 * data.width * (data.count % data.col),
-      top: -1 * data.height * (Math.floor((data.count / data.row)) % data.row)
+    $(Preview.el).css({
+      left: -1 * storyboard.frameWidth * (storyboard.count % storyboard.col),
+      top: -1 * storyboard.frameheight * (Math.floor((storyboard.count / storyboard.row)) % storyboard.row)
     });
-    data.count += 1;
-    if (Preview.id === data.id) {
-      setTimeout(function(){ Preview.framesPlaying(el, data); }, Preview.interval);
+    storyboard.count += 1;
+    if (Preview.id === storyboard.id) {
+      setTimeout(function(){ Preview.framesPlaying(storyboard); }, Preview.interval);
     }
   }
 
@@ -91,6 +102,8 @@ Preview.Storyboard = function (str, baseUrl) {
   this.baseUrl = baseUrl;
   this.width = arr[0];
   this.height = arr[1];
+  this.frameWidth = arr[0];
+  this.frameheight = arr[1];
   this.totalFrames = arr[2];
   this.row = arr[3];
   this.col = arr[4];
