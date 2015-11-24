@@ -11,7 +11,7 @@ var Preview = {
     $(document)
       .off('mouseenter mouseleave')
       .on({
-        mouseenter: Preview.mouseEnterEvent,
+        mouseenter: Preview.debounce(Preview.mouseEnterEvent, 300),
         mouseleave: Preview.mouseLeaveEvent
       }, "a[href^='/watch']");
   },
@@ -40,8 +40,22 @@ var Preview = {
     Preview.id = null;
     Preview.el = null;
   },
+  debounce: function (func, wait) {
+    var timeout;
+    return function () {
+      var context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        timeout = null;
+        func.apply(context, []);
+      }, wait);
+      if (!timeout) {
+        func.apply(context, []);
+      }
+    };
+  },
   loadStoryboard: function(storyboard, thumb) {
-    if (!Preview.el) return false;
+    if (!Preview.el || Preview.id !== storyboard.id) return false;
     if (thumb) {
       storyboard.frameWidth = thumb.width() || storyboard.frameWidth;
       storyboard.frameheight = thumb.height() || storyboard.frameheight;
@@ -68,7 +82,7 @@ var Preview = {
     return storyboards;
   },
   loadPreviewImg: function(storyboard) {
-    if (!Preview.el) return false;
+    if (!Preview.el || Preview.id !== storyboard.id) return false;
     Preview.el.src = storyboard.url();
     Preview.el.onload = function() {
       $(Preview.el).css({
@@ -112,7 +126,7 @@ Preview.Storyboard = function (str, baseUrl) {
   this.row = Number(arr[3]);
   this.col = Number(arr[4]);
   this.ms = Number(arr[5]);
-  this.unit = Number(arr[6]);
+  this.unit = arr[6];
   this.sigh = arr[7];
   this.maxPage = Math.ceil(this.totalFrames/ (this.row * this.col));
   this.count = 0;
