@@ -13,7 +13,7 @@ var Preview = {
       .on({
         mouseenter: Preview.debounce(Preview.mouseEnterEvent, 300),
         mouseleave: Preview.mouseLeaveEvent
-      }, "a[href^='/watch']");
+      }, "a[href^='/watch'], a[href*='/watch?v=']");
   },
   mouseEnterEvent: function() {
     var obj = $(this);
