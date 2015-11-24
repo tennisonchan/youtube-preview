@@ -1,23 +1,23 @@
 {
-   "name": "YouTube Preview",
-   "manifest_version": 2,
-   "version": "0.1.0",
-   "author": "Tennison Chan <tennison.chan@gmail.com>",
-   "description": "Preview video for YouTube",
-   "icons": {
-      "128": "assets/images/icon.png",
-      "16": "assets/images/icon.png",
-      "48": "assets/images/icon.png"
-   },
-   "content_scripts": [ {
-      "js": [
-        "js/jquery.js",
-        "js/preview.js"
-      ],
-      "matches": [
-        "http://www.youtube.com/*",
-        "https://www.youtube.com/*"
-      ],
-      "run_at": "document_end"
-   } ]
+  "name": "YouTube Preview",
+  "manifest_version": 2,
+  "version": "0.1.0",
+  "author": "Tennison Chan <tennison.chan@gmail.com>",
+  "description": "Preview video for YouTube",
+  "icons": {
+    "128": "assets/images/icon.png",
+    "16": "assets/images/icon.png",
+    "48": "assets/images/icon.png"
+  },
+  "content_scripts": [{
+    "js": [
+      "js/jquery.js",
+      "js/preview.js"
+    ],
+    "matches": [
+      "http://www.youtube.com/*",
+      "https://www.youtube.com/*"
+    ],
+    "run_at": "document_end"
+  }]
 }
