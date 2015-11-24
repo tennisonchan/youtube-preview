@@ -7,15 +7,16 @@ var Preview = {
   interval: 200,
   cache: {},
   initialize: function() {
+    console.log("Preview.init");
     $("a[href^='/watch']")
       .mouseenter(this.mouseEnterEvent)
       .mouseleave(this.mouseLeaveEvent);
   },
   mouseEnterEvent: function() {
     var obj = $(this);
-    Preview.el = obj.find("img").get(0);
     Preview.id = obj.attr("href");
-    var thumb = obj.find(".yt-thumb");
+    Preview.el = obj.find("img").get(0);
+    var thumb = obj.find(".yt-thumb, .yt-uix-simple-thumb-wrap");
     if (Preview.cache[Preview.id]) {
       Preview.loadStoryboard(Preview.cache[Preview.id], thumb);
     } else {
@@ -39,8 +40,8 @@ var Preview = {
   loadStoryboard: function(storyboard, thumb) {
     if (!Preview.el) return false;
     if (thumb) {
-      storyboard.frameWidth = thumb.width();
-      storyboard.frameheight = thumb.height();
+      storyboard.frameWidth = thumb.width() || storyboard.frameWidth;
+      storyboard.frameheight = thumb.height() || storyboard.frameheight;
       thumb.css({
         width: storyboard.frameWidth,
         height: storyboard.frameheight,
@@ -100,15 +101,15 @@ Preview.Storyboard = function (str, baseUrl) {
   var arr = str.split("#");
 
   this.baseUrl = baseUrl;
-  this.width = arr[0];
-  this.height = arr[1];
-  this.frameWidth = arr[0];
-  this.frameheight = arr[1];
-  this.totalFrames = arr[2];
-  this.row = arr[3];
-  this.col = arr[4];
-  this.ms = arr[5];
-  this.unit = arr[6];
+  this.width = Number(arr[0]);
+  this.height = Number(arr[1]);
+  this.frameWidth = Number(arr[0]);
+  this.frameheight = Number(arr[1]);
+  this.totalFrames = Number(arr[2]);
+  this.row = Number(arr[3]);
+  this.col = Number(arr[4]);
+  this.ms = Number(arr[5]);
+  this.unit = Number(arr[6]);
   this.sigh = arr[7];
   this.maxPage = Math.ceil(this.totalFrames/ (this.row * this.col));
   this.count = 0;
