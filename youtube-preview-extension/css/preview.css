@@ -1,0 +1,12 @@
+.storyboard + img {
+  display: none;
+}
+.storyboard {
+  background-color: black;
+}
+.yt-thumb-clip {
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+}

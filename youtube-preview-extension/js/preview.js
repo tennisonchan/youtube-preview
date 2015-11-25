@@ -18,12 +18,11 @@ var Preview = {
   mouseEnterEvent: function() {
     var obj = $(this);
     Preview.id = obj.attr("href");
-    Preview.el = obj.find("img").get(0);
-    var thumb = obj.find(".yt-thumb, .yt-uix-simple-thumb-wrap");
+    Preview.imgEl = obj.find("img").get(0);
     if (Preview.cache[Preview.id]) {
       var storyboard = Preview.cache[Preview.id];
       storyboard.count = 0;
-      Preview.loadStoryboard(storyboard, thumb);
+      Preview.loadStoryboard(storyboard);
     } else {
       $.ajax({
         dataType: "html",
@@ -32,7 +31,7 @@ var Preview = {
           var storyboard = Preview.getStoryboardDetails(html)[2];
           storyboard.id = this.url;
           Preview.cache[storyboard.id] = storyboard;
-          Preview.loadStoryboard(storyboard, thumb);
+          Preview.loadStoryboard(storyboard);
         }
       });
     }
@@ -40,6 +39,8 @@ var Preview = {
   mouseLeaveEvent: function() {
     console.log("mouseleave");
     Preview.id = null;
+    Preview.imgEl = null;
+    Preview.el && Preview.el.remove();
     Preview.el = null;
   },
   debounce: function (func, wait) {
@@ -56,17 +57,10 @@ var Preview = {
       }
     };
   },
-  loadStoryboard: function(storyboard, thumb) {
-    if (!Preview.el || Preview.id !== storyboard.id) return false;
-    if (thumb) {
-      storyboard.frameWidth = thumb.width() || storyboard.frameWidth;
-      storyboard.frameheight = thumb.height() || storyboard.frameheight;
-      thumb.css({
-        width: storyboard.frameWidth,
-        height: storyboard.frameheight,
-        overflow: "hidden"
-      });
-    }
+  loadStoryboard: function(storyboard) {
+    if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
+    storyboard.frameWidth = Preview.imgEl.width || storyboard.frameWidth;
+    storyboard.frameheight = Preview.imgEl.height || storyboard.frameheight;
     Preview.loadPreviewImg(storyboard);
   },
   getStoryboardDetails: function(html) {
@@ -79,19 +73,21 @@ var Preview = {
     for(var i = 1; i < result.length; i++){
       storyboards[i] = new Preview.Storyboard(result[i], url);
     }
-    console.log("l", storyboards);
+    console.log("storyboards", storyboards);
 
     return storyboards;
   },
   loadPreviewImg: function(storyboard) {
-    if (!Preview.el || Preview.id !== storyboard.id) return false;
-    Preview.el.src = storyboard.url();
-    Preview.el.onload = function() {
-      $(Preview.el).css({
-        width: (storyboard.frameWidth * this.naturalWidth / storyboard.width),
-        height: (storyboard.frameheight * this.naturalHeight / storyboard.height),
-        position: "relative"
-      });
+    if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
+    var img = new Image();
+    img.src = storyboard.url();
+    img.onload = function() {
+      Preview.el = Preview.el || $("<div/>", { class: "storyboard" })
+      .css({
+        width: storyboard.frameWidth,
+        height: storyboard.frameheight,
+      }).insertBefore($(Preview.imgEl));
+
       if (Preview.id === storyboard.id) {
         setTimeout(function(){ Preview.framesPlaying(storyboard); }, Preview.interval);
       }
@@ -103,17 +99,21 @@ var Preview = {
       Preview.loadPreviewImg(storyboard);
       return false;
     }
+    var left = -1 * storyboard.frameWidth * (storyboard.count % storyboard.col),
+        top = -1 * storyboard.frameheight * (Math.floor((storyboard.count / storyboard.row)) % storyboard.row),
+        backgroundImgWidth = (storyboard.frameWidth * (storyboard.width * storyboard.col) / storyboard.width),
+        backgroundImgHeight = (storyboard.frameheight * (storyboard.height * storyboard.row) / storyboard.height);
 
     $(Preview.el).css({
-      left: -1 * storyboard.frameWidth * (storyboard.count % storyboard.col),
-      top: -1 * storyboard.frameheight * (Math.floor((storyboard.count / storyboard.row)) % storyboard.row)
+      backgroundImage: "url(" + storyboard.url() + ")",
+      backgroundPosition: left + "px " + top + "px",
+      backgroundSize: backgroundImgWidth + "px " + backgroundImgHeight + "px"
     });
     storyboard.count = (storyboard.count + 1) % storyboard.totalFrames;
     if (Preview.id === storyboard.id) {
       setTimeout(function(){ Preview.framesPlaying(storyboard); }, Preview.interval);
     }
   }
-
 };
 
 Preview.Storyboard = function (str, baseUrl) {
