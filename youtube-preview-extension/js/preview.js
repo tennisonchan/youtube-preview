@@ -6,14 +6,81 @@ var Preview = {
   currentPage: 0,
   interval: 200,
   cache: {},
+  timeout: null,
+  ImageIdReg: new RegExp("vi(_webp)?\\/([a-z0-9-_=]+)\\/([a-z]*default)\\.([a-z]+)*", "i"),
+  videoIdReg: new RegExp("v=([a-z0-9-_=]+)", "i"),
+  channelImageIdReg: new RegExp("yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*", "i"),
+  ratingList: {},
+  API_KEY: "AIzaSyAKHgX0wWr82Ko24rnJSBqs8FFvHns21a4",
   initialize: function() {
     console.log("Preview.init");
+    document.addEventListener("DOMNodeInserted", Preview.onDOMNodeInserted, true);
+    Preview.delegateOnVideoThumb();
+
     $(document)
       .off('mouseenter mouseleave')
       .on({
         mouseenter: Preview.debounce(Preview.mouseEnterEvent, 300),
         mouseleave: Preview.mouseLeaveEvent
       }, "a[href^='/watch'], a[href*='/watch?v=']");
+  },
+  onDOMNodeInserted: function(evt) {
+    var el = evt.target, nodeName = el.nodeName.toLowerCase();
+
+    if (["#comment","#text","script","style","input","iframe","embed","button","video", "link"].indexOf(nodeName) === -1) {
+      Preview.delegateOnVideoThumb(el);
+      // Preview.addRatingCssClassToBody();
+    }
+    return false;
+  },
+  getVideoId: function (parentEl) {
+    var result, videoId = null,
+        imgSrc = $(parentEl).find("img").attr("data-thumb") || $(parentEl).find("img").attr("src");
+    if (Preview.ImageIdReg.test(imgSrc)) {
+      result = Preview.ImageIdReg.exec(imgSrc);
+      videoId = result[2];
+    } else if (Preview.videoIdReg.test(imgSrc)) {
+      result = Preview.videoIdReg.exec(imgSrc);
+      videoId = result[1];
+    } else if (Preview.channelImageIdReg.test(imgSrc)){
+      result = Preview.channelImageIdReg.exec(imgSrc);
+      videoId = result[1];
+    } else if($(parentEl).attr("data-vid")) {
+      videoId = $(parentEl).attr("data-vid");
+    }
+    return videoId;
+  },
+  delegateOnVideoThumb: function(el) {
+    var tempList = [];
+    el = el || $("#body-container").get(0) || document;
+    $(el).find(".video-thumb, .yt-uix-simple-thumb-wrap")
+      .each(function(i, videoEl){
+        if (videoEl.offsetWidth === 0 || videoEl.offsetWidth > 50) {
+          var id = Preview.getVideoId(videoEl);
+          if (id && !Preview.ratingList[id]) {
+            Preview.ratingList[id] = videoEl;
+            tempList.push(id);
+            Preview.debounce(Preview.retrieveVideoData, 20)(tempList);
+          }
+        }
+      });
+  },
+  retrieveVideoData: function (videoIds) {
+    do {
+      var reqUrl = "https://www.googleapis.com/youtube/v3/videos"
+        + "?part=statistics&id=" + videoIds.splice(0, 50).join(",") + "&key=" + Preview.API_KEY;
+      $.ajax({
+        url: reqUrl,
+        dataType: "json",
+        success: function(resp) {
+          resp.items.forEach(function(item, index) {
+            var el = Preview.ratingList[item.id];
+            var videoSparkbar = new Preview.VideoSparkbar(item.id, item.statistics);
+            videoSparkbar.appendRatingTo(el);
+          });
+        }
+      });
+    } while(videoIds.length)
   },
   mouseEnterEvent: function() {
     var obj = $(this);
@@ -38,29 +105,28 @@ var Preview = {
   },
   mouseLeaveEvent: function() {
     console.log("mouseleave");
+    clearTimeout(Preview.timeout);
     Preview.id = null;
     Preview.imgEl = null;
     Preview.el && Preview.el.remove();
     Preview.el = null;
   },
-  debounce: function (func, wait) {
-    var timeout;
+  debounce: function (fn, delay) {
     return function () {
-      var context = this;
-      clearTimeout(timeout);
-      timeout = setTimeout(function () {
-        timeout = null;
-        func.apply(context, []);
-      }, wait);
-      if (!timeout) {
-        func.apply(context, []);
-      }
+      var context = this,
+          args = arguments;
+      clearTimeout(Preview.timeout);
+      Preview.timeout = setTimeout(function () {
+        Preview.timeout = null;
+        fn.apply(context, args);
+      }, delay);
     };
   },
   loadStoryboard: function(storyboard) {
     if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
-    storyboard.frameWidth = Preview.imgEl.width || storyboard.frameWidth;
-    storyboard.frameheight = Preview.imgEl.height || storyboard.frameheight;
+    var parent = $(Preview.imgEl).parents('.video-thumb, .yt-uix-simple-thumb-wrap');
+    storyboard.frameWidth = parent.width() || storyboard.frameWidth;
+    storyboard.frameheight = parent.height() || storyboard.frameheight;
     Preview.loadPreviewImg(storyboard);
   },
   getStoryboardDetails: function(html) {
@@ -116,6 +182,29 @@ var Preview = {
   }
 };
 
+Preview.VideoSparkbar = function(id, statistics) {
+  this.id = id;
+  this.viewCount = Number(statistics.viewCount);
+  this.likeCount = Number(statistics.likeCount);
+  this.dislikeCount = Number(statistics.dislikeCount);
+  this.favoriteCount = Number(statistics.favoriteCount);
+  this.commentCount = Number(statistics.commentCount);
+};
+Preview.VideoSparkbar.prototype.appendRatingTo = function(el) {
+  var target = $(el).find("img").parents('.video-thumb, .yt-uix-simple-thumb-wrap');
+  if (target.length) {
+    var sparkbar = this.createSparkbar();
+    sparkbar.insertAfter(target);
+  }
+};
+Preview.VideoSparkbar.prototype.createSparkbar = function() {
+  var ratingCount = this.likeCount + this.dislikeCount;
+
+  return $("<div/>", { class: "preview-sparkbars"})
+    .append($("<div/>", { class: "preview-sparkbar-likes", style: "width: "+(this.likeCount * 100 / ratingCount)+"%;"}))
+    .append($("<div/>", { class: "preview-sparkbar-dislikes", style: "width: "+(this.dislikeCount * 100 / ratingCount)+"%;"}))
+};
+
 Preview.Storyboard = function (str, baseUrl) {
   var arr = str.split("#");
 
@@ -144,6 +233,16 @@ Preview.Storyboard.prototype.url = function(l, m) {
   m = m || this.page();
   return this.baseUrl.replace(/\\/g, "").replace("$L", l).replace("$N", "M" + m) + "?sigh=" + this.sigh;
 };
+
+Preview.Rate = function(id, statistics) {
+  this.id = id;
+  this.viewCount = Number(statistics.viewCount),
+  this.likeCount = Number(statistics.likeCount),
+  this.dislikeCount = Number(statistics.dislikeCount),
+  this.favoriteCount = Number(statistics.favoriteCount),
+  this.commentCount = Number(statistics.commentCount)
+}
+
 
 Preview.initialize();
 

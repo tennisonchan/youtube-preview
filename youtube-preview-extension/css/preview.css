@@ -4,9 +4,37 @@
 .storyboard {
   background-color: black;
 }
-.yt-thumb-clip {
-  top: 0 !important;
-  left: 0 !important;
-  bottom: 0 !important;
-  right: 0 !important;
+.video-thumb .yt-thumb-clip {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+/*
+  Large size thumb 370px, .yt-thumb-370
+*/
+.yt-thumb-370 .yt-thumb-clip img {
+  margin-top: -2.2rem;
+}
+.yt-thumb-370 .yt-thumb-clip .storyboard + img {
+  margin-top: 0;
+}
+.video-list-item.related-list-item .thumb-wrapper {
+  overflow: visible;
+}
+.preview-sparkbars {
+  clear: both;
+  height: 4px;
+  overflow: hidden;
+}
+.preview-sparkbars > .preview-sparkbar-likes,
+.preview-sparkbars > .preview-sparkbar-dislikes {
+  float: left;
+  height: 4px;
+}
+.preview-sparkbar-likes {
+  background: #167ac6;
+}
+.preview-sparkbar-dislikes {
+  background: #ccc;
 }
