@@ -10,6 +10,9 @@
     "48": "assets/images/icon.png"
   },
   "content_scripts": [{
+    "css": [
+      "css/preview.css"
+    ],
     "js": [
       "js/jquery.js",
       "js/preview.js"
