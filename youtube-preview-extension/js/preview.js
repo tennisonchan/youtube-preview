@@ -14,6 +14,7 @@ var Preview = {
   API_KEY: "AIzaSyAKHgX0wWr82Ko24rnJSBqs8FFvHns21a4",
   initialize: function() {
     console.log("Preview.init");
+
     document.addEventListener("DOMNodeInserted", Preview.onDOMNodeInserted, true);
     Preview.delegateOnVideoThumb();
 
@@ -56,8 +57,13 @@ var Preview = {
       .each(function(i, videoEl){
         if (videoEl.offsetWidth === 0 || videoEl.offsetWidth > 50) {
           var id = Preview.getVideoId(videoEl);
-          if (id && !Preview.ratingList[id]) {
-            Preview.ratingList[id] = videoEl;
+          if (id) {
+            if (Preview.ratingList[id]) {
+              Preview.ratingList[id].push(videoEl);
+            } else {
+              Preview.ratingList[id] = [videoEl];
+            }
+
             tempList.push(id);
             Preview.debounce(Preview.retrieveVideoData, 20)(tempList);
           }
@@ -73,9 +79,11 @@ var Preview = {
         dataType: "json",
         success: function(resp) {
           resp.items.forEach(function(item, index) {
-            var el = Preview.ratingList[item.id];
-            var videoSparkbar = new Preview.VideoSparkbar(item.id, item.statistics);
-            videoSparkbar.appendRatingTo(el);
+            (Preview.ratingList[item.id] || []).forEach(function(el){
+              var videoSparkbar = new Preview.VideoSparkbar(item.id, item.statistics);
+              videoSparkbar.appendRatingTo(el);
+            });
+            delete Preview.ratingList[item.id];
           });
         }
       });
