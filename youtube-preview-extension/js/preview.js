@@ -72,8 +72,8 @@ var Preview = {
   },
   retrieveVideoData: function (videoIds) {
     do {
-      var reqUrl = "https://www.googleapis.com/youtube/v3/videos"
-        + "?part=statistics&id=" + videoIds.splice(0, 50).join(",") + "&key=" + Preview.API_KEY;
+      var reqUrl = "https://www.googleapis.com/youtube/v3/videos" +
+          "?part=statistics&id=" + videoIds.splice(0, 50).join(",") + "&key=" + Preview.API_KEY;
       $.ajax({
         url: reqUrl,
         dataType: "json",
@@ -87,7 +87,7 @@ var Preview = {
           });
         }
       });
-    } while(videoIds.length)
+    } while(videoIds.length);
   },
   mouseEnterEvent: function() {
     var obj = $(this);
@@ -209,7 +209,7 @@ Preview.VideoSparkbar.prototype.createSparkbar = function() {
 
   return $("<div/>", { class: "preview-sparkbars"})
     .append($("<div/>", { class: "preview-sparkbar-likes", style: "width: "+(this.likeCount * 100 / ratingCount)+"%;"}))
-    .append($("<div/>", { class: "preview-sparkbar-dislikes", style: "width: "+(this.dislikeCount * 100 / ratingCount)+"%;"}))
+    .append($("<div/>", { class: "preview-sparkbar-dislikes", style: "width: "+(this.dislikeCount * 100 / ratingCount)+"%;"}));
 };
 
 Preview.Storyboard = function (str, baseUrl) {
@@ -247,8 +247,8 @@ Preview.Rate = function(id, statistics) {
   this.likeCount = Number(statistics.likeCount),
   this.dislikeCount = Number(statistics.dislikeCount),
   this.favoriteCount = Number(statistics.favoriteCount),
-  this.commentCount = Number(statistics.commentCount)
-}
+  this.commentCount = Number(statistics.commentCount);
+};
 
 
 Preview.initialize();

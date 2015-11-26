@@ -4,6 +4,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-zip');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -13,7 +14,7 @@ module.exports = function (grunt) {
     src: 'youtube-preview-extension',
     dest: 'ext',
     tmp: '.tmp',
-    builds: '../builds',
+    builds: 'builds',
     pkg: 'package.json',
     manifestName: 'manifest.json',
 
@@ -59,6 +60,20 @@ module.exports = function (grunt) {
           jQuery: true,
           // Extension
           chrome: true
+        }
+      }
+    },
+
+    cssmin: {
+      options: {
+        expand: true,
+        flatten: true,
+      },
+      target: {
+        files: {
+          '<%=dest %>/youtube-preview.css': [
+            '<%=src %>/css/*.css'
+          ]
         }
       }
     },
@@ -141,6 +156,7 @@ module.exports = function (grunt) {
 
     // content_scripts/js
     manifest.content_scripts[0].js = [ "youtube-preview.js" ];
+    manifest.content_scripts[0].css = [ "youtube-preview.css" ];
 
     grunt.file.write(manifestDest, JSON.stringify(manifest, null, 2));
   });
@@ -154,6 +170,7 @@ module.exports = function (grunt) {
       'jshint',
       // Minify
       'imagemin',
+      'cssmin',
       'uglify',
       //Build
       'updateRev',
