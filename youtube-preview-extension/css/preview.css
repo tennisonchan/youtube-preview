@@ -1,4 +1,5 @@
-.storyboard + img {
+.storyboard + img,
+.storyboard + .videowall-still-image {
   display: none;
 }
 .storyboard {
