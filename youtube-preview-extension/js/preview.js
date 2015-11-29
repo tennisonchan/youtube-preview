@@ -241,16 +241,6 @@ Preview.Storyboard.prototype.url = function(l, m) {
   return this.baseUrl.replace(/\\/g, "").replace("$L", l).replace("$N", "M" + m) + "?sigh=" + this.sigh;
 };
 
-Preview.Rate = function(id, statistics) {
-  this.id = id;
-  this.viewCount = Number(statistics.viewCount),
-  this.likeCount = Number(statistics.likeCount),
-  this.dislikeCount = Number(statistics.dislikeCount),
-  this.favoriteCount = Number(statistics.favoriteCount),
-  this.commentCount = Number(statistics.commentCount);
-};
-
-
 Preview.initialize();
 
 }(jQuery));
