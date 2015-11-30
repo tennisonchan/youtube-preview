@@ -23,7 +23,7 @@ var Preview = {
       .on({
         mouseenter: Preview.debounce(Preview.mouseEnterEvent, 300),
         mouseleave: Preview.mouseLeaveEvent
-      }, "a[href^='/watch'], a[href*='/watch?v=']");
+      }, "a[href^='/watch'], a[href*='/watch?v='], [data-link*='youtube.com/watch?v=']");
   },
   onDOMNodeInserted: function(evt) {
     var el = evt.target, nodeName = el.nodeName.toLowerCase();
@@ -91,7 +91,7 @@ var Preview = {
   },
   mouseEnterEvent: function() {
     var obj = $(this);
-    Preview.id = obj.attr("href");
+    Preview.id = obj.attr("data-link") || obj.attr("href");
     Preview.imgEl = obj.find("img").get(0) || obj.find('.videowall-still-image').get(0);
     if (Preview.cache[Preview.id]) {
       var storyboard = Preview.cache[Preview.id];
@@ -132,8 +132,8 @@ var Preview = {
   loadStoryboard: function(storyboard) {
     if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
     var parent = $(Preview.imgEl).parents('.video-thumb, .yt-uix-simple-thumb-wrap, .videowall-still');
-    storyboard.frameWidth = parent.width() || storyboard.frameWidth;
-    storyboard.frameheight = parent.height() || storyboard.frameheight;
+    storyboard.frameWidth = parent.width() || Preview.imgEl.clientWidth || storyboard.frameWidth;
+    storyboard.frameheight = parent.height() || Preview.imgEl.clientHeight || storyboard.frameheight;
     Preview.loadPreviewImg(storyboard);
   },
   getStoryboardDetails: function(html) {
