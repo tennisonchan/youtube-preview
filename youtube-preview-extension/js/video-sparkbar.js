@@ -1,8 +1,4 @@
-(function($, window) {
-
-var Preview = window.Preview;
-
-Preview.VideoSparkbar = function(id, statistics) {
+var VideoSparkbar = function(id, statistics) {
   this.id = id;
   this.viewCount = Number(statistics.viewCount);
   this.likeCount = Number(statistics.likeCount);
@@ -11,14 +7,14 @@ Preview.VideoSparkbar = function(id, statistics) {
   this.commentCount = Number(statistics.commentCount);
 };
 
-Preview.VideoSparkbar.prototype.appendRatingTo = function(target) {
+VideoSparkbar.prototype.appendRatingTo = function(target) {
   if (target.length) {
     var sparkbar = this.createSparkbar();
     sparkbar.insertAfter(target);
   }
 };
 
-Preview.VideoSparkbar.prototype.createSparkbar = function() {
+VideoSparkbar.prototype.createSparkbar = function() {
   var ratingCount = this.likeCount + this.dislikeCount;
   var likesWidth = (this.likeCount * 100 / ratingCount);
 
@@ -26,5 +22,3 @@ Preview.VideoSparkbar.prototype.createSparkbar = function() {
     .append($("<div/>", { class: "preview-sparkbar-likes", style: "width: "+likesWidth+"%;"}))
     .append($("<div/>", { class: "preview-sparkbar-dislikes", style: "width: "+(100-likesWidth)+"%;"}));
 };
-
-})(jQuery, window);

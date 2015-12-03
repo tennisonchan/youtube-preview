@@ -1,17 +1,7 @@
-﻿(function($, window){
-
-"use strict";
+﻿/*global Storyboard, VideoSparkbar */
 
 var cache = {},
-  timeout = null,
-  imageIdRegEx = new RegExp("vi(_webp)?\\/([a-z0-9-_=]+)\\/([a-z]*default)\\.([a-z]+)*", "i"),
-  videoIdRegEx = new RegExp("v=([a-z0-9-_=]+)", "i"),
-  channelImageIdRegEx = new RegExp("yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*", "i"),
-  ratingList = {},
-  API_KEY = "AIzaSyAKHgX0wWr82Ko24rnJSBqs8FFvHns21a4",
-  config = {
-    interval: 200,
-  };
+  timeout = null;
 
 function debounce(fn, delay) {
   return function() {
@@ -32,152 +22,127 @@ function requestUrl(baseURL, paramsObject) {
   return baseURL;
 }
 
-var Preview = {
-  id: null,
-  imgEl: null,
-  storyboard: null,
-  initialize: function() {
-    console.log("Preview.init");
+var Preview = function(Profile, config) {
+  var _this = {
+    storyboard: null,
+    initialize: function() {
+      console.log("Preview.init");
 
-    document.addEventListener("DOMNodeInserted", Preview.onDOMNodeInserted, true);
-    Preview.delegateOnVideoThumb();
+      document.addEventListener("DOMNodeInserted", _this.onDOMNodeInserted, true);
+      _this.delegateOnVideoThumb();
 
-    $(document)
-      .off('mouseenter mouseleave')
-      .on({
-        mouseenter: debounce(Preview.mouseEnterEvent, 300),
-        mouseleave: Preview.mouseLeaveEvent
-      }, "a[href^='/watch'], a[href*='/watch?v='], [data-link*='youtube.com/watch?v=']");
+      $(document)
+        .off('mouseenter mouseleave')
+        .on({
+          mouseenter: debounce(_this.mouseEnterEvent, 300),
+          mouseleave: _this.mouseLeaveEvent
+        }, Profile.listenerSelector);
 
-    return this;
-  },
-  onDOMNodeInserted: function(evt) {
-    var el = evt.target, nodeName = el.nodeName.toLowerCase();
+      return this;
+    },
+    onDOMNodeInserted: function(evt) {
+      var el = evt.target, nodeName = el.nodeName.toLowerCase();
 
-    if (["#comment","#text","script","style","input","iframe","embed","button","video", "link"].indexOf(nodeName) === -1) {
-      Preview.delegateOnVideoThumb(el);
-    }
-    return false;
-  },
-  getVideoId: function (parentEl) {
-    var result, videoId = null,
-        imgSrc = $(parentEl).find("img").attr("data-thumb") || $(parentEl).find("img").attr("src");
-    if (imageIdRegEx.test(imgSrc)) {
-      result = imageIdRegEx.exec(imgSrc);
-      videoId = result[2];
-    } else if (videoIdRegEx.test(imgSrc)) {
-      result = videoIdRegEx.exec(imgSrc);
-      videoId = result[1];
-    } else if (channelImageIdRegEx.test(imgSrc)){
-      result = channelImageIdRegEx.exec(imgSrc);
-      videoId = result[1];
-    } else if($(parentEl).attr("data-vid")) {
-      videoId = $(parentEl).attr("data-vid");
-    }
-    return videoId;
-  },
-  delegateOnVideoThumb: function(el) {
-    var tempList = [];
-    $(el || document).find(".video-thumb, .yt-uix-simple-thumb-wrap")
-      .each(function(i, videoEl){
-        if (videoEl.offsetWidth === 0 || videoEl.offsetWidth > 50) {
-          var id = Preview.getVideoId(videoEl);
-          if (id) {
-            if (ratingList[id]) {
-              ratingList[id].push(videoEl);
-            } else {
-              ratingList[id] = [videoEl];
+      if (["#comment","#text","script","style","input","iframe","embed","button","video", "link"].indexOf(nodeName) === -1) {
+        _this.delegateOnVideoThumb(el);
+      }
+      return false;
+    },
+    delegateOnVideoThumb: function(el) {
+      var videoList = {};
+      Profile.getVideoThumbs(el || document)
+        .each(function(i, videoThumbEl){
+          if (videoThumbEl.offsetWidth === 0 || videoThumbEl.offsetWidth > 50) {
+            var id = Profile.getVideoId(videoThumbEl);
+            if (id) {
+              if (videoList[id]) {
+                videoList[id].push(videoThumbEl);
+              } else {
+                videoList[id] = [videoThumbEl];
+              }
             }
-
-            tempList.push(id);
-            debounce(Preview.retrieveVideoData, 20)(tempList);
           }
-        }
-      });
-  },
-  retrieveVideoData: function (videoIds) {
-    do {
+        });
+      _this.retrieveVideoData(videoList);
+    },
+    retrieveVideoData: function (videoList) {
+      var videoIds = Object.keys(videoList);
+
       $.ajax({
-        url: requestUrl("https://www.googleapis.com/youtube/v3/videos?", {
+        url: requestUrl("//www.googleapis.com/youtube/v3/videos?", {
           part: "statistics",
           id: videoIds.splice(0, 50).join(","),
-          key: API_KEY
+          key: "AIzaSyAKHgX0wWr82Ko24rnJSBqs8FFvHns21a4"
         }),
         dataType: "json",
         success: function(resp) {
           resp.items.forEach(function(item, index) {
-            (ratingList[item.id] || []).forEach(function(el){
-              var videoSparkbar = new Preview.VideoSparkbar(item.id, item.statistics);
+            (videoList[item.id] || []).forEach(function(el){
+              var videoSparkbar = new VideoSparkbar(item.id, item.statistics);
               videoSparkbar.appendRatingTo($(el));
             });
-            delete ratingList[item.id];
+            delete videoList[item.id];
           });
+
+          if(videoIds.length) _this.retrieveVideoData(videoList);
         }
       });
-    } while(videoIds.length);
-  },
-  mouseEnterEvent: function() {
-    var obj = $(this);
-    Preview.id = obj.attr("data-link") || obj.attr("href");
-    Preview.imgEl = obj.find("img").get(0) || obj.find('.videowall-still-image').get(0);
-    if (cache[Preview.id]) {
-      Preview.storyboard = cache[Preview.id];
-      Preview.loadStoryboard();
-    } else {
-      $.ajax({
-        dataType: "html",
-        url: Preview.id,
-        success: function(html) {
-          var storyboard = Preview.getStoryboardDetails(html)[2];
-          Preview.storyboard = storyboard.set('id', this.url);
-          cache[this.url] = storyboard;
-          Preview.loadStoryboard();
-        }
-      });
-    }
-  },
-  mouseLeaveEvent: function() {
-    console.log("mouseleave");
-    clearTimeout(timeout);
-    Preview.id = null;
-    Preview.imgEl = null;
-    Preview.storyboard.reset();
-  },
-  getStoryboardDetails: function(html) {
-    var storyboards = {};
-    var getStoryboardRegExp = new RegExp("\"storyboard_spec\": ?\"(.*?)\"", "g");
-    var storyboard_spec = getStoryboardRegExp.exec(html);
-    var result = storyboard_spec[1].split("|");
-    var baseURL = result.shift();
+    },
+    mouseEnterEvent: function() {
+      var videoUrl = Profile.getVideoURL(this);
+      var imgEl = Profile.getImgElement(this);
+      if (cache[videoUrl]) {
+        _this.storyboard = cache[videoUrl];
+        _this.loadPreviewImg(imgEl);
+      } else {
+        $.ajax({
+          dataType: "html",
+          url: videoUrl,
+          success: function(html) {
+            var storyboard = _this.getStoryboardDetails(html)[2];
+            _this.storyboard = storyboard;
+            cache[this.url] = storyboard;
+            _this.loadPreviewImg(imgEl);
+          }
+        });
+      }
+    },
+    mouseLeaveEvent: function() {
+      console.log("mouseleave");
+      clearTimeout(timeout);
+      _this.storyboard && _this.storyboard.reset();
+    },
+    getStoryboardDetails: function(html) {
+      var storyboards = {};
+      var getStoryboardRegExp = new RegExp("\"storyboard_spec\": ?\"(.*?)\"", "g");
+      var storyboard_spec = getStoryboardRegExp.exec(html);
+      var result = storyboard_spec[1].split("|");
+      var baseURL = result.shift();
 
-    for(var i = 1; i < result.length; i++){
-      storyboards[i] = new Preview.Storyboard(result[i], baseURL);
-    }
-    console.log("storyboards", storyboards);
+      for(var i = 1; i < result.length; i++){
+        storyboards[i] = new Storyboard(result[i], baseURL);
+      }
+      console.log("storyboards", storyboards);
 
-    return storyboards;
-  },
-  loadStoryboard: function() {
-    var parent = $(Preview.imgEl).parents('.video-thumb, .yt-uix-simple-thumb-wrap, .videowall-still');
-    Preview.storyboard.set('frameWidth', parent.width() || Preview.imgEl.clientWidth);
-    Preview.storyboard.set('frameheight', parent.height() || Preview.imgEl.clientHeight);
-    Preview.loadPreviewImg();
-  },
-  loadPreviewImg: function() {
-    var img = new Image();
-    img.src = Preview.storyboard.url();
-    img.onload = function() {
-      Preview.storyboard.appendThumbTo(Preview.imgEl);
-      Preview.framesPlaying();
-    };
-  },
-  framesPlaying: function () {
-    if(Preview.storyboard.playingFrames()) {
-      setTimeout(function(){ Preview.framesPlaying(); }, config.interval);
+      return storyboards;
+    },
+    loadPreviewImg: function(imgEl) {
+      var parent = Profile.getVideoThumb(imgEl);
+      var img = new Image();
+      img.src = _this.storyboard.url();
+      _this.storyboard.set('frameWidth', parent.width() || imgEl.width());
+      _this.storyboard.set('frameheight', parent.height() || imgEl.height());
+      img.onload = function() {
+        _this.storyboard.appendThumbTo(imgEl);
+        _this.framesPlaying();
+      };
+    },
+    framesPlaying: function () {
+      if(_this.storyboard.playingFrames()) {
+        setTimeout(function(){ _this.framesPlaying(); }, config.interval);
+      }
     }
-  }
+  };
+
+  _this.initialize();
 };
-
-window.Preview = Preview.initialize();
-
-}(jQuery, window));

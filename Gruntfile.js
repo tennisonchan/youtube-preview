@@ -97,7 +97,11 @@ module.exports = function (grunt) {
         files: {
           '<%=dest %>/youtube-preview.js': [
             '<%=src %>/js/jquery.js',
+            '<%=src %>/js/profiles.youtube.js',
             '<%=src %>/js/preview.js',
+            '<%=src %>/js/storyboard.js',
+            '<%=src %>/js/video-sparkbar.js',
+            '<%=src %>/js/main.js'
           ]
         }
       }

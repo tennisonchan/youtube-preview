@@ -15,9 +15,11 @@
     ],
     "js": [
       "js/jquery.js",
+      "js/profiles.youtube.js",
       "js/preview.js",
       "js/storyboard.js",
-      "js/video-sparkbar.js"
+      "js/video-sparkbar.js",
+      "js/main.js"
     ],
     "matches": [
       "*://duckduckgo.com/*",
