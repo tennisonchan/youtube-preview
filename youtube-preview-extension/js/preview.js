@@ -35,7 +35,7 @@ function requestUrl(baseURL, paramsObject) {
 var Preview = {
   id: null,
   imgEl: null,
-  currentPage: 0,
+  storyboard: null,
   initialize: function() {
     console.log("Preview.init");
 
@@ -121,18 +121,17 @@ var Preview = {
     Preview.id = obj.attr("data-link") || obj.attr("href");
     Preview.imgEl = obj.find("img").get(0) || obj.find('.videowall-still-image').get(0);
     if (cache[Preview.id]) {
-      var storyboard = cache[Preview.id];
-      storyboard.count = 0;
-      Preview.loadStoryboard(storyboard);
+      Preview.storyboard = cache[Preview.id];
+      Preview.loadStoryboard();
     } else {
       $.ajax({
         dataType: "html",
         url: Preview.id,
         success: function(html) {
           var storyboard = Preview.getStoryboardDetails(html)[2];
-          storyboard.id = this.url;
-          cache[storyboard.id] = storyboard;
-          Preview.loadStoryboard(storyboard);
+          Preview.storyboard = storyboard.set('id', this.url);
+          cache[this.url] = storyboard;
+          Preview.loadStoryboard();
         }
       });
     }
@@ -142,15 +141,7 @@ var Preview = {
     clearTimeout(timeout);
     Preview.id = null;
     Preview.imgEl = null;
-    Preview.el && Preview.el.remove();
-    Preview.el = null;
-  },
-  loadStoryboard: function(storyboard) {
-    if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
-    var parent = $(Preview.imgEl).parents('.video-thumb, .yt-uix-simple-thumb-wrap, .videowall-still');
-    storyboard.frameWidth = parent.width() || Preview.imgEl.clientWidth || storyboard.frameWidth;
-    storyboard.frameheight = parent.height() || Preview.imgEl.clientHeight || storyboard.frameheight;
-    Preview.loadPreviewImg(storyboard);
+    Preview.storyboard.reset();
   },
   getStoryboardDetails: function(html) {
     var storyboards = {};
@@ -166,32 +157,23 @@ var Preview = {
 
     return storyboards;
   },
-  loadPreviewImg: function(storyboard) {
-    if (!Preview.imgEl || Preview.id !== storyboard.id) return false;
+  loadStoryboard: function() {
+    var parent = $(Preview.imgEl).parents('.video-thumb, .yt-uix-simple-thumb-wrap, .videowall-still');
+    Preview.storyboard.set('frameWidth', parent.width() || Preview.imgEl.clientWidth);
+    Preview.storyboard.set('frameheight', parent.height() || Preview.imgEl.clientHeight);
+    Preview.loadPreviewImg();
+  },
+  loadPreviewImg: function() {
     var img = new Image();
-    img.src = storyboard.url();
+    img.src = Preview.storyboard.url();
     img.onload = function() {
-      Preview.el = Preview.el || $("<div/>", { class: "storyboard" })
-      .css({
-        width: storyboard.frameWidth,
-        height: storyboard.frameheight,
-      }).insertBefore($(Preview.imgEl));
-
-      if (Preview.id === storyboard.id) {
-        setTimeout(function(){ Preview.framesPlaying(storyboard); }, config.interval);
-      }
+      Preview.storyboard.appendThumbTo(Preview.imgEl);
+      Preview.framesPlaying();
     };
   },
-  framesPlaying: function (storyboard) {
-    var pos = storyboard.getPosition();
-    $(Preview.el).css({
-      backgroundImage: "url(" + storyboard.url() + ")",
-      backgroundPosition: pos.left + "px " + pos.top + "px",
-      backgroundSize: pos.width + "px " + pos.height + "px"
-    });
-    storyboard.increaseCount();
-    if (Preview.id === storyboard.id) {
-      setTimeout(function(){ Preview.framesPlaying(storyboard); }, config.interval);
+  framesPlaying: function () {
+    if(Preview.storyboard.playingFrames()) {
+      setTimeout(function(){ Preview.framesPlaying(); }, config.interval);
     }
   }
 };

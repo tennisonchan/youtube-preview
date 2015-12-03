@@ -5,6 +5,9 @@ var Preview = window.Preview;
 Preview.Storyboard = function (str, baseUrl) {
   var arr = str.split("#");
 
+  this.id = null;
+  this.el = null;
+  this.count = 0;
   this.baseUrl = baseUrl;
   this.width = Number(arr[0]);
   this.height = Number(arr[1]);
@@ -17,9 +20,40 @@ Preview.Storyboard = function (str, baseUrl) {
   this.unit = arr[6];
   this.sigh = arr[7];
   this.maxPage = Math.ceil(this.totalFrames/ (this.row * this.col));
-  this.count = 0;
 
   return this;
+};
+
+Preview.Storyboard.prototype.set = function(key, value) {
+  if(key !== undefined && value !== undefined) {
+    this[key] = value;
+  }
+  return this;
+};
+
+Preview.Storyboard.prototype.appendThumbTo = function(target) {
+  this.el = $("<div/>", { class: "storyboard" })
+    .css({
+      width: this.frameWidth,
+      height: this.frameheight,
+    }).insertBefore(target);
+
+  return this.el;
+};
+
+Preview.Storyboard.prototype.playingFrames = function(target) {
+  if(!this.el) return false;
+
+  var pos = this.getPosition();
+  this.el.css({
+    backgroundImage: "url(" + this.url() + ")",
+    backgroundPosition: pos.left + "px " + pos.top + "px",
+    backgroundSize: pos.width + "px " + pos.height + "px"
+  });
+
+  this.increaseCount();
+
+  return true;
 };
 
 Preview.Storyboard.prototype.page = function() {
@@ -45,6 +79,12 @@ Preview.Storyboard.prototype.getPosition = function() {
 Preview.Storyboard.prototype.increaseCount = function() {
   this.count = (this.count + 1) % this.totalFrames;
   return this.count;
+};
+
+Preview.Storyboard.prototype.reset = function() {
+  this.count = 0;
+  this.el && this.el.remove();
+  this.el = null;
 };
 
 })(window);
