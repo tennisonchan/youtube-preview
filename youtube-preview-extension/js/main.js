@@ -12,7 +12,7 @@ var list = {
       interval: 200,
     };
 
-var profile = Profiles[list[window.location.host]]();
+var profile = Profiles[list[window.location.host] || "youtube"]();
 var App = Preview(profile, config);
 
 })(window, Preview, Profiles);
