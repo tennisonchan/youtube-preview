@@ -22,7 +22,6 @@
       "js/main.js"
     ],
     "matches": [
-      "*://duckduckgo.com/*",
       "*://www.youtube.com/*",
       "*://www.google.com/*",
       "*://www.google.ac/*",

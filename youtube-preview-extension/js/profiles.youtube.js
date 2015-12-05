@@ -1,7 +1,7 @@
 var Profiles = {};
 
 Profiles.youtube = function() {
-  var _target = null, _img = null,
+  var _target = null, _imgEl = null,
       imageIdRegEx = new RegExp("vi(_webp)?\\/([a-z0-9-_=]+)\\/([a-z]*default)\\.([a-z]+)*", "i"),
       videoIdRegEx = new RegExp("v=([a-z0-9-_=]+)", "i"),
       channelImageIdRegEx = new RegExp("yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*", "i");
@@ -9,12 +9,12 @@ Profiles.youtube = function() {
   var _this = {
     listenerSelector: "a[href^='/watch'], a[href*='/watch?v=']",
     getImgElement: function(el){
-      var img = $(el).find("img");
-      if(img.length) {
+      var imgEl = $(el).find("img, .videowall-still-image");
+      if(imgEl.length) {
         _target = $(el);
-        _img = img;
+        _imgEl = imgEl;
       }
-      return img;
+      return imgEl;
     },
     getVideoURL: function(el) {
       el = el || _target;

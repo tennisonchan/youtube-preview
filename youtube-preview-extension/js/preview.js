@@ -91,6 +91,7 @@ var Preview = function(Profile, config) {
     mouseEnterEvent: function() {
       var videoUrl = Profile.getVideoURL(this);
       var imgEl = Profile.getImgElement(this);
+      _this.storyboard && _this.storyboard.reset();
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg(imgEl);
@@ -101,8 +102,8 @@ var Preview = function(Profile, config) {
           success: function(html) {
             var storyboard = _this.getStoryboardDetails(html)[2];
             _this.storyboard = storyboard;
-            cache[this.url] = storyboard;
             _this.loadPreviewImg(imgEl);
+            cache[this.url] = storyboard;
           }
         });
       }
