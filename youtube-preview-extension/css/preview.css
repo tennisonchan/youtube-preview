@@ -49,17 +49,21 @@
   height: 4px;
   overflow: hidden;
 
-  transition: height 0.2s;
+  transition: height 0.5s;
 }
-
 .preview-sparkbars.loading {
   height: 0;
+}
+.preview-sparkbars.loading > .preview-sparkbar-likes,
+.preview-sparkbars.loading > .preview-sparkbar-dislikes {
+  width: 0 !important;
 }
 
 .preview-sparkbars > .preview-sparkbar-likes,
 .preview-sparkbars > .preview-sparkbar-dislikes {
   float: left;
   height: 4px;
+  transition: width 0.5s;
 }
 .preview-sparkbar-likes {
   background: #167ac6;

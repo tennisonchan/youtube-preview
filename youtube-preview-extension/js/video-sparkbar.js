@@ -10,12 +10,11 @@ var VideoSparkbar = function(id, statistics) {
 VideoSparkbar.prototype.appendRatingTo = function(target) {
   if (target.length) {
     var sparkbar = this.createSparkbar();
-    sparkbar
-      .insertAfter(target)
+    sparkbar.insertAfter(target);
 
     setTimeout(function(){
       sparkbar.removeClass('loading');
-    }, 3000);
+    }, 500);
   }
 };
 
