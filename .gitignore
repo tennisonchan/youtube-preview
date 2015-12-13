@@ -6,6 +6,7 @@ builds
 layouts
 **/env.js
 .sass-cache
+**/css/*.css
 
 ### OSX ###
 .DS_Store
