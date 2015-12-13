@@ -1,0 +1,115 @@
+$video-time-bottom: 6px;
+$preview-sparkbars-height: 4px;
+$storyboard-background-color: #000;
+$preview-sparkbars-likes-background-color: #167ac6;
+$preview-sparkbars-dislikes-background-color: #ccc;
+$enlarged-video-list-content-wrapper-margin-left: 180px;
+$enlarged-video-list-thumb-height: 90px;
+$enlarged-video-list-thumb-width: 160px;
+$enlarged-video-list-image-height: 118px;
+$enlarged-video-list-image-width: 160px;
+$playlist-preview-sparkbars-margin: 0 28px;
+$playlist-preview-sparkbars-width: 72px;
+$video-image-top-adjustment: -11px;
+$video-image-top-reset: 0;
+$enlarged-playlist-preview-sparkbars-width: 160px;
+$enlarged-playlist-video-thumb-height: 90px;
+$enlarged-playlist-video-thumb-width: 160px;
+$enlarged-playlist-video-image-height: 118px;
+$enlarged-playlist-video-image-width: 160px;
+$enlarged-video-image-top-adjustment: -14px;
+$enlarged-video-image-top-reset: 0;
+
+.storyboard {
+  background-color: $storyboard-background-color;
+
+  & + img,
+  & + .videowall-still-image {
+    display: none;
+  }
+}
+
+/*
+  Modification of original layout
+  video-time: it's covering the rating sparkbars
+  yt-thumb-clip: it's weird positioning affecting the preview position
+  thumb-wrapper: set overflow to visible to show the sparkbars
+*/
+
+.yt-lockup-thumbnail .video-actions,
+.video-list-item.related-list-item .video-actions,
+.yt-lockup-thumbnail .video-time,
+.video-list-item.related-list-item .video-time {
+  bottom: $video-time-bottom;
+}
+.video-thumb .yt-thumb-clip {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.video-list-item.related-list-item .thumb-wrapper {
+  padding-bottom: 4px;
+}
+
+#player-playlist .video-thumb.yt-thumb {
+  .storyboard + img{
+    top: $video-image-top-reset;
+  }
+
+  img {
+    position: relative;
+    top: $video-image-top-adjustment;
+  }
+}
+
+/*
+  Large size thumb 370px, .yt-thumb-370
+*/
+.yt-thumb-370 .yt-thumb-clip {
+  img {
+    margin-top: -2.2rem;
+  }
+
+  .storyboard + img {
+    margin-top: 0;
+  }
+}
+/*
+  Preview Sparkbars
+*/
+.playlist-video .preview-sparkbars {
+  float: left;
+  margin: $playlist-preview-sparkbars-margin;
+  width: $playlist-preview-sparkbars-width;
+}
+.preview-sparkbars {
+  clear: both;
+  height: $preview-sparkbars-height;
+  overflow: hidden;
+  transition: height 0.5s;
+
+  > .preview-sparkbar-likes {
+    background: $preview-sparkbars-likes-background-color;
+  }
+
+  > .preview-sparkbar-dislikes {
+    background: $preview-sparkbars-dislikes-background-color;
+  }
+
+  > .preview-sparkbar-likes,
+  > .preview-sparkbar-dislikes {
+    float: left;
+    height: $preview-sparkbars-height;
+    transition: width 0.5s;
+  }
+
+  &.loading {
+    height: 0;
+
+    > .preview-sparkbar-likes,
+    > .preview-sparkbar-dislikes {
+      width: 0 !important;
+    }
+  }
+}

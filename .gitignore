@@ -5,6 +5,7 @@ ext
 builds
 layouts
 **/env.js
+.sass-cache
 
 ### OSX ###
 .DS_Store
