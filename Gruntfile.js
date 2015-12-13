@@ -4,6 +4,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-zip');
@@ -64,6 +65,20 @@ module.exports = function (grunt) {
       }
     },
 
+    sass: {
+      dist: {
+        options: {
+          style: 'expanded',
+          sourcemap: 'none'
+        },
+        files: {
+          '<%=src %>/css/preview.css': [
+            '<%=src %>/css/*.scss'
+          ]
+        }
+      }
+    },
+
     cssmin: {
       options: {
         expand: true,
@@ -72,7 +87,7 @@ module.exports = function (grunt) {
       target: {
         files: {
           '<%=dest %>/youtube-preview.css': [
-            '<%=src %>/css/*.css'
+            '<%=src %>/css/**.css'
           ]
         }
       }
@@ -174,6 +189,7 @@ module.exports = function (grunt) {
       'jshint',
       // Minify
       'imagemin',
+      'sass',
       'cssmin',
       'uglify',
       //Build
