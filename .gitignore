@@ -4,6 +4,7 @@
 ext
 builds
 layouts
+**/env.js
 
 ### OSX ###
 .DS_Store

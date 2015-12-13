@@ -7,6 +7,23 @@ A chrome extension for previewing YouTube video like a gif when hovering.
 
 ![youtube-preview-screenshots-1-640x400](https://cloud.githubusercontent.com/assets/719938/11464236/919846f8-96fa-11e5-8a8f-69210ddb1982.png)
 
+### Setup
+Run the commands below and then place your YouTube API key inside that file:
+```bash
+cp youtube-preview-extension/js/env-example.js youtube-preview-extension/js/env.js
+npm install
+```
+
+To generate a minified version of the extension:
+```bash
+grunt
+```
+
+To generate a zip file of the minified extension:
+```bash
+grunt pack
+```
+
 # Coming Soon
 - [ ] YouTube Bookmark.
   - Have you even need to mark an-hour-long videos and just want to jump right back those marks? I do!

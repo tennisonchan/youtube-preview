@@ -1,7 +1,7 @@
 {
   "name": "YouTube Preview",
   "manifest_version": 2,
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "Tennison Chan <tennison.chan@gmail.com>",
   "description": "Preview video for YouTube",
   "icons": {
@@ -15,6 +15,7 @@
     ],
     "js": [
       "js/jquery.js",
+      "js/env.js",
       "js/profiles.youtube.js",
       "js/preview.js",
       "js/storyboard.js",

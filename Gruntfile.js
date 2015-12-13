@@ -89,13 +89,13 @@ module.exports = function (grunt) {
           compress: {
             drop_console: true
           },
-          // mangle: true,
-          mangle: {toplevel: true},
-          squeeze: {dead_code: false},
-          codegen: {quote_keys: true}
+          mangle: { toplevel: true },
+          squeeze: { dead_code: false },
+          codegen: { quote_keys: true }
         },
         files: {
           '<%=dest %>/youtube-preview.js': [
+            '<%=src %>/js/env.js',
             '<%=src %>/js/jquery.js',
             '<%=src %>/js/profiles.youtube.js',
             '<%=src %>/js/preview.js',

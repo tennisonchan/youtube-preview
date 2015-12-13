@@ -1,4 +1,4 @@
-﻿/*global Storyboard, VideoSparkbar */
+﻿/*global Storyboard, VideoSparkbar, API_KEY */
 
 var cache = {},
   timeout = null;
@@ -72,7 +72,7 @@ var Preview = function(Profile, config) {
         url: requestUrl("//www.googleapis.com/youtube/v3/videos?", {
           part: "statistics",
           id: videoIds.splice(0, 50).join(","),
-          key: "AIzaSyAKHgX0wWr82Ko24rnJSBqs8FFvHns21a4"
+          key: API_KEY
         }),
         dataType: "json",
         success: function(resp) {
