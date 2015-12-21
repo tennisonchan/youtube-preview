@@ -34,7 +34,7 @@ var Preview = function(Profile, config) {
       $(document)
         .off('mouseenter mouseleave')
         .on({
-          mouseenter: debounce(_this.mouseEnterEvent, 300),
+          mouseenter: debounce(_this.mouseEnterEvent, 200),
           mouseleave: _this.mouseLeaveEvent
         }, Profile.listenerSelector);
 
@@ -91,7 +91,7 @@ var Preview = function(Profile, config) {
     mouseEnterEvent: function() {
       var videoUrl = Profile.getVideoURL(this);
       var imgEl = Profile.getImgElement(this);
-      _this.storyboard && _this.storyboard.reset();
+      _this.storyboard && _this.storyboard.remove();
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg(imgEl);
@@ -100,18 +100,18 @@ var Preview = function(Profile, config) {
           dataType: "html",
           url: videoUrl,
           success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html)[2];
-            _this.storyboard = storyboard;
+            _this.storyboard = _this.getStoryboardDetails(html)[2];
             _this.loadPreviewImg(imgEl);
-            cache[this.url] = storyboard;
+            cache[this.url] = _this.storyboard;
           }
         });
       }
     },
     mouseLeaveEvent: function() {
       console.log("mouseleave");
+      _this.storyboard && _this.storyboard.remove();
+      $('.storyboard').remove();
       clearTimeout(timeout);
-      _this.storyboard && _this.storyboard.reset();
     },
     getStoryboardDetails: function(html) {
       var storyboards = {};
@@ -139,8 +139,9 @@ var Preview = function(Profile, config) {
       };
     },
     framesPlaying: function () {
+      clearTimeout(timeout);
       if(_this.storyboard.playingFrames()) {
-        setTimeout(function(){ _this.framesPlaying(); }, config.interval);
+        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.interval);
       }
     }
   };

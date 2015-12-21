@@ -1,7 +1,7 @@
 {
   "name": "YouTube Preview",
   "manifest_version": 2,
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "Tennison Chan <tennison.chan@gmail.com>",
   "description": "Preview video for YouTube",
   "icons": {

@@ -76,7 +76,7 @@ Storyboard.prototype.increaseCount = function() {
   return this.count;
 };
 
-Storyboard.prototype.reset = function() {
+Storyboard.prototype.remove = function() {
   this.count = 0;
   this.el && this.el.remove();
   this.el = null;
