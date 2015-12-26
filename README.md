@@ -1,5 +1,5 @@
 # YouTube Preview
-A chrome extension for previewing YouTube video like a gif when hovering.
+A chrome extension shows likes and dislikes rating bar on all video thumbnail and previewing YouTube video like a gif, helping you decide if it is worth watching.
 [Download from Chrome Store](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap)
 
 ### Screenshots

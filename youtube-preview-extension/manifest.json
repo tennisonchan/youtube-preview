@@ -1,9 +1,9 @@
 {
   "name": "YouTube Preview",
   "manifest_version": 2,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "Tennison Chan <tennison.chan@gmail.com>",
-  "description": "Preview video for YouTube",
+  "description": "Show likes and dislikes rating bar on all video thumbnail and previewing YouTube video like a gif, helping you decide if it is worth watching.",
   "icons": {
     "128": "assets/images/icon.png",
     "16": "assets/images/icon.png",

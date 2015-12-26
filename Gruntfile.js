@@ -181,20 +181,21 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', [ 'jshint' ]);
-  grunt.registerTask('pack', [ 'updateRev', 'shell:git-stash', 'zip' ]);
+  grunt.registerTask('pack', [ 'development', 'updateRev', 'shell:git-stash', 'zip' ]);
 
-  grunt.registerTask('default',
-    [
-      'clean:pre',
-      'jshint',
-      // Minify
-      'imagemin',
-      'sass',
-      'cssmin',
-      'uglify',
-      //Build
-      'updateRev',
-      'updateManifest',
-      'clean:post'
-    ]);
+  grunt.registerTask('development', [
+    'clean:pre',
+    'jshint',
+    // Minify
+    'imagemin',
+    'sass',
+    'cssmin',
+    'uglify',
+    //Build
+    'updateRev',
+    'updateManifest',
+    'clean:post'
+  ]);
+
+  grunt.registerTask('default', ['development']);
 };

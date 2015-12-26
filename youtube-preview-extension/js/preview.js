@@ -67,6 +67,7 @@ var Preview = function(Profile, config) {
     },
     retrieveVideoData: function (videoList) {
       var videoIds = Object.keys(videoList);
+      if(!videoIds.length) return false;
 
       $.ajax({
         url: requestUrl("//www.googleapis.com/youtube/v3/videos?", {
@@ -84,7 +85,7 @@ var Preview = function(Profile, config) {
             delete videoList[item.id];
           });
 
-          if(videoIds.length) _this.retrieveVideoData(videoList);
+          _this.retrieveVideoData(videoList);
         }
       });
     },
