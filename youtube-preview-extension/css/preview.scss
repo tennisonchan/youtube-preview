@@ -10,7 +10,8 @@ $enlarged-video-list-image-height: 118px;
 $enlarged-video-list-image-width: 160px;
 $playlist-preview-sparkbars-margin: 0px 0 0 28px;
 $playlist-preview-sparkbars-width: 72px;
-$video-image-top-adjustment: -11px;
+$video-image-72-top-adjustment: -6px;
+$video-image-120-top-adjustment: -11px;
 $video-image-top-reset: 0;
 $enlarged-playlist-preview-sparkbars-width: 160px;
 $enlarged-playlist-video-thumb-height: 90px;
@@ -52,14 +53,25 @@ $enlarged-video-image-top-reset: 0;
   padding-bottom: 4px;
 }
 
-#player-playlist .video-thumb.yt-thumb {
+.yt-thumb-72 .yt-thumb-clip {
   .storyboard + img{
     top: $video-image-top-reset;
   }
 
   img {
     position: relative;
-    top: $video-image-top-adjustment;
+    top: $video-image-72-top-adjustment;
+  }
+}
+
+.yt-thumb-120 .yt-thumb-clip {
+  .storyboard + img{
+    top: $video-image-top-reset;
+  }
+
+  img {
+    position: relative;
+    top: $video-image-120-top-adjustment;
   }
 }
 
