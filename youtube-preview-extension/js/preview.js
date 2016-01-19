@@ -38,6 +38,27 @@ var Preview = function(Profile, config) {
           mouseleave: _this.mouseLeaveEvent
         }, Profile.listenerSelector);
 
+      $(document)
+        .off('mousewheel DOMMouseScroll')
+        .on(
+          'mousewheel DOMMouseScroll',
+          'video',
+          function(evt){
+            var target = evt.target
+            var volume = target.volume, newVolumn;
+            window.onscroll = function(){
+              window.scrollTo(window.scrollX, window.scrollY);
+            };
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            debounce(function(evt){
+              target.volume = (evt.originalEvent.wheelDelta > 0 || evt.originalEvent.detail < 0) ? Math.min(volume + 0.02, 1) : Math.max(volume - 0.02, 0);
+              window.onscroll = function(){};
+            }, 5)(evt);
+          }
+        );
+
       return this;
     },
     onDOMNodeInserted: function(evt) {
