@@ -8,6 +8,26 @@ Profiles.youtube = function() {
 
   var _this = {
     listenerSelector: "a[href^='/watch'], a[href*='/watch?v=']",
+    moviePlayer: "#movie_player, .html5-video-player",
+    hideVideoControlClass: "ytp-autohide",
+    progressBarList: ".ytp-progress-bar .ytp-progress-list",
+    videoThumb: ".video-thumb, .yt-uix-simple-thumb-wrap",
+    mainVideo: "video",
+    bookmarkPanelHook: "#watch7-content",
+    bookmarksScrollbox: ".bookmarks-scrollbox",
+    imgElement: "img, .videowall-still-image",
+    secondaryActions: "#watch8-secondary-actions, .watch-secondary-actions",
+    bookmarkMarks: ".bookmark-mark.mark-color",
+    bookmarksToggled: "action-button-bookmarks-toggled",
+    bookmarkInput: "#add-bookmark-input",
+    bookmarkBtn: "#add-bookmark-btn",
+    bookmarkPanelTrigger: ".action-panel-trigger-bookmarks",
+    bookmarkPanelDismissBtn: ".bookmark-panel-dismiss-btn",
+    bookmarkPanel: ".bookmark-panel",
+    bookmarkLineCloseBtn: ".bookmark-line-close-btn",
+    ytpTimeCurrent: ".ytp-time-current",
+    ytpScrubberButton: ".ytp-scrubber-button",
+    ytpPlayProgress: ".ytp-play-progress",
     getImgElement: function(el){
       var imgEl = $(el).find("img, .videowall-still-image");
       if(imgEl.length) {
