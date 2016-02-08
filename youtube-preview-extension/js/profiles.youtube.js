@@ -17,7 +17,7 @@ Profiles.youtube = function() {
     bookmarksScrollbox: ".bookmarks-scrollbox",
     imgElement: "img, .videowall-still-image",
     secondaryActions: "#watch8-secondary-actions, .watch-secondary-actions",
-    bookmarkMarks: ".bookmark-mark.mark-color",
+    bookmarkMark: ".bookmark-mark",
     bookmarksToggled: "action-button-bookmarks-toggled",
     bookmarkInput: "#add-bookmark-input",
     bookmarkBtn: ".add-bookmark-btn",

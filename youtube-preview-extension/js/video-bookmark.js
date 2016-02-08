@@ -135,7 +135,7 @@ var VideoBookmark = function(Profile) {
   };
 
   _this.removeBookmarks = function() {
-    $(Profile.bookmarkMarks).remove();
+    $(Profile.bookmarkMark).remove();
   };
 
   _this.addBookmarkInputFocus = function(evt) {
