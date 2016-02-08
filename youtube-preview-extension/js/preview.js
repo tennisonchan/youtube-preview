@@ -38,10 +38,16 @@ var Preview = function(Profile, config) {
           mouseleave: _this.mouseLeaveEvent
         }, Profile.listenerSelector);
 
+      _this.videoBookmark = new VideoBookmark(Profile);
+
       return this;
     },
     onDOMNodeInserted: function(evt) {
       var el = evt.target, nodeName = el.nodeName.toLowerCase();
+
+      if (nodeName === "video") {
+        _this.videoBookmark.delegateOnVideoBookmark(el);
+      }
 
       if (["#comment","#text","script","style","input","iframe","embed","button","video", "link"].indexOf(nodeName) === -1) {
         _this.delegateOnVideoThumb(el);
@@ -53,7 +59,7 @@ var Preview = function(Profile, config) {
       Profile.getVideoThumbs(el || document)
         .each(function(i, videoThumbEl){
           if (videoThumbEl.offsetWidth === 0 || videoThumbEl.offsetWidth > 50) {
-            var id = Profile.getVideoId(videoThumbEl);
+            var id = Profile.getVideoIdByElement(videoThumbEl);
             if (id) {
               if (videoList[id]) {
                 videoList[id].push(videoThumbEl);

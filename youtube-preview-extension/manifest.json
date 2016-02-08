@@ -5,9 +5,9 @@
   "author": "Tennison Chan <tennison.chan@gmail.com>",
   "description": "Show likes and dislikes rating bar on video thumbnails, previewing YouTube video like gif, helping you decide if its worth watching.",
   "icons": {
-    "128": "assets/images/icon.png",
-    "16": "assets/images/icon.png",
-    "48": "assets/images/icon.png"
+    "128": "images/icon.png",
+    "16": "images/icon.png",
+    "48": "images/icon.png"
   },
   "content_scripts": [{
     "css": [
@@ -15,8 +15,10 @@
     ],
     "js": [
       "js/jquery.js",
+      "js/fuse.min.js",
       "js/env.js",
       "js/profiles.youtube.js",
+      "js/video-bookmark.js",
       "js/preview.js",
       "js/storyboard.js",
       "js/video-sparkbar.js",
@@ -225,5 +227,11 @@
       "*://www.google.co.zw/*"
     ],
     "run_at": "document_end"
-  }]
+  }],
+  "web_accessible_resources": [
+    "images/bookmark-icon.png",
+    "images/close.png",
+    "images/add.png",
+    "images/search.png"
+  ]
 }
