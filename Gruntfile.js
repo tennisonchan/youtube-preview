@@ -36,7 +36,7 @@ module.exports = function (grunt) {
     },
 
     jshint: {
-      files: ['Gruntfile.js', '<%=src %>/js/**/*.js', '!<%=src %>/js/jquery.js'],
+      files: ['Gruntfile.js', '<%=src %>/js/**/*.js', '!<%=src %>/js/jquery.js', '!<%=src %>/js/fuse.min.js'],
       options: {
         curly: false,
         eqeqeq: true,

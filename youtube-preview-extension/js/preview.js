@@ -1,4 +1,4 @@
-﻿/*global Storyboard, VideoSparkbar, API_KEY */
+﻿/*global Storyboard, VideoSparkbar, VideoBookmark, API_KEY */
 
 var cache = {},
   timeout = null;

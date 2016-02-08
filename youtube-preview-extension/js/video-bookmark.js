@@ -1,8 +1,63 @@
+/*global Fuse */
+
 function displayTime(time) {
   var h = ~~(time / 3600);
   var m = ("0" + ~~((time % 3600) / 60)).substr(-2);
   var s = ("0" + time % 60).substr(-2);
   return [h, m, s].filter(function(val) { return val; }).join(":");
+}
+
+var Mark = function(note, atTime, timestamp) {
+  this.atTime = atTime;
+  this.bookmarkHighlightClass = "bookmark-highlight";
+  this.item = this.createBookmarkLine(note, atTime);
+  this.mark = this.createMarkOnProcessbar();
+  this.note = note;
+  this.timestamp = timestamp;
+};
+
+Mark.prototype.appendToBar = function(target, duration) {
+  this.mark
+    .css({ left: this.atTime * 100 / duration + "%" })
+    .appendTo(target);
+
+  return this;
+};
+
+Mark.prototype.highlight = function() {
+  this.mark.addClass(this.bookmarkHighlightClass);
+};
+
+Mark.prototype.lightout = function() {
+  this.mark.removeClass(this.bookmarkHighlightClass);
+};
+
+Mark.prototype.appendToList = function(target) {
+  this.item.appendTo(target);
+
+  return this;
+};
+
+Mark.prototype.remove = function(target) {
+  this.item.remove();
+
+  return this;
+};
+
+Mark.prototype.createBookmarkLine = function(note, atTime) {
+  return $(
+    '<div class="bookmark-line" data-time="' + atTime + '">'+
+      '<div class="bookmark-line-time">' + displayTime(atTime) +'</div>'+
+      '<div class="bookmark-line-text">' + note + '</div>'+
+      '<div class="bookmark-line-close-btn"></div>'+
+    '</div>'
+  );
+};
+
+Mark.prototype.createMarkOnProcessbar = function() {
+  return $('<div/>', {
+    class: "bookmark-mark"
+  });
 };
 
 var BookmarkStorage = function(videoId) {
@@ -18,7 +73,7 @@ var BookmarkStorage = function(videoId) {
     _storage.bookmarks = data;
 
     localStorage[_storage.localStorageKey] = JSON.stringify({ data: data });
-  };
+  }
 
   _storage.loadBookmarks = function() {
     var stringData = localStorage[_storage.localStorageKey];
@@ -293,57 +348,4 @@ var VideoBookmark = function(Profile) {
   _this.initialize();
 
   return _this;
-};
-
-var Mark = function(note, atTime, timestamp) {
-  this.atTime = atTime;
-  this.bookmarkHighlightClass = "bookmark-highlight";
-  this.item = this.createBookmarkLine(note, atTime);
-  this.mark = this.createMarkOnProcessbar();
-  this.note = note;
-  this.timestamp = timestamp;
-};
-
-Mark.prototype.appendToBar = function(target, duration) {
-  this.mark
-    .css({ left: this.atTime * 100 / duration + "%" })
-    .appendTo(target);
-
-  return this;
-};
-
-Mark.prototype.highlight = function() {
-  this.mark.addClass(this.bookmarkHighlightClass);
-};
-
-Mark.prototype.lightout = function() {
-  this.mark.removeClass(this.bookmarkHighlightClass);
-};
-
-Mark.prototype.appendToList = function(target) {
-  this.item.appendTo(target);
-
-  return this;
-};
-
-Mark.prototype.remove = function(target) {
-  this.item.remove();
-
-  return this;
-};
-
-Mark.prototype.createBookmarkLine = function(note, atTime) {
-  return $(
-    '<div class="bookmark-line" data-time="' + atTime + '">'+
-      '<div class="bookmark-line-time">' + displayTime(atTime) +'</div>'+
-      '<div class="bookmark-line-text">' + note + '</div>'+
-      '<div class="bookmark-line-close-btn"></div>'+
-    '</div>'
-  );
-};
-
-Mark.prototype.createMarkOnProcessbar = function() {
-  return $('<div/>', {
-    class: "bookmark-mark"
-  });
 };
