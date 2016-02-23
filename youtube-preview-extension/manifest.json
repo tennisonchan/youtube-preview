@@ -9,13 +9,14 @@
     "16": "images/icon.png",
     "48": "images/icon.png"
   },
+  "options_page": "template/options.html",
   "content_scripts": [{
     "css": [
       "css/preview.css"
     ],
     "js": [
-      "js/jquery.js",
-      "js/fuse.min.js",
+      "js/lib/jquery.js",
+      "js/lib/fuse.min.js",
       "js/env.js",
       "js/profiles.youtube.js",
       "js/video-bookmark.js",
@@ -233,5 +234,8 @@
     "images/close.png",
     "images/add.png",
     "images/search.png"
+  ],
+  "permissions": [
+    "storage"
   ]
 }
