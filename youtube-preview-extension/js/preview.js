@@ -159,7 +159,7 @@ var Preview = function(Profile, config) {
     framesPlaying: function () {
       clearTimeout(timeout);
       if(_this.storyboard.playingFrames()) {
-        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.interval);
+        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.previewInterval);
       }
     }
   };

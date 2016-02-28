@@ -2,14 +2,15 @@ var path = require('path');
 
 module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
-  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-zip');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-zip');
 
   grunt.initConfig({
     src: 'youtube-preview-extension',
@@ -36,7 +37,7 @@ module.exports = function (grunt) {
     },
 
     jshint: {
-      files: ['Gruntfile.js', '<%=src %>/js/**/*.js', '!<%=src %>/js/jquery.js', '!<%=src %>/js/fuse.min.js'],
+      files: ['Gruntfile.js', '<%=src %>/js/**/*.js', '!<%=src %>/js/lib/*.js', '!<%=src %>/options/js/lib/*.js'],
       options: {
         curly: false,
         eqeqeq: true,
@@ -79,6 +80,18 @@ module.exports = function (grunt) {
       }
     },
 
+    copy: {
+      main: {
+        files: [{
+          expand: true,
+          flatten: false,
+          cwd: '<%=src %>/',
+          src: [ 'options/**/*' ],
+          dest: '<%=dest %>/'
+        }],
+      },
+    },
+
     cssmin: {
       options: {
         expand: true,
@@ -110,12 +123,13 @@ module.exports = function (grunt) {
         },
         files: {
           '<%=dest %>/youtube-preview.js': [
+            '<%=src %>/js/lib/*.js',
             '<%=src %>/js/env.js',
-            '<%=src %>/js/jquery.js',
             '<%=src %>/js/profiles.youtube.js',
             '<%=src %>/js/preview.js',
             '<%=src %>/js/storyboard.js',
             '<%=src %>/js/video-sparkbar.js',
+            '<%=src %>/js/video-bookmark.js',
             '<%=src %>/js/main.js'
           ]
         }
@@ -187,9 +201,10 @@ module.exports = function (grunt) {
     'clean:pre',
     'jshint',
     // Minify
-    'imagemin',
+    // 'imagemin',
     'sass',
     'cssmin',
+    'copy',
     'uglify',
     //Build
     'updateRev',

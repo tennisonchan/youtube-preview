@@ -6,13 +6,20 @@
 "use strict";
 
 var list = {
-      "www.youtube.com": "youtube"
-    },
-    config = {
-      interval: 200,
-    };
+    "www.youtube.com": "youtube"
+  },
+  config = {
+    previewInterval: 200,
+  };
 
-var profile = Profiles[list[window.location.host] || "youtube"]();
-var App = Preview(profile, config);
+var App;
+
+chrome.storage.sync.get({
+  previewInterval: 200
+}, function(config) {
+  var previewInterval = Number(config.previewInterval);
+  var profile = Profiles[list[window.location.host] || "youtube"]();
+  App = Preview(profile, config);
+});
 
 })(window, Preview, Profiles);
