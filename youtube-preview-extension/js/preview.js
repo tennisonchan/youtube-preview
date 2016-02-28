@@ -35,7 +35,9 @@ var Preview = function(Profile, config) {
         .off('mouseenter mouseleave')
         .on({
           mouseenter: debounce(_this.mouseEnterEvent, 200),
-          mouseleave: _this.mouseLeaveEvent
+          mouseleave: _this.mouseLeaveEvent,
+          mouseover: _this.mouseOverEvent,
+          mouseout: _this.mouseOutEvent,
         }, Profile.listenerSelector);
 
       _this.videoBookmark = new VideoBookmark(Profile);
@@ -96,6 +98,7 @@ var Preview = function(Profile, config) {
       });
     },
     mouseEnterEvent: function() {
+      console.log("mouseenter");
       var videoUrl = Profile.getVideoURL(this);
       var imgEl = Profile.getImgElement(this);
       _this.storyboard && _this.storyboard.remove();
@@ -119,6 +122,14 @@ var Preview = function(Profile, config) {
       _this.storyboard && _this.storyboard.remove();
       $('.storyboard').remove();
       clearTimeout(timeout);
+    },
+    mouseOverEvent: function() {
+      console.log("mouseOverEvent");
+
+    },
+    mouseOutEvent: function() {
+      console.log("mouseOutEvent");
+
     },
     getStoryboardDetails: function(html) {
       var storyboards = {};
@@ -148,7 +159,7 @@ var Preview = function(Profile, config) {
     framesPlaying: function () {
       clearTimeout(timeout);
       if(_this.storyboard.playingFrames()) {
-        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.interval);
+        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.previewInterval);
       }
     }
   };
