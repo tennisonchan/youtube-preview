@@ -201,7 +201,7 @@ module.exports = function (grunt) {
     'clean:pre',
     'jshint',
     // Minify
-    // 'imagemin',
+    'imagemin',
     'sass',
     'cssmin',
     'copy',
