@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "youtube preview",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "Show likes and dislikes rating bar on video thumbnails, previewing YouTube video like gif, helping you decide if its worth watching.",
+    "description": "The description of the application"
+  }
+}
