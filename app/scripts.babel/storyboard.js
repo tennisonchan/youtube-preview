@@ -1,5 +1,5 @@
 var Storyboard = function (str, baseUrl) {
-  var arr = str.split("#");
+  var arr = str.split('#');
 
   this.el = null;
   this.count = 0;
@@ -27,7 +27,7 @@ Storyboard.prototype.set = function(key, value) {
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  this.el = $("<div/>", { class: "storyboard" })
+  this.el = $('<div/>', { class: 'storyboard' })
     .css({
       width: this.frameWidth,
       height: this.frameheight,
@@ -41,9 +41,9 @@ Storyboard.prototype.playingFrames = function(target) {
 
   var pos = this.getPosition();
   this.el.css({
-    backgroundImage: "url(" + this.url() + ")",
-    backgroundPosition: pos.left + "px " + pos.top + "px",
-    backgroundSize: pos.width + "px " + pos.height + "px"
+    backgroundImage: 'url(' + this.url() + ')',
+    backgroundPosition: pos.left + 'px ' + pos.top + 'px',
+    backgroundSize: pos.width + 'px ' + pos.height + 'px'
   });
 
   this.increaseCount();
@@ -59,7 +59,7 @@ Storyboard.prototype.page = function() {
 Storyboard.prototype.url = function(l, m) {
   l = l || 2;
   m = m || this.page();
-  return this.baseUrl.replace(/\\/g, "").replace("$L", l).replace("$N", "M" + m) + "?sigh=" + this.sigh;
+  return this.baseUrl.replace(/\\/g, '').replace('$L', l).replace('$N', 'M' + m) + '?sigh=' + this.sigh;
 };
 
 Storyboard.prototype.getPosition = function() {

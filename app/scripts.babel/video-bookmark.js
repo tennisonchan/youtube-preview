@@ -2,14 +2,14 @@
 
 function displayTime(time) {
   var h = ~~(time / 3600);
-  var m = ("0" + ~~((time % 3600) / 60)).substr(-2);
-  var s = ("0" + time % 60).substr(-2);
-  return [h, m, s].filter(function(val) { return val; }).join(":");
+  var m = ('0' + ~~((time % 3600) / 60)).substr(-2);
+  var s = ('0' + time % 60).substr(-2);
+  return [h, m, s].filter(function(val) { return val; }).join(':');
 }
 
 var Mark = function(note, atTime, timestamp) {
   this.atTime = atTime;
-  this.bookmarkHighlightClass = "bookmark-highlight";
+  this.bookmarkHighlightClass = 'bookmark-highlight';
   this.item = this.createBookmarkLine(note, atTime);
   this.mark = this.createMarkOnProcessbar();
   this.note = note;
@@ -18,7 +18,7 @@ var Mark = function(note, atTime, timestamp) {
 
 Mark.prototype.appendToBar = function(target, duration) {
   this.mark
-    .css({ left: this.atTime * 100 / duration + "%" })
+    .css({ left: this.atTime * 100 / duration + '%' })
     .appendTo(target);
 
   return this;
@@ -56,7 +56,7 @@ Mark.prototype.createBookmarkLine = function(note, atTime) {
 
 Mark.prototype.createMarkOnProcessbar = function() {
   return $('<div/>', {
-    class: "bookmark-mark"
+    class: 'bookmark-mark'
   });
 };
 
@@ -65,7 +65,7 @@ var BookmarkStorage = function(videoId) {
 
   function initialize () {
     _storage.videoId = videoId;
-    _storage.localStorageKey = "yt-preview::" + videoId;
+    _storage.localStorageKey = 'yt-preview::' + videoId;
     _storage.bookmarks = _storage.loadBookmarks(videoId);
   }
 
@@ -144,12 +144,12 @@ var VideoBookmark = function(Profile) {
 
   _this.delegateOnVideoBookmark = function(el) {
     Profile.getMainVideo(el || document)
-      .off("loadedmetadata")
-      .on("loadedmetadata", _this.onLoadedMetaData);
+      .off('loadedmetadata')
+      .on('loadedmetadata', _this.onLoadedMetaData);
   };
 
   _this.onLoadedMetaData = function(evt) {
-    console.log("afterLoadedMetaData");
+    console.log('afterLoadedMetaData');
 
     _this.video = evt.target;
     _this.videoId = Profile.getVideoId();
@@ -157,13 +157,13 @@ var VideoBookmark = function(Profile) {
     _storage = new BookmarkStorage(_this.videoId);
 
     $(_this.video)
-      .off("timeupdate")
-      .on("timeupdate", function() {
+      .off('timeupdate')
+      .on('timeupdate', function() {
         var currentTime = Math.floor(_this.video.currentTime);
         var ratio = currentTime / Math.floor(_this.video.duration);
         $(Profile.ytpTimeCurrent).text(displayTime(currentTime));
-        $(Profile.ytpScrubberButton).css("left", ratio * 100 + "%");
-        $(Profile.ytpPlayProgress).css("transform", "scaleX(" + ratio + ")");
+        $(Profile.ytpScrubberButton).css('left', ratio * 100 + '%');
+        $(Profile.ytpPlayProgress).css('transform', 'scaleX(' + ratio + ')');
       });
 
     var bookmarkPanelHook = Profile.getBookmarkPanelHook();
@@ -194,13 +194,13 @@ var VideoBookmark = function(Profile) {
   };
 
   _this.addBookmarkInputFocus = function(evt) {
-    console.log("focus");
+    console.log('focus');
     _this.isVideoPaused = _this.video.paused;
     _this.video.pause();
   };
 
   _this.addBookmarkInputBlur = function() {
-    console.log("blur");
+    console.log('blur');
     if(!_this.isVideoPaused) {
       _this.video.play();
     }
@@ -212,21 +212,21 @@ var VideoBookmark = function(Profile) {
 
     if(value) {
       _this.addBookmark(value);
-      addBookmarInput.val("").blur();
+      addBookmarInput.val('').blur();
     }
   };
 
   _this.addBookmarkInputKeyup = function(evt) {
     var value = evt.target.value;
-    console.log("keyup");
+    console.log('keyup');
 
     if(evt.keyCode === 13) {
-      console.log("enter");
+      console.log('enter');
       _this.submitBookmark();
     } else {
       if(value.length > 2) {
         _this.render(new Fuse(_storage.bookmarks, {
-          keys: ["note"]
+          keys: ['note']
         }).search(value));
       } else {
         _this.render(_storage.bookmarks);
@@ -255,8 +255,8 @@ var VideoBookmark = function(Profile) {
   };
 
   _this.createBookmarkPanel = function() {
-    var bookmarksNotFound = "The bookmark could not be loaded.";
-    var bookmarkPanelTitle = "Bookmark list";
+    var bookmarksNotFound = 'The bookmark could not be loaded.';
+    var bookmarkPanelTitle = 'Bookmark list';
 
     return $(
       '<div class="bookmark-panel yt-uix-button-panel yt-card yt-card-has-padding" style="display: none;">'+
@@ -309,7 +309,7 @@ var VideoBookmark = function(Profile) {
   };
 
   _this.render = function(bookmarks) {
-    $(Profile.bookmarksScrollbox).html("");
+    $(Profile.bookmarksScrollbox).html('');
     _this.loadBookmarks(bookmarks);
   };
 
@@ -334,7 +334,7 @@ var VideoBookmark = function(Profile) {
           mark.lightout();
         }
       })
-      .on("click", Profile.bookmarkLineCloseBtn, function(e) {
+      .on('click', Profile.bookmarkLineCloseBtn, function(e) {
         e.stopPropagation();
         mark.remove();
         _storage.removeBookmark(mark.timestamp);

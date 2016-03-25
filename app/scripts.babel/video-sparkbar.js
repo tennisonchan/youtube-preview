@@ -22,7 +22,7 @@ VideoSparkbar.prototype.appendRatingTo = function(target) {
 VideoSparkbar.prototype.createSparkbar = function() {
   var likesWidth = (this.likeCount * 100 / this.ratingCount);
 
-  return $("<div/>", { class: "preview-sparkbars loading" })
-    .append($("<div/>", { class: "preview-sparkbar-likes", style: "width: "+likesWidth+"%;"}))
-    .append($("<div/>", { class: "preview-sparkbar-dislikes", style: "width: "+(100-likesWidth)+"%;"}));
+  return $('<div/>', { class: 'preview-sparkbars loading' })
+    .append($('<div/>', { class: 'preview-sparkbar-likes', style: 'width: '+likesWidth+'%;'}))
+    .append($('<div/>', { class: 'preview-sparkbar-dislikes', style: 'width: '+(100-likesWidth)+'%;'}));
 };

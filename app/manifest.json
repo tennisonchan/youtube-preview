@@ -1,29 +1,42 @@
 {
-  "name": "YouTube Preview",
+  "name": "__MSG_appName__",
+  "version": "0.2.0",
   "manifest_version": 2,
-  "version": "0.1.14",
+  "description": "__MSG_appDescription__",
   "author": "Tennison Chan <tennison.chan@gmail.com>",
-  "description": "Show likes and dislikes rating bar on video thumbnails, previewing YouTube video like gif, helping you decide if its worth watching.",
   "icons": {
-    "128": "images/icon.png",
     "16": "images/icon.png",
-    "48": "images/icon.png"
+    "48": "images/icon.png",
+    "128": "images/icon.png"
   },
-  "options_page": "options/options.html",
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "scripts/chromereload.js"
+    ]
+  },
+  "permissions": [
+    "storage"
+  ],
+  "options_page": "options.html",
   "content_scripts": [{
     "css": [
-      "css/preview.css"
+      "bower_components/material-design-lite/material.min.css",
+      "styles/preview.css",
+      "styles/options.css"
     ],
     "js": [
-      "js/lib/jquery.js",
-      "js/lib/fuse.min.js",
-      "js/env.js",
-      "js/profiles.youtube.js",
-      "js/video-bookmark.js",
-      "js/preview.js",
-      "js/storyboard.js",
-      "js/video-sparkbar.js",
-      "js/main.js"
+      "bower_components/material-design-lite/material.min.js",
+      "bower_components/jquery/dist/jquery.min.js",
+      "bower_components/fuse.js/src/fuse.min.js",
+      "scripts/options.js",
+      "scripts/env.js",
+      "scripts/profiles.youtube.js",
+      "scripts/video-bookmark.js",
+      "scripts/preview.js",
+      "scripts/storyboard.js",
+      "scripts/video-sparkbar.js",
+      "scripts/main.js"
     ],
     "matches": [
       "*://www.youtube.com/*",
@@ -227,6 +240,7 @@
       "*://www.google.co.zm/*",
       "*://www.google.co.zw/*"
     ],
+    "all_frames": false,
     "run_at": "document_end"
   }],
   "web_accessible_resources": [
@@ -234,8 +248,5 @@
     "images/close.png",
     "images/add.png",
     "images/search.png"
-  ],
-  "permissions": [
-    "storage"
   ]
 }
