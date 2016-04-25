@@ -21,7 +21,6 @@
   "options_page": "options.html",
   "content_scripts": [{
     "css": [
-      "bower_components/material-design-lite/material.min.css",
       "styles/preview.css"
     ],
     "js": [
