@@ -8,7 +8,7 @@ $enlarged-video-list-thumb-height: 90px;
 $enlarged-video-list-thumb-width: 160px;
 $enlarged-video-list-image-height: 118px;
 $enlarged-video-list-image-width: 160px;
-$playlist-preview-sparkbars-margin: 0px 0 0 28px;
+$playlist-preview-sparkbars-margin: 0 0 0 28px;
 $playlist-preview-sparkbars-width: 72px;
 $video-image-72-top-adjustment: -6px;
 $video-image-120-top-adjustment: -11px;
@@ -20,27 +20,23 @@ $enlarged-playlist-video-image-height: 118px;
 $enlarged-playlist-video-image-width: 160px;
 $enlarged-video-image-top-adjustment: -14px;
 $enlarged-video-image-top-reset: 0;
-
 .storyboard {
   background-color: $storyboard-background-color;
-
-  & + img,
-  & + .videowall-still-image {
+  & + .videowall-still-image,
+  & + img {
     display: none;
   }
 }
-
 /*
   Modification of original layout
   video-time: it's covering the rating sparkbars
   yt-thumb-clip: it's weird positioning affecting the preview position
   thumb-wrapper: set overflow to visible to show the sparkbars
 */
-
-.yt-lockup-thumbnail .video-actions,
 .video-list-item.related-list-item .video-actions,
-.yt-lockup-thumbnail .video-time,
-.video-list-item.related-list-item .video-time {
+.video-list-item.related-list-item .video-time,
+.yt-lockup-thumbnail .video-actions,
+.yt-lockup-thumbnail .video-time {
   bottom: $video-time-bottom;
 }
 .video-thumb .yt-thumb-clip {
@@ -52,29 +48,24 @@ $enlarged-video-image-top-reset: 0;
 .video-list-item.related-list-item .thumb-wrapper {
   padding-bottom: 4px;
 }
-
 .yt-thumb-72 .yt-thumb-clip {
-  .storyboard + img{
+  .storyboard + img {
     top: $video-image-top-reset;
   }
-
   img {
     position: relative;
     top: $video-image-72-top-adjustment;
   }
 }
-
 .yt-thumb-120 .yt-thumb-clip {
-  .storyboard + img{
+  .storyboard + img {
     top: $video-image-top-reset;
   }
-
   img {
     position: relative;
     top: $video-image-120-top-adjustment;
   }
 }
-
 /*
   Large size thumb 370px, .yt-thumb-370
 */
@@ -82,7 +73,6 @@ $enlarged-video-image-top-reset: 0;
   img {
     margin-top: -2.2rem;
   }
-
   .storyboard + img {
     margin-top: 0;
   }
@@ -100,32 +90,26 @@ $enlarged-video-image-top-reset: 0;
   height: $preview-sparkbars-height;
   overflow: hidden;
   transition: height 0.5s;
-
   > .preview-sparkbar-likes {
     background: $preview-sparkbars-likes-background-color;
   }
-
   > .preview-sparkbar-dislikes {
     background: $preview-sparkbars-dislikes-background-color;
   }
-
-  > .preview-sparkbar-likes,
-  > .preview-sparkbar-dislikes {
+   > .preview-sparkbar-dislikes,
+  > .preview-sparkbar-likes {
     float: left;
     height: $preview-sparkbars-height;
     transition: width 0.5s;
   }
-
   &.loading {
     height: 0;
-
-    > .preview-sparkbar-likes,
-    > .preview-sparkbar-dislikes {
+     > .preview-sparkbar-dislikes,
+    > .preview-sparkbar-likes {
       width: 0 !important;
     }
   }
 }
-
 .bookmark-mark {
   background-color: rgb(255, 179, 62);
   bottom: 0;
@@ -135,7 +119,6 @@ $enlarged-video-image-top-reset: 0;
   transform-origin: 0 0;
   width: 3px;
   z-index: 42;
-
   &.bookmark-highlight {
     width: 0;
     height: 0;
@@ -147,17 +130,14 @@ $enlarged-video-image-top-reset: 0;
     margin-left: -3px;
   }
 }
-
 .bookmarks-menu {
   width: 100%;
-
   #bookmark-search {
     margin-top: 3px;
     max-width: 100%;
     overflow: hidden;
     padding: 0;
     position: relative;
-
     .add-bookmark-btn {
       background: #f8f8f8;
       border-bottom-left-radius: 0;
@@ -168,33 +148,28 @@ $enlarged-video-image-top-reset: 0;
       float: right;
       height: 29px;
       padding: 0;
-
       span {
         font-size: 20px;
-
         i {
           display: inline-block;
           background-size: auto;
           border: none;
           box-shadow: none;
           height: 15px;
-          opacity: .6;
+          opacity: 0.6;
           margin: 0 25px;
           padding: 0;
           text-indent: -10000px;
           width: 15px;
-
           &.search-btn-icon {
             background: url('chrome-extension://__MSG_@@extension_id__/images/search.png');
           }
-
           &.add-btn-icon {
             background: url('chrome-extension://__MSG_@@extension_id__/images/add.png');
           }
         }
       }
     }
-
     #bookmark-search-terms {
       background-color: #fff;
       border: 1px solid #ccc;
@@ -206,8 +181,7 @@ $enlarged-video-image-top-reset: 0;
       margin: 0 0 2px;
       overflow: hidden;
       position: relative;
-      transition: border-color .2s ease;
-
+      transition: border-color 0.2s ease;
       input {
         background: transparent;
         border: 0;
@@ -225,18 +199,16 @@ $enlarged-video-image-top-reset: 0;
     }
   }
 }
-
 .bookmark-panel-dismiss-btn {
   background: none;
   border: none;
   box-shadow: none;
   color: #333;
   filter: alpha(opacity=50);
-  opacity: .5;
+  opacity: 0.5;
   position: absolute;
   right: 3px;
   top: 3px;
-
   &.yt-uix-button {
     border-radius: 2px;
     border: none;
@@ -254,7 +226,6 @@ $enlarged-video-image-top-reset: 0;
     white-space: nowrap;
     word-wrap: normal;
   }
-
   &:before {
     background-size: auto;
     background: url('chrome-extension://__MSG_@@extension_id__/images/close.png');
@@ -265,7 +236,6 @@ $enlarged-video-image-top-reset: 0;
     width: 10px;
   }
 }
-
 .bookmark-panel {
   background: #fff;
   border: 0;
@@ -275,45 +245,37 @@ $enlarged-video-image-top-reset: 0;
   padding: 15px;
   position: relative;
 }
-
 .bookmarks-scrollbox {
   cursor: pointer;
   margin: 5px 3px;
   max-height: 15.6em;
   overflow-x: hidden;
   overflow-y: scroll;
-
   .bookmark-line {
     border-radius: 3px;
     border: 1px solid #fff;
     line-height: 1.3em;
     margin-right: 2px;
     width: 100%;
-
     &:hover {
       background-color: #d0e0fa;
-
       .bookmark-line-close-btn:before {
         display: inline-block;
       }
     }
-
     .bookmark-line-time {
       display: inline-block;
       width: 40px;
       color: #666;
       vertical-align: middle;
     }
-
     .bookmark-line-text {
       display: inline-block;
       overflow: hidden;
       width: 520px;
       vertical-align: middle;
     }
-
     .bookmark-line-close-btn {
-      float: right;
       background: none;
       border: none;
       box-shadow: none;
@@ -321,14 +283,14 @@ $enlarged-video-image-top-reset: 0;
       cursor: pointer;
       display: inline-block;
       filter: alpha(opacity=50);
+      float: right;
       line-height: normal;
-      opacity: .5;
+      opacity: 0.5;
       outline: 0;
-      text-decoration: none;
-      vertical-align: middle;
       padding-left: 11px;
       padding-right: 11px;
-
+      text-decoration: none;
+      vertical-align: middle;
       &:before {
         background-image: url('chrome-extension://__MSG_@@extension_id__/images/close.png');
         background-repeat: no-repeat;
@@ -342,7 +304,6 @@ $enlarged-video-image-top-reset: 0;
     }
   }
 }
-
 .action-panel-trigger-bookmarks {
   background: none;
   border-radius: 0;
@@ -355,7 +316,6 @@ $enlarged-video-image-top-reset: 0;
   font-weight: 500;
   height: 28px;
   line-height: normal;
-  margin-right: -1px;
   margin: 0;
   opacity: 0.5;
   outline: 0;
@@ -364,18 +324,16 @@ $enlarged-video-image-top-reset: 0;
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: normal;
-
   &.action-button-bookmarks-toggled {
     opacity: 0.8;
   }
-
   &:before {
     background: url('chrome-extension://__MSG_@@extension_id__/images/bookmark-icon.png');
     content: '';
     display: inline-block;
     height: 20px;
+    margin-right: 6px;
     vertical-align: middle;
     width: 20px;
-    margin-right: 6px;
   }
 }

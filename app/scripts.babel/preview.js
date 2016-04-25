@@ -1,4 +1,4 @@
-﻿/*global Storyboard, VideoSparkbar, VideoBookmark, API_KEY */
+﻿ /*global Storyboard, VideoSparkbar, VideoBookmark, API_KEY */
 
 var cache = {},
   timeout = null;
@@ -6,9 +6,9 @@ var cache = {},
 function debounce(fn, delay) {
   return function() {
     var context = this,
-        args = arguments;
+      args = arguments;
     clearTimeout(timeout);
-    timeout = setTimeout(function () {
+    timeout = setTimeout(function() {
       timeout = null;
       fn.apply(context, args);
     }, delay);
@@ -16,7 +16,7 @@ function debounce(fn, delay) {
 }
 
 function requestUrl(baseURL, paramsObject) {
-  if(paramsObject) {
+  if (paramsObject) {
     baseURL += $.param(paramsObject);
   }
   return baseURL;
@@ -41,13 +41,14 @@ var Preview = function(Profile, config) {
       return this;
     },
     onDOMNodeInserted: function(evt) {
-      var el = evt.target, nodeName = el.nodeName.toLowerCase();
+      var el = evt.target,
+        nodeName = el.nodeName.toLowerCase();
 
       if (nodeName === 'video') {
         _this.videoBookmark.delegateOnVideoBookmark(el);
       }
 
-      if (['#comment','#text','script','style','input','iframe','embed','button','video', 'link'].indexOf(nodeName) === -1) {
+      if (['#comment', '#text', 'script', 'style', 'input', 'iframe', 'embed', 'button', 'video', 'link'].indexOf(nodeName) === -1) {
         _this.delegateOnVideoThumb(el);
       }
       return false;
@@ -55,7 +56,7 @@ var Preview = function(Profile, config) {
     delegateOnVideoThumb: function(el) {
       var videoList = {};
       Profile.getVideoThumbs(el || document)
-        .each(function(i, videoThumbEl){
+        .each(function(i, videoThumbEl) {
           if (videoThumbEl.offsetWidth === 0 || videoThumbEl.offsetWidth > 50) {
             var id = Profile.getVideoIdByElement(videoThumbEl);
             if (id) {
@@ -69,9 +70,9 @@ var Preview = function(Profile, config) {
         });
       _this.retrieveVideoData(videoList);
     },
-    retrieveVideoData: function (videoList) {
+    retrieveVideoData: function(videoList) {
       var videoIds = Object.keys(videoList);
-      if(!videoIds.length) return false;
+      if (!videoIds.length) return false;
 
       $.ajax({
         url: requestUrl('//www.googleapis.com/youtube/v3/videos?', {
@@ -82,7 +83,7 @@ var Preview = function(Profile, config) {
         dataType: 'json',
         success: function(resp) {
           resp.items.forEach(function(item, index) {
-            (videoList[item.id] || []).forEach(function(el){
+            (videoList[item.id] || []).forEach(function(el) {
               var videoSparkbar = new VideoSparkbar(item.id, item.statistics);
               videoSparkbar.appendRatingTo($(el));
             });
@@ -148,10 +149,12 @@ var Preview = function(Profile, config) {
         _this.framesPlaying();
       };
     },
-    framesPlaying: function () {
+    framesPlaying: function() {
       clearTimeout(timeout);
-      if(_this.storyboard.playingFrames()) {
-        timeout = setTimeout(function(){ _this.framesPlaying(); }, config.previewInterval);
+      if (_this.storyboard.playingFrames()) {
+        timeout = setTimeout(function() {
+          _this.framesPlaying();
+        }, config.previewInterval);
       }
     }
   };

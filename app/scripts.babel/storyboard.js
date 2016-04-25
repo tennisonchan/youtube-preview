@@ -1,34 +1,37 @@
-var Storyboard = function (str, baseUrl, index) {
+var Storyboard = function(str, baseUrl, index) {
   var arr = str.split('#');
 
-  this.el = null;
-  this.index = index;
-  this.count = 0;
   this.baseUrl = baseUrl;
-  this.width = Number(arr[0]);
-  this.height = Number(arr[1]);
-  this.frameWidth = Number(arr[0]);
-  this.frameheight = Number(arr[1]);
-  this.totalFrames = Number(arr[2]);
-  this.row = Number(arr[3]);
   this.col = Number(arr[4]);
+  this.count = 0;
+  this.el = null;
+  this.frameheight = Number(arr[1]);
+  this.frameWidth = Number(arr[0]);
+  this.height = Number(arr[1]);
+  this.index = index;
   this.ms = Number(arr[5]);
-  this.unit = arr[6];
+  this.row = Number(arr[3]);
   this.sigh = arr[7];
-  this.maxPage = Math.ceil(this.totalFrames/ (this.row * this.col));
+  this.totalFrames = Number(arr[2]);
+  this.unit = arr[6];
+  this.width = Number(arr[0]);
+
+  this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
   return this;
 };
 
 Storyboard.prototype.set = function(key, value) {
-  if(key !== undefined && value !== undefined) {
+  if (key !== undefined && value !== undefined) {
     this[key] = value;
   }
   return this;
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  this.el = $('<div/>', { class: 'storyboard' })
+  this.el = $('<div/>', {
+      class: 'storyboard'
+    })
     .css({
       width: this.frameWidth,
       height: this.frameheight,
@@ -38,7 +41,7 @@ Storyboard.prototype.appendThumbTo = function(target) {
 };
 
 Storyboard.prototype.playingFrames = function(target) {
-  if(!this.el) return false;
+  if (!this.el) return false;
 
   var pos = this.getPosition();
   this.el.css({

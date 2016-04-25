@@ -20,4 +20,3 @@ connection.onmessage = e => {
     }
   }
 };
-
