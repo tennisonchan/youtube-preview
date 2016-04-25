@@ -24,6 +24,7 @@ function requestUrl(baseURL, paramsObject) {
 
 var Preview = function(Profile, config) {
   var _this = {
+    isPlay: false,
     storyboard: null,
     initialize: function() {
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
@@ -95,6 +96,7 @@ var Preview = function(Profile, config) {
       });
     },
     mouseEnterEvent: function() {
+      _this.isPlay = true;
       console.log('mouseenter');
       var videoUrl = Profile.getVideoURL(this);
       var imgEl = Profile.getImgElement(this);
@@ -119,6 +121,7 @@ var Preview = function(Profile, config) {
       }
     },
     mouseLeaveEvent: function() {
+      _this.isPlay = false;
       console.log('mouseleave');
       _this.storyboard && _this.storyboard.remove();
       $('.storyboard').remove();
@@ -151,10 +154,12 @@ var Preview = function(Profile, config) {
     },
     framesPlaying: function() {
       clearTimeout(timeout);
-      if (_this.storyboard.playingFrames()) {
+      if (_this.isPlay && _this.storyboard.playingFrames()) {
         timeout = setTimeout(function() {
           _this.framesPlaying();
         }, config.previewInterval);
+      } else {
+        _this.mouseLeaveEvent();
       }
     }
   };
