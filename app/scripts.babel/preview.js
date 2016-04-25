@@ -26,8 +26,6 @@ var Preview = function(Profile, config) {
   var _this = {
     storyboard: null,
     initialize: function() {
-      console.log('Preview.init');
-
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
       _this.delegateOnVideoThumb();
 
@@ -36,8 +34,6 @@ var Preview = function(Profile, config) {
         .on({
           mouseenter: debounce(_this.mouseEnterEvent, 200),
           mouseleave: _this.mouseLeaveEvent,
-          mouseover: _this.mouseOverEvent,
-          mouseout: _this.mouseOutEvent,
         }, Profile.listenerSelector);
 
       _this.videoBookmark = new VideoBookmark(Profile);
@@ -105,14 +101,18 @@ var Preview = function(Profile, config) {
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg(imgEl);
+        console.log('storyboards', cache[videoUrl]);
       } else {
         $.ajax({
           dataType: 'html',
           url: videoUrl,
           success: function(html) {
-            _this.storyboard = _this.getStoryboardDetails(html)[2];
-            _this.loadPreviewImg(imgEl);
-            cache[this.url] = _this.storyboard;
+            var storyboards = _this.getStoryboardDetails(html);
+            if (storyboards.length > 0) {
+              _this.storyboard = storyboards.pop();
+              _this.loadPreviewImg(imgEl);
+              cache[this.url] = _this.storyboard;
+            }
           }
         });
       }
@@ -123,23 +123,15 @@ var Preview = function(Profile, config) {
       $('.storyboard').remove();
       clearTimeout(timeout);
     },
-    mouseOverEvent: function() {
-      console.log('mouseOverEvent');
-
-    },
-    mouseOutEvent: function() {
-      console.log('mouseOutEvent');
-
-    },
     getStoryboardDetails: function(html) {
-      var storyboards = {};
+      var storyboards = [];
       var getStoryboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"', 'g');
       var storyboard_spec = getStoryboardRegExp.exec(html);
       var result = storyboard_spec[1].split('|');
       var baseURL = result.shift();
 
-      for(var i = 1; i < result.length; i++){
-        storyboards[i] = new Storyboard(result[i], baseURL);
+      for (var i = 1; i < result.length; i++) {
+        storyboards.push(new Storyboard(result[i], baseURL, i));
       }
       console.log('storyboards', storyboards);
 

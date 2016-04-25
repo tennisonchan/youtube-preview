@@ -1,7 +1,8 @@
-var Storyboard = function (str, baseUrl) {
+var Storyboard = function (str, baseUrl, index) {
   var arr = str.split('#');
 
   this.el = null;
+  this.index = index;
   this.count = 0;
   this.baseUrl = baseUrl;
   this.width = Number(arr[0]);
@@ -57,7 +58,7 @@ Storyboard.prototype.page = function() {
 };
 
 Storyboard.prototype.url = function(l, m) {
-  l = l || 2;
+  l = this.index || 2;
   m = m || this.page();
   return this.baseUrl.replace(/\\/g, '').replace('$L', l).replace('$N', 'M' + m) + '?sigh=' + this.sigh;
 };
