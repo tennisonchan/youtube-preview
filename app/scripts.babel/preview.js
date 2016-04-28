@@ -34,7 +34,7 @@ var Preview = function(Profile, config) {
       $(document)
         .off('mouseenter mouseleave')
         .on({
-          mouseenter: debounce(_this.mouseEnterEvent, 200),
+          mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
           mouseleave: _this.mouseLeaveEvent,
         }, Profile.listenerSelector);
 
@@ -102,7 +102,6 @@ var Preview = function(Profile, config) {
       var videoUrl = Profile.getVideoURL(this);
       _this.imgEl = Profile.getImgElement(this);
       _this.storyboard && _this.storyboard.remove();
-      // console.log('storyboards', _this.storyboard);
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg();
@@ -147,6 +146,7 @@ var Preview = function(Profile, config) {
       return storyboard;
     },
     loadPreviewImg: function() {
+      console.log('storyboards', _this.storyboard);
       var imgEl = _this.imgEl;
       var parent = Profile.getVideoThumb(imgEl);
       _this.storyboard.set('frameWidth', parent.width() || imgEl.width());
