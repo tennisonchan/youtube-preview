@@ -26,6 +26,7 @@ var Preview = function(Profile, config) {
   var _this = {
     isPlay: false,
     storyboard: null,
+    imgEl: null,
     initialize: function() {
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
       _this.delegateOnVideoThumb();
@@ -96,61 +97,70 @@ var Preview = function(Profile, config) {
       });
     },
     mouseEnterEvent: function() {
-      _this.isPlay = true;
       console.log('mouseenter');
+      _this.isPlay = true;
       var videoUrl = Profile.getVideoURL(this);
-      var imgEl = Profile.getImgElement(this);
+      _this.imgEl = Profile.getImgElement(this);
       _this.storyboard && _this.storyboard.remove();
+      // console.log('storyboards', _this.storyboard);
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
-        _this.loadPreviewImg(imgEl);
-        console.log('storyboards', cache[videoUrl]);
+        _this.loadPreviewImg();
       } else {
         $.ajax({
           dataType: 'html',
           url: videoUrl,
           success: function(html) {
-            var storyboards = _this.getStoryboardDetails(html);
-            if (storyboards.length > 0) {
-              _this.storyboard = storyboards.pop();
-              _this.loadPreviewImg(imgEl);
-              cache[this.url] = _this.storyboard;
+            var storyboard = _this.getStoryboardDetails(html);
+            if (storyboard) {
+              _this.storyboard = storyboard;
+              cache[this.url] = storyboard;
+              _this.loadPreviewImg();
             }
+          },
+          fail: function() {
+            debugger;
           }
         });
       }
     },
     mouseLeaveEvent: function() {
-      _this.isPlay = false;
       console.log('mouseleave');
+      _this.isPlay = false;
       _this.storyboard && _this.storyboard.remove();
       $('.storyboard').remove();
       clearTimeout(timeout);
     },
     getStoryboardDetails: function(html) {
-      var storyboards = [];
+      var storyboard = null;
       var getStoryboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"', 'g');
       var storyboard_spec = getStoryboardRegExp.exec(html);
-      var result = storyboard_spec[1].split('|');
-      var baseURL = result.shift();
 
-      for (var i = 1; i < result.length; i++) {
-        storyboards.push(new Storyboard(result[i], baseURL, i));
+      if (getStoryboardRegExp.test(html) && storyboard_spec[1]) {
+        var result = storyboard_spec[1].split('|');
+        var baseURL = result.shift();
+        storyboard = new Storyboard(result.pop(), baseURL, i);
+      } else {
+        storyboard = new NoPreview();
       }
-      console.log('storyboards', storyboards);
 
-      return storyboards;
+      return storyboard;
     },
-    loadPreviewImg: function(imgEl) {
+    loadPreviewImg: function() {
+      var imgEl = _this.imgEl;
       var parent = Profile.getVideoThumb(imgEl);
-      var img = new Image();
-      img.src = _this.storyboard.url();
       _this.storyboard.set('frameWidth', parent.width() || imgEl.width());
       _this.storyboard.set('frameheight', parent.height() || imgEl.height());
-      img.onload = function() {
+      if (_this.storyboard.isNoPreview) {
         _this.storyboard.appendThumbTo(imgEl);
-        _this.framesPlaying();
-      };
+      } else {
+        var img = new Image();
+        img.src = _this.storyboard.url();
+        img.onload = function() {
+          _this.storyboard.appendThumbTo(imgEl);
+          _this.framesPlaying();
+        };
+      }
     },
     framesPlaying: function() {
       clearTimeout(timeout);

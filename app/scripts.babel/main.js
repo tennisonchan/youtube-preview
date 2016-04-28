@@ -9,7 +9,7 @@
       'www.youtube.com': 'youtube'
     },
     config = {
-      previewInterval: 200,
+      previewInterval: 200
     };
 
   chrome.storage.sync.get({
