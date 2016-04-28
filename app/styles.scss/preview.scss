@@ -1,6 +1,9 @@
 $video-time-bottom: 6px;
 $preview-sparkbars-height: 4px;
 $storyboard-background-color: #000;
+$no-preview-background-color: rgba(0, 0, 0, 0.5);
+$no-preview-color: rgba(255, 255, 255, 0.5);
+$no-preview-font-size: 20px;
 $preview-sparkbars-likes-background-color: #167ac6;
 $preview-sparkbars-dislikes-background-color: #ccc;
 $enlarged-video-list-content-wrapper-margin-left: 180px;
@@ -26,6 +29,13 @@ $enlarged-video-image-top-reset: 0;
   & + img {
     display: none;
   }
+}
+.no-preview {
+  background-color: $no-preview-background-color;
+  color: $no-preview-color;
+  font-size: $no-preview-font-size;
+  position: absolute;
+  text-align: center;
 }
 /*
   Modification of original layout
