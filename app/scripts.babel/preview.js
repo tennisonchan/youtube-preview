@@ -133,13 +133,13 @@ var Preview = function(Profile, config) {
     },
     getStoryboardDetails: function(html) {
       var storyboard = null;
-      var getStoryboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"', 'g');
-      var storyboard_spec = getStoryboardRegExp.exec(html);
-
-      if (getStoryboardRegExp.test(html) && storyboard_spec[1]) {
+      var storyboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"');
+      if (storyboardRegExp.test(html)) {
+        var storyboard_spec = storyboardRegExp.exec(html);
         var result = storyboard_spec[1].split('|');
-        var baseURL = result.shift();
-        storyboard = new Storyboard(result.pop(), baseURL, i);
+        var baseUrl = result.shift();
+        var lastIndex = result.length - 1;
+        storyboard = new Storyboard(result[lastIndex], baseUrl, lastIndex);
       } else {
         storyboard = new NoPreview();
       }
