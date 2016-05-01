@@ -36,6 +36,7 @@ $enlarged-video-image-top-reset: 0;
   font-size: $no-preview-font-size;
   position: absolute;
   text-align: center;
+  z-index: 1;
 }
 /*
   Modification of original layout
