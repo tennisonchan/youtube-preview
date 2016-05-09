@@ -118,7 +118,8 @@ var Preview = function(Profile, config) {
             }
           },
           fail: function() {
-            debugger;
+            _this.storyboard = new NoPreview();
+            _this.loadPreviewImg();
           }
         });
       }
