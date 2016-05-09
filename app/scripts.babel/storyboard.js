@@ -29,13 +29,15 @@ Storyboard.prototype.set = function(key, value) {
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  this.el = $('<div/>', {
+  if (!this.el) {
+    this.el = $('<div/>', {
       class: 'storyboard'
     })
     .css({
       width: this.frameWidth,
       height: this.frameheight,
     }).insertBefore(target);
+  }
 
   return this.el;
 };

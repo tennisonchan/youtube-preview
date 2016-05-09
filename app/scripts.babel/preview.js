@@ -111,7 +111,7 @@ var Preview = function(Profile, config) {
           url: videoUrl,
           success: function(html) {
             var storyboard = _this.getStoryboardDetails(html);
-            if (storyboard) {
+            if (storyboard && !cache[this.url]) {
               _this.storyboard = storyboard;
               cache[this.url] = storyboard;
               _this.loadPreviewImg();
@@ -125,9 +125,9 @@ var Preview = function(Profile, config) {
     },
     mouseLeaveEvent: function() {
       console.log('mouseleave');
-      _this.isPlay = false;
-      _this.storyboard && _this.storyboard.remove();
       $('.storyboard').remove();
+      _this.storyboard && _this.storyboard.remove();
+      _this.isPlay = false;
       clearTimeout(timeout);
     },
     getStoryboardDetails: function(html) {
