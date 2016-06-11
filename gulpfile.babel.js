@@ -50,6 +50,7 @@ gulp.task('images', () => {
     })))
     .pipe(gulp.dest('dist/images'));
 });
+
 gulp.task('styles', () => {
   return gulp.src('app/styles.scss/*.scss')
     .pipe($.plumber())
@@ -59,6 +60,17 @@ gulp.task('styles', () => {
       includePaths: ['.']
     }).on('error', $.sass.logError))
     .pipe(gulp.dest('app/styles'));
+});
+
+gulp.task('build-styles', () => {
+  return gulp.src('app/styles.scss/*.scss')
+    .pipe($.plumber())
+    .pipe($.sass.sync({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['.']
+    }).on('error', $.sass.logError))
+    .pipe(gulp.dest('dist/styles'));
 });
 
 gulp.task('html', ['styles'], () => {
@@ -136,10 +148,10 @@ gulp.task('package', function () {
       .pipe(gulp.dest('package'));
 });
 
-gulp.task('build', (cb) => {
+gulp.task('build', ['clean'], (cb) => {
   runSequence(
     'lint', 'babel', 'chromeManifest',
-    ['html', 'images', 'extras'],
+    ['html', 'build-styles', 'images', 'extras'],
     'size', cb);
 });
 
