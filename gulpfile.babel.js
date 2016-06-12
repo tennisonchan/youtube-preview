@@ -66,7 +66,7 @@ gulp.task('build-styles', () => {
   return gulp.src('app/styles.scss/*.scss')
     .pipe($.plumber())
     .pipe($.sass.sync({
-      outputStyle: 'expanded',
+      outputStyle: 'compressed',
       precision: 10,
       includePaths: ['.']
     }).on('error', $.sass.logError))
