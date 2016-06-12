@@ -56,6 +56,8 @@ var Preview = function(Profile, config) {
       return false;
     },
     delegateOnVideoThumb: function(el) {
+      if (!config.showRatingBar) { return false; }
+
       var videoList = {};
       Profile.getVideoThumbs(el || document)
         .each(function(i, videoThumbEl) {
@@ -70,6 +72,7 @@ var Preview = function(Profile, config) {
             }
           }
         });
+
       _this.retrieveVideoData(videoList);
     },
     retrieveVideoData: function(videoList) {
