@@ -11,7 +11,7 @@
     config = {
       delayPreview: 50,
       previewInterval: 200,
-      showRatingBar: true
+      showRatingBar: false
     };
 
   chrome.storage.sync.get(config, function(config) {
