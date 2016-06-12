@@ -107,7 +107,6 @@ gulp.task('babel', () => {
       .pipe($.babel({
         presets: ['es2015']
       }))
-      .pipe($.if('*.js', $.uglify({compress: {drop_console: true}})))
       .pipe(gulp.dest('app/scripts'));
 });
 

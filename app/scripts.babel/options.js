@@ -9,12 +9,18 @@
 
   function restore_options() {
     chrome.storage.sync.get({
-      previewInterval: 200
+      previewInterval: 200,
+      showRatingBar: true
     }, function(data) {
       var previewInterval = Number(data.previewInterval);
+      var showRatingBar = Boolean(data.showRatingBar);
       clearInterval(timeInterval);
       timeInterval = setInterval(animate, previewInterval);
       $('#preview-intervals-slide').val(previewInterval);
+      $('#rating-bar-switch').prop('checked', showRatingBar);
+      if (showRatingBar) {
+        $('.rating-bar').addClass('on');
+      }
     });
   }
 
@@ -49,7 +55,15 @@
     })
     .on('change', function() {
       console.log('previewInterval', this.value);
-      save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms.');
+      save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms');
+    });
+
+  $('#rating-bar-switch')
+    .on('change', function() {
+      console.log('showRatingBar', this.checked);
+      let message = this.checked ? 'Show rating bar' : 'Hide rating bar';
+      $('.rating-bar').toggleClass('on', this.checked);
+      save_option('showRatingBar', this.checked, message);
     });
 
 })(jQuery);

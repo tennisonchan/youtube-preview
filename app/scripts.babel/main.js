@@ -10,15 +10,14 @@
     },
     config = {
       delayPreview: 50,
-      previewInterval: 200
+      previewInterval: 200,
+      showRatingBar: true
     };
 
-  chrome.storage.sync.get({
-    delayPreview: 50,
-    previewInterval: 200
-  }, function(config) {
+  chrome.storage.sync.get(config, function(config) {
     config.previewInterval = Number(config.previewInterval);
     config.delayPreview = Number(config.delayPreview);
+    config.showRatingBar = config.showRatingBar;
     var profile = Profiles[list[window.location.host] || 'youtube']();
     var App = Preview(profile, config);
   });

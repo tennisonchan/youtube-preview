@@ -1,5 +1,9 @@
 @import '../bower_components/material-design-lite/material.min';
 
+$preview-sparkbars-height: 6px;
+$preview-sparkbars-likes-background-color: #167ac6;
+$preview-sparkbars-dislikes-background-color: #ccc;
+
 body.option-page::before {
   background-attachment: fixed;
   background-size: cover;
@@ -36,24 +40,66 @@ body.option-page .preview-options {
 .preview-options__posts {
   justify-content: center;
 }
-.preview-intervals.mdl-card {
+.mdl-card {
   width: 334px;
 }
-.preview-intervals.mdl-card .mdl-card__title {
+.mdl-card .mdl-card__title {
   color: #fff;
   padding: 0;
+  height: 250px;
 }
 .preview-intervals .animated-background {
   background-color: #ffffff;
   background-repeat: no-repeat;
   background-size: 1288px 946px;
-  background: url('chrome-extension://__MSG_@@extension_id__/images/muybridge_horse.png');
+  background-image: url('chrome-extension://__MSG_@@extension_id__/images/muybridge_horse.png');
   height: 236.5px;
   margin-left: auto;
   margin-right: auto;
   width: 322px;
 }
-.preview-intervals .mdl-card__title-text {
+.preview-sparkbars {
+  clear: both;
+  height: 0;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 250px;
+  transition: height 0.5s;
+  width: 100%;
+  > .preview-sparkbar-likes {
+    background: $preview-sparkbars-likes-background-color;
+  }
+  > .preview-sparkbar-dislikes {
+    background: $preview-sparkbars-dislikes-background-color;
+  }
+   > .preview-sparkbar-dislikes,
+  > .preview-sparkbar-likes {
+    float: left;
+    height: $preview-sparkbars-height;
+    transition: width 0.5s;
+  }
+}
+.rating-bar {
+  &.on {
+    .preview-sparkbars {
+      height: $preview-sparkbars-height;
+    }
+  }
+
+  .background {
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-size: 322px 236.5px;
+    background-image: url('chrome-extension://__MSG_@@extension_id__/images/youtube-logo.png');
+    height: 236.5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 322px;
+  }
+}
+
+ .mdl-card__title-text {
   color: #ffffff;
   left: 18px;
   position: absolute;
@@ -81,10 +127,6 @@ body.option-page .preview-options {
   display: flex;
   flex-direction: column;
   min-height: 360px;
-}
-.preview-options .mdl-card__title {
-  flex-grow: 1;
-  padding: 16px;
 }
 .preview-options .mdl-card__media {
   align-items: flex-end;
