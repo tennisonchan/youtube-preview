@@ -39,6 +39,7 @@ body.option-page .preview-options {
 }
 .preview-options__posts {
   justify-content: center;
+  transform: translateY(50%);
 }
 .mdl-card {
   width: 334px;
@@ -119,8 +120,6 @@ body.option-page .preview-options {
 }
 .preview-options.mdl-layout .mdl-layout__content {
   -webkit-overflow-scrolling: touch;
-  padding-top: 230px;
-  position: relative;
 }
 .preview-options .mdl-card {
   align-items: stretch;
