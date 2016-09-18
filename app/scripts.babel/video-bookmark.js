@@ -2,7 +2,7 @@
 
 function displayTime(time) {
   var h = ~~(time / 3600);
-  var m = ('0' + ~~((time % 3600) / 60)).substr(-2);
+  var m = ('0' + ~~((time % 3600) / 60)).substr(-1);
   var s = ('0' + time % 60).substr(-2);
   return [h, m, s].filter(function(val) {
     return val;
