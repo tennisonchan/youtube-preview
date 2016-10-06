@@ -15,6 +15,7 @@ var Storyboard = function(str, baseUrl, index) {
   this.totalFrames = Number(arr[2]);
   this.unit = arr[6];
   this.width = Number(arr[0]);
+  this.target = null;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -29,14 +30,15 @@ Storyboard.prototype.set = function(key, value) {
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  if (!this.el) {
+  if (!this.el &&
+      this.target.prevAll('.no-preview, .storyboard').length === 0) {
     this.el = $('<div/>', {
       class: 'storyboard'
     })
     .css({
       width: this.frameWidth,
       height: this.frameheight,
-    }).insertBefore(target);
+    }).insertBefore(this.target);
   }
 
   return this.el;
@@ -69,6 +71,7 @@ Storyboard.prototype.url = function(l, m) {
 };
 
 Storyboard.prototype.getPosition = function() {
+  console.log('getPosition', this.count);
   return {
     left: -1 * this.frameWidth * (this.count % this.col),
     top: -1 * this.frameheight * (Math.floor((this.count / this.row)) % this.row),
@@ -82,8 +85,6 @@ Storyboard.prototype.increaseCount = function() {
   return this.count;
 };
 
-Storyboard.prototype.remove = function() {
+Storyboard.prototype.reset = function() {
   this.count = 0;
-  this.el && this.el.remove();
-  this.el = null;
 };

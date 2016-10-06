@@ -101,13 +101,15 @@ var Preview = function(Profile, config) {
     },
     mouseEnterEvent: function() {
       console.log('mouseenter');
-      _this.isPlay = true;
+
       var videoUrl = Profile.getVideoURL(this);
-      _this.imgEl = Profile.getImgElement(this);
-      _this.storyboard && _this.storyboard.remove();
+      var imgEl = Profile.getImgElement(this);
+      _this.isPlay = true;
+      _this.storyboard && _this.storyboard.reset();
+
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
-        _this.loadPreviewImg();
+        _this.loadPreviewImg(_this.storyboard, imgEl);
       } else {
         $.ajax({
           dataType: 'html',
@@ -117,20 +119,21 @@ var Preview = function(Profile, config) {
             if (storyboard && !cache[this.url]) {
               _this.storyboard = storyboard;
               cache[this.url] = storyboard;
-              _this.loadPreviewImg();
+              _this.loadPreviewImg(_this.storyboard, imgEl);
             }
           },
           fail: function() {
-            _this.storyboard = new NoPreview();
-            _this.loadPreviewImg();
+            var noPreview = new NoPreview();
+            _this.storyboard = noPreview;
+            cache[this.url] = noPreview;
+            _this.loadPreviewImg(_this.storyboard, imgEl);
           }
         });
       }
     },
     mouseLeaveEvent: function() {
       console.log('mouseleave');
-      $('.storyboard').remove();
-      _this.storyboard && _this.storyboard.remove();
+      _this.storyboard && _this.storyboard.reset();
       _this.isPlay = false;
       clearTimeout(timeout);
     },
@@ -149,19 +152,19 @@ var Preview = function(Profile, config) {
 
       return storyboard;
     },
-    loadPreviewImg: function() {
-      console.log('storyboards', _this.storyboard);
-      var imgEl = _this.imgEl;
+    loadPreviewImg: function(storyboard, imgEl) {
+      console.log('storyboards');
       var parent = Profile.getVideoThumb(imgEl);
-      _this.storyboard.set('frameWidth', parent.width() || imgEl.width());
-      _this.storyboard.set('frameheight', parent.height() || imgEl.height());
-      if (_this.storyboard.isNoPreview) {
-        _this.storyboard.appendThumbTo(imgEl);
+      storyboard.set('target', imgEl);
+      storyboard.set('frameWidth', parent.width() || imgEl.width());
+      storyboard.set('frameheight', parent.height() || imgEl.height());
+      if (storyboard.isNoPreview) {
+        storyboard.appendThumbTo();
       } else {
         var img = new Image();
-        img.src = _this.storyboard.url();
+        img.src = storyboard.url();
         img.onload = function() {
-          _this.storyboard.appendThumbTo(imgEl);
+          storyboard.appendThumbTo();
           _this.framesPlaying();
         };
       }
