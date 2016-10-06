@@ -41,7 +41,6 @@ Profiles.youtube = function() {
         _target = $(el);
         _imgEl = imgEl;
       }
-      console.log('imgEl', imgEl);
       return imgEl;
     },
     getVideoURL: function(el) {

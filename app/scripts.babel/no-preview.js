@@ -21,7 +21,8 @@ NoPreview.prototype.url = function(l, m) {
 };
 
 NoPreview.prototype.appendThumbTo = function(target) {
-  if(!this.el) {
+  if (!this.el &&
+      this.target.prevAll('.no-preview, .storyboard').length === 0) {
     this.el = $('<div/>', {
       class: 'no-preview',
       text: 'No Preview'
@@ -30,7 +31,7 @@ NoPreview.prototype.appendThumbTo = function(target) {
       lineHeight: this.frameheight + 'px',
       width: this.frameWidth,
       height: this.frameheight,
-    }).insertBefore(target);
+    }).insertBefore(this.target);
   }
 
   return this.el;

@@ -15,6 +15,7 @@ var Storyboard = function(str, baseUrl, index) {
   this.totalFrames = Number(arr[2]);
   this.unit = arr[6];
   this.width = Number(arr[0]);
+  this.target = null;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -29,14 +30,15 @@ Storyboard.prototype.set = function(key, value) {
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  if (!this.el) {
+  if (!this.el &&
+      this.target.prevAll('.no-preview, .storyboard').length === 0) {
     this.el = $('<div/>', {
       class: 'storyboard'
     })
     .css({
       width: this.frameWidth,
       height: this.frameheight,
-    }).insertBefore(target);
+    }).insertBefore(this.target);
   }
 
   return this.el;
