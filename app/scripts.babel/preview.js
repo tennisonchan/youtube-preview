@@ -100,7 +100,7 @@ var Preview = function(Profile, config) {
       });
     },
     mouseEnterEvent: function() {
-      console.log('mouseenter', this);
+      console.log('mouseenter');
 
       var videoUrl = Profile.getVideoURL(this);
       _this.isPlay = true;
@@ -153,7 +153,7 @@ var Preview = function(Profile, config) {
       return storyboard;
     },
     loadPreviewImg: function() {
-      console.log('storyboards', _this.storyboard);
+      console.log('storyboards');
       var imgEl = _this.imgEl;
       var parent = Profile.getVideoThumb(imgEl);
       _this.storyboard.set('frameWidth', parent.width() || imgEl.width());
