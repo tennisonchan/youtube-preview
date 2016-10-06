@@ -69,6 +69,7 @@ Storyboard.prototype.url = function(l, m) {
 };
 
 Storyboard.prototype.getPosition = function() {
+  console.log('getPosition', this.count);
   return {
     left: -1 * this.frameWidth * (this.count % this.col),
     top: -1 * this.frameheight * (Math.floor((this.count / this.row)) % this.row),
@@ -82,8 +83,6 @@ Storyboard.prototype.increaseCount = function() {
   return this.count;
 };
 
-Storyboard.prototype.remove = function() {
+Storyboard.prototype.reset = function() {
   this.count = 0;
-  this.el && this.el.remove();
-  this.el = null;
 };

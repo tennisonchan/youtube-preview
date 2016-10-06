@@ -23,8 +23,17 @@ $enlarged-playlist-video-image-height: 118px;
 $enlarged-playlist-video-image-width: 160px;
 $enlarged-video-image-top-adjustment: -14px;
 $enlarged-video-image-top-reset: 0;
+.thumb-wrapper, .yt-thumb-clip {
+  &:hover {
+    .storyboard {
+      display: block;
+    }
+  }
+}
 .storyboard {
+  display: none;
   background-color: $storyboard-background-color;
+
   & + .videowall-still-image,
   & + img {
     display: none;

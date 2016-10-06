@@ -20,7 +20,7 @@ Profiles.youtube = function() {
     bookmarksToggled: 'action-button-bookmarks-toggled',
     hideVideoControlClass: 'ytp-autohide',
     imgElement: 'img, .videowall-still-image',
-    listenerSelector: 'a[href^=\'/watch\'], a[href*=\'/watch?v=\']',
+    listenerSelector: 'a[href^=\'/watch\'].thumb-link, a[href*=\'/watch?v=\'].thumb-link, a[href*=\'/watch?v=\'].playlist-video',
     mainVideo: 'video',
     moviePlayer: '#movie_player, .html5-video-player',
     progressBarList: '.ytp-progress-bar .ytp-progress-list',
@@ -41,6 +41,7 @@ Profiles.youtube = function() {
         _target = $(el);
         _imgEl = imgEl;
       }
+      console.log('imgEl', imgEl);
       return imgEl;
     },
     getVideoURL: function(el) {

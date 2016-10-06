@@ -100,11 +100,13 @@ var Preview = function(Profile, config) {
       });
     },
     mouseEnterEvent: function() {
-      console.log('mouseenter');
-      _this.isPlay = true;
+      console.log('mouseenter', this);
+
       var videoUrl = Profile.getVideoURL(this);
+      _this.isPlay = true;
       _this.imgEl = Profile.getImgElement(this);
-      _this.storyboard && _this.storyboard.remove();
+      _this.storyboard && _this.storyboard.reset();
+
       if (cache[videoUrl]) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg();
@@ -129,8 +131,7 @@ var Preview = function(Profile, config) {
     },
     mouseLeaveEvent: function() {
       console.log('mouseleave');
-      $('.storyboard').remove();
-      _this.storyboard && _this.storyboard.remove();
+      _this.storyboard && _this.storyboard.reset();
       _this.isPlay = false;
       clearTimeout(timeout);
     },

@@ -43,8 +43,6 @@ NoPreview.prototype.playingFrames = function(target) {
   return true;
 };
 
-NoPreview.prototype.remove = function() {
+NoPreview.prototype.reset = function() {
   this.count = 0;
-  this.el && this.el.remove();
-  this.el = null;
 };
