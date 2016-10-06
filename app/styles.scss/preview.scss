@@ -11,6 +11,8 @@ $enlarged-video-list-thumb-height: 90px;
 $enlarged-video-list-thumb-width: 160px;
 $enlarged-video-list-image-height: 118px;
 $enlarged-video-list-image-width: 160px;
+$playlist-preview-sparkbars-margin-in-radio-playlist: 0 0 0 15px;
+$playlist-preview-sparkbars-margin-in-video-playlist: 0 0 0 28px;
 $playlist-preview-sparkbars-margin: 0 0 0 15px;
 $playlist-preview-sparkbars-width: 72px;
 $video-image-72-top-adjustment: -6px;
@@ -91,10 +93,13 @@ $enlarged-video-image-top-reset: 0;
 /*
   Preview Sparkbars
 */
+.radio-playlist .preview-sparkbars {
+  margin: $playlist-preview-sparkbars-margin-in-radio-playlist !important;
+}
 .playlist-video .preview-sparkbars {
   float: left;
   background-color: $preview-sparkbars-dislikes-background-color;
-  margin: $playlist-preview-sparkbars-margin;
+  margin: $playlist-preview-sparkbars-margin-in-video-playlist;
   width: $playlist-preview-sparkbars-width;
 }
 .preview-sparkbars {
