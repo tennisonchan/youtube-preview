@@ -21,7 +21,8 @@ NoPreview.prototype.url = function(l, m) {
 };
 
 NoPreview.prototype.appendThumbTo = function(target) {
-   var overlay = $('<div/>', {
+  if(!this.el) {
+    this.el = $('<div/>', {
       class: 'no-preview',
       text: 'No Preview'
     })
@@ -30,12 +31,8 @@ NoPreview.prototype.appendThumbTo = function(target) {
       width: this.frameWidth,
       height: this.frameheight,
     }).insertBefore(target);
+  }
 
-  // overlay.append($('<span/>', {
-  //   text: 'No Preview'
-  // }))
-
-  this.el = overlay;
   return this.el;
 };
 

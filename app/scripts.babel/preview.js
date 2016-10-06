@@ -123,7 +123,9 @@ var Preview = function(Profile, config) {
             }
           },
           fail: function() {
-            _this.storyboard = new NoPreview();
+            var noPreview = new NoPreview();
+            _this.storyboard = noPreview;
+            cache[this.url] = noPreview;
             _this.loadPreviewImg();
           }
         });
