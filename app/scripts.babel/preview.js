@@ -32,7 +32,19 @@ var Preview = function(Profile, config) {
       _this.delegateOnVideoThumb();
 
       $(document)
-        .off('mouseenter mouseleave')
+        .off('mouseenter mouseleave mousemove')
+        .on({
+          mousemove: function(evt) {
+            var progress = evt.offsetX / evt.currentTarget.clientWidth;
+            _this.isPlay = false;
+            _this.storyboard.setFrame(progress);
+            _this.storyboard.playingFrames();
+          },
+          mouseleave: function() {
+            _this.isPlay = true;
+            _this.framesPlaying();
+          }
+        }, '.scrubber')
         .on({
           mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
           mouseleave: _this.mouseLeaveEvent,
@@ -153,7 +165,7 @@ var Preview = function(Profile, config) {
       return storyboard;
     },
     loadPreviewImg: function(storyboard, imgEl) {
-      console.log('storyboards');
+      console.log('storyboard', storyboard);
       var parent = Profile.getVideoThumb(imgEl);
       storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());

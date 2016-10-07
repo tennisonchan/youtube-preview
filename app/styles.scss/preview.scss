@@ -367,3 +367,34 @@ $enlarged-video-image-top-reset: 0;
     width: 20px;
   }
 }
+
+.video_list_renew_thumb div.video_thumb_small div.scrubber {
+  left: 15px;
+  right: 15px;
+  top: 3px;
+}
+
+div.scrubber {
+  position: absolute;
+  z-index: 3;
+  bottom: 5px;
+  left: 15px;
+  right: 15px;
+  height: 4px;
+  border-radius: 4px;
+  background: #111;
+  background: linear-gradient(#000000,#222222);
+  box-shadow: rgba(255,255,255,0.2) 0 0 0 1px;
+  transition: opacity 0.2s linear;
+  padding: 1px;
+  display: block;
+}
+
+div.scrubber .scrubbed {
+  background: #ffb7b7;
+  background: linear-gradient(to bottom, #ffb7b7 0%,#f00000 50%,#f00000 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb7b7', endColorstr='#f00000',GradientType=0 );
+  height: 4px;
+  border-radius: 4px;
+  min-width: 6px;
+}

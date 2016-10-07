@@ -16,6 +16,8 @@ var Storyboard = function(str, baseUrl, index) {
   this.unit = arr[6];
   this.width = Number(arr[0]);
   this.target = null;
+  this.progressBar = null;
+  this.isPlaying = false;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -29,7 +31,7 @@ Storyboard.prototype.set = function(key, value) {
   return this;
 };
 
-Storyboard.prototype.appendThumbTo = function(target) {
+Storyboard.prototype.appendThumbTo = function() {
   if (!this.el &&
       this.target.prevAll('.no-preview, .storyboard').length === 0) {
     this.el = $('<div/>', {
@@ -38,7 +40,9 @@ Storyboard.prototype.appendThumbTo = function(target) {
     .css({
       width: this.frameWidth,
       height: this.frameheight,
-    }).insertBefore(this.target);
+    })
+    .append(this.getProgressBar().getElement())
+    .insertBefore(this.target);
   }
 
   return this.el;
@@ -55,6 +59,7 @@ Storyboard.prototype.playingFrames = function(target) {
   });
 
   this.increaseCount();
+  this.progressBar.update(this.count / this.totalFrames);
 
   return true;
 };
@@ -92,4 +97,16 @@ Storyboard.prototype.increaseCount = function() {
 
 Storyboard.prototype.reset = function() {
   this.count = 0;
+};
+
+Storyboard.prototype.getProgressBar = function() {
+  if(!this.progressBar) {
+    this.progressBar = new ProgressBar();
+  }
+
+  return this.progressBar;
+};
+
+Storyboard.prototype.setFrame = function(progress) {
+  this.count = Math.floor(this.totalFrames * progress);
 };
