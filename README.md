@@ -3,9 +3,9 @@ A chrome extension shows likes and dislikes rating bar on all video thumbnail an
 [Download from Chrome Store](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github)
 
 ### Screenshots
-[![YouTube Preview Demo](https://raw.githubusercontent.com/tennisonchan/youtube-preview/master/assets/preview-progress-bar.gif)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=demo)
+[![YouTube Preview Demo](https://raw.githubusercontent.com/tennisonchan/youtube-preview/bbccdb2bb2662f5311fb5d68a5ec89e697a1eb1e/assets/preview-progress-bar.gif)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=demo)
 
-[![youtube-preview-screenshots-1-640x400](https://raw.githubusercontent.com/tennisonchan/youtube-preview/master/assets/youtube-preview-screenshots-1-640x400.png)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=screenshots_1)
+[![youtube-preview-screenshots-1-640x400](https://raw.githubusercontent.com/tennisonchan/youtube-preview/bbccdb2bb2662f5311fb5d68a5ec89e697a1eb1e/assets/youtube-preview-screenshots-1-640x400.png)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=screenshots_1)
 
 ### Setup
 ```sh
