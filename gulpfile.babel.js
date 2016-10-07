@@ -1,5 +1,6 @@
 // generated on 2016-03-25 using generator-chrome-extension 0.5.6
 import gulp from 'gulp';
+import util from 'gulp-util';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
@@ -103,10 +104,16 @@ gulp.task('chromeManifest', () => {
 });
 
 gulp.task('babel', () => {
+  var babelOption = {
+    presets: ['es2015'],
+    comments: false
+  };
+  if (util.env.production) {
+    babelOption.plugins = ["transform-remove-console"]
+  }
+
   return gulp.src('app/scripts.babel/**/*.js')
-      .pipe($.babel({
-        presets: ['es2015']
-      }))
+      .pipe($.babel(babelOption))
       .pipe(gulp.dest('app/scripts'));
 });
 
