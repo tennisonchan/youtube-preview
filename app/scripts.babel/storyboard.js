@@ -77,11 +77,16 @@ Storyboard.prototype.url = function(l, m) {
 
 Storyboard.prototype.getPosition = function() {
   console.log('getPosition', this.count);
+  var row = this.row;
+  if(this.maxPage === this.page() + 1) {
+    var rest = this.totalFrames - this.col * this.row * (this.page() + 1);
+    row = Math.ceil(rest / this.col);
+  }
   return {
     left: -1 * this.frameWidth * (this.count % this.col),
-    top: -1 * this.frameheight * (Math.floor((this.count / this.row)) % this.row),
+    top: -1 * this.frameheight * (Math.floor((this.count / row)) % row),
     width: (this.frameWidth * (this.width * this.col) / this.width),
-    height: (this.frameheight * (this.height * this.row) / this.height)
+    height: (this.frameheight * row)
   };
 };
 
