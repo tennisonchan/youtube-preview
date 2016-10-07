@@ -39,6 +39,10 @@ var Preview = function(Profile, config) {
             _this.isPlay = false;
             _this.storyboard.setFrame(progress);
             _this.storyboard.playingFrames();
+          },
+          mouseleave: function() {
+            _this.isPlay = true;
+            _this.framesPlaying();
           }
         }, '.scrubber')
         .on({
