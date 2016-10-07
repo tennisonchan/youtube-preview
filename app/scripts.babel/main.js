@@ -9,7 +9,7 @@
       'www.youtube.com': 'youtube'
     },
     config = {
-      delayPreview: 50,
+      delayPreview: 20,
       previewInterval: 200,
       showRatingBar: false
     };
