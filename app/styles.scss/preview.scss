@@ -387,7 +387,7 @@ div.scrubber {
   box-shadow: rgba(255,255,255,0.2) 0 0 0 1px;
   transition: opacity 0.2s linear;
   padding: 1px;
-  display: none;
+  display: block;
 }
 
 div.scrubber .scrubbed {

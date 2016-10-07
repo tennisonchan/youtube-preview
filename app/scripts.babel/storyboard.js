@@ -16,7 +16,7 @@ var Storyboard = function(str, baseUrl, index) {
   this.unit = arr[6];
   this.width = Number(arr[0]);
   this.target = null;
-  this.statusBar = null;
+  this.progressBar = null;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -40,7 +40,7 @@ Storyboard.prototype.appendThumbTo = function() {
       width: this.frameWidth,
       height: this.frameheight,
     })
-    .append(this.getStatusBar())
+    .append(this.getProgressBar().getElement())
     .insertBefore(this.target);
   }
 
@@ -58,6 +58,7 @@ Storyboard.prototype.playingFrames = function(target) {
   });
 
   this.increaseCount();
+  this.progressBar.update(this.count / this.totalFrames);
 
   return true;
 };
@@ -92,10 +93,10 @@ Storyboard.prototype.reset = function() {
   this.count = 0;
 };
 
-Storyboard.prototype.getStatusBar = function() {
-  if(!this.statusBar) {
-    this.statusBar = $('<div class="scrubber" style="display: block"><div class="scrubbed" style="width: 10%;"></div></div>');
+Storyboard.prototype.getProgressBar = function() {
+  if(!this.progressBar) {
+    this.progressBar = new ProgressBar();
   }
 
-  return this.statusBar;
+  return this.progressBar;
 };

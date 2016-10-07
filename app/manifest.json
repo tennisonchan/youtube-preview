@@ -31,6 +31,7 @@
       "scripts/options.js",
       "scripts/env.js",
       "scripts/profiles.youtube.js",
+      "scripts/progress-bar.js",
       "scripts/video-bookmark.js",
       "scripts/preview.js",
       "scripts/no-preview.js",
