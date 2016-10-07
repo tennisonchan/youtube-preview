@@ -17,6 +17,7 @@ var Storyboard = function(str, baseUrl, index) {
   this.width = Number(arr[0]);
   this.target = null;
   this.progressBar = null;
+  this.isPlaying = false;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -99,4 +100,8 @@ Storyboard.prototype.getProgressBar = function() {
   }
 
   return this.progressBar;
+};
+
+Storyboard.prototype.setFrame = function(progress) {
+  this.count = Math.floor(this.totalFrames * progress);
 };

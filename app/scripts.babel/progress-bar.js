@@ -13,7 +13,8 @@ ProgressBar.prototype.getElement = function() {
 
     this.el = $('<div/>', {
       class: 'scrubber'
-    }).wrapInner(this.scrubber);
+    })
+    .wrapInner(this.scrubber);
   }
 
   return this.el;
@@ -21,8 +22,6 @@ ProgressBar.prototype.getElement = function() {
 
 ProgressBar.prototype.update = function(progress) {
   this.progress = progress;
-
-  console.log('hello', progress);
 
   this.scrubber.css({
     width: (this.progress * 100) + '%'

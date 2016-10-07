@@ -32,7 +32,15 @@ var Preview = function(Profile, config) {
       _this.delegateOnVideoThumb();
 
       $(document)
-        .off('mouseenter mouseleave')
+        .off('mouseenter mouseleave mousemove')
+        .on({
+          mousemove: function(evt) {
+            var progress = evt.offsetX / evt.currentTarget.clientWidth;
+            _this.isPlay = false;
+            _this.storyboard.setFrame(progress);
+            _this.storyboard.playingFrames();
+          }
+        }, '.scrubber')
         .on({
           mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
           mouseleave: _this.mouseLeaveEvent,
