@@ -16,6 +16,7 @@ var Storyboard = function(str, baseUrl, index) {
   this.unit = arr[6];
   this.width = Number(arr[0]);
   this.target = null;
+  this.statusBar = null;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
 
@@ -29,7 +30,7 @@ Storyboard.prototype.set = function(key, value) {
   return this;
 };
 
-Storyboard.prototype.appendThumbTo = function(target) {
+Storyboard.prototype.appendThumbTo = function() {
   if (!this.el &&
       this.target.prevAll('.no-preview, .storyboard').length === 0) {
     this.el = $('<div/>', {
@@ -38,7 +39,9 @@ Storyboard.prototype.appendThumbTo = function(target) {
     .css({
       width: this.frameWidth,
       height: this.frameheight,
-    }).insertBefore(this.target);
+    })
+    .append(this.getStatusBar())
+    .insertBefore(this.target);
   }
 
   return this.el;
@@ -87,4 +90,12 @@ Storyboard.prototype.increaseCount = function() {
 
 Storyboard.prototype.reset = function() {
   this.count = 0;
+};
+
+Storyboard.prototype.getStatusBar = function() {
+  if(!this.statusBar) {
+    this.statusBar = $('<div class="scrubber" style="display: block"><div class="scrubbed" style="width: 10%;"></div></div>');
+  }
+
+  return this.statusBar;
 };

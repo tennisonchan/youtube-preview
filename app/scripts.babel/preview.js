@@ -153,7 +153,7 @@ var Preview = function(Profile, config) {
       return storyboard;
     },
     loadPreviewImg: function(storyboard, imgEl) {
-      console.log('storyboards');
+      console.log('storyboard', storyboard);
       var parent = Profile.getVideoThumb(imgEl);
       storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());
