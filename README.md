@@ -1,11 +1,11 @@
 # YouTube Preview
 A chrome extension shows likes and dislikes rating bar on all video thumbnail and previewing YouTube video like a gif, helping you decide if it is worth watching.
-[Download from Chrome Store](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap)
+[Download from Chrome Store](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github)
 
 ### Screenshots
-![YouTube Preview Demo](https://cloud.githubusercontent.com/assets/719938/11446392/23ac7314-9504-11e5-9e93-f97d7e61aedb.gif)
+[![YouTube Preview Demo](https://raw.githubusercontent.com/tennisonchan/youtube-preview/master/assets/preview-progress-bar.gif)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=demo)
 
-![youtube-preview-screenshots-1-640x400](https://cloud.githubusercontent.com/assets/719938/11464236/919846f8-96fa-11e5-8a8f-69210ddb1982.png)
+[![youtube-preview-screenshots-1-640x400](https://raw.githubusercontent.com/tennisonchan/youtube-preview/master/assets/youtube-preview-screenshots-1-640x400.png)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=screenshots_1)
 
 ### Setup
 ```sh
