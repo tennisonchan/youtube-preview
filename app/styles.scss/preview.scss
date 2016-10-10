@@ -368,13 +368,13 @@ $enlarged-video-image-top-reset: 0;
   }
 }
 
-.video_list_renew_thumb div.video_thumb_small div.scrubber {
+.video_list_renew_thumb div.video_thumb_small div.preview-scrubber {
   left: 15px;
   right: 15px;
   top: 3px;
 }
 
-div.scrubber {
+div.preview-scrubber {
   position: absolute;
   z-index: 3;
   top: 8px;
@@ -390,7 +390,7 @@ div.scrubber {
   display: block;
 }
 
-div.scrubber .scrubbed {
+div.preview-scrubber .preview-scrubbed {
   background: #ffb7b7;
   background: linear-gradient(to bottom, #ffb7b7 0%,#f00000 50%,#f00000 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb7b7', endColorstr='#f00000',GradientType=0 );

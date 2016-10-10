@@ -33,40 +33,13 @@ var Preview = function(Profile, config) {
 
       $(document)
         .off('mouseenter mouseleave mousemove click')
-        .on({
-          mousemove: function(evt) {
-            var progress = evt.offsetX / evt.currentTarget.clientWidth;
-            _this.isPlay = false;
-            _this.storyboard.setFrame(progress);
-            _this.storyboard.playingFrames();
-          },
-          mouseleave: function() {
-            _this.isPlay = true;
-            _this.framesPlaying();
-          },
-          click: function(evt) {
-            evt.preventDefault();
-            var progress = evt.offsetX / evt.currentTarget.clientWidth;
-            var listener = $(evt.currentTarget).parents(Profile.listenerSelector);
-            var videoTimeString = listener.find('.video-time').text() || listener.next('.video-time').text();
-            if (videoTimeString) {
-              var videoTimeArray = videoTimeString.split(':');
-              var videoTimeInSec = 0;
-              for(var i = 0; i < videoTimeArray.length; i++) {
-                videoTimeInSec += videoTimeArray[i] * Math.pow(60, videoTimeArray.length - i - 1);
-              }
-              window.location.search = window.location.search + '&t=' + Math.floor(videoTimeInSec * progress) + 's';
-            }
-          }
-        }, '.scrubber')
+        .on(scrubberEventHandler, Profile.scrubber)
         .on({
           mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
           mouseleave: _this.mouseLeaveEvent,
         }, Profile.listenerSelector);
 
       _this.videoBookmark = new VideoBookmark(Profile);
-
-      return this;
     },
     onDOMNodeInserted: function(evt) {
       var el = evt.target,
@@ -207,5 +180,34 @@ var Preview = function(Profile, config) {
     }
   };
 
+  var scrubberEventHandler = {
+    mousemove: function(evt) {
+      var progress = evt.offsetX / evt.currentTarget.clientWidth;
+      _this.isPlay = false;
+      _this.storyboard.setFrame(progress);
+      _this.storyboard.playingFrames();
+    },
+    mouseleave: function() {
+      _this.isPlay = true;
+      _this.framesPlaying();
+    },
+    click: function(evt) {
+      evt.preventDefault();
+      var progress = evt.offsetX / evt.currentTarget.clientWidth;
+      var listener = $(evt.currentTarget).parents(Profile.listenerSelector);
+      var videoTimeString = listener.find('.video-time').text() || listener.next('.video-time').text();
+      if (videoTimeString) {
+        var videoTimeArray = videoTimeString.split(':');
+        var videoTimeInSec = 0;
+        for(var i = 0; i < videoTimeArray.length; i++) {
+          videoTimeInSec += videoTimeArray[i] * Math.pow(60, videoTimeArray.length - i - 1);
+        }
+        window.location.search = window.location.search + '&t=' + Math.floor(videoTimeInSec * progress) + 's';
+      }
+    }
+  };
+
   _this.initialize();
+
+  return _this;
 };

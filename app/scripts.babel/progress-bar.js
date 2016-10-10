@@ -7,12 +7,12 @@ var ProgressBar = function() {
 ProgressBar.prototype.getElement = function() {
   if (!this.el) {
     this.scrubber = $('<div/>', {
-      class: 'scrubbed',
+      class: 'preview-scrubbed',
     }).css({ width: (this.progress * 100) + '%' })
 
 
     this.el = $('<div/>', {
-      class: 'scrubber'
+      class: 'preview-scrubber'
     })
     .wrapInner(this.scrubber);
   }

@@ -22,6 +22,7 @@ Profiles.youtube = function() {
     imgElement: 'img, .videowall-still-image',
     listenerSelector: 'a[href^=\'/watch\'], a[href*=\'/watch?v=\']',
     mainVideo: 'video',
+    scrubber: '.preview-scrubber',
     moviePlayer: '#movie_player, .html5-video-player',
     progressBarList: '.ytp-progress-bar .ytp-progress-list',
     secondaryActions: '#watch8-secondary-actions, .watch-secondary-actions',
