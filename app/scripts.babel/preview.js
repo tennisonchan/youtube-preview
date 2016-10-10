@@ -32,7 +32,7 @@ var Preview = function(Profile, config) {
       _this.delegateOnVideoThumb();
 
       $(document)
-        .off('mouseenter mouseleave mousemove')
+        .off('mouseenter mouseleave mousemove click')
         .on({
           mousemove: function(evt) {
             var progress = evt.offsetX / evt.currentTarget.clientWidth;
@@ -43,6 +43,20 @@ var Preview = function(Profile, config) {
           mouseleave: function() {
             _this.isPlay = true;
             _this.framesPlaying();
+          },
+          click: function(evt) {
+            evt.preventDefault();
+            var progress = evt.offsetX / evt.currentTarget.clientWidth;
+            var listener = $(evt.currentTarget).parents(Profile.listenerSelector);
+            var videoTimeString = listener.find('.video-time').text() || listener.next('.video-time').text();
+            if (videoTimeString) {
+              var videoTimeArray = videoTimeString.split(':');
+              var videoTimeInSec = 0;
+              for(var i = 0; i < videoTimeArray.length; i++) {
+                videoTimeInSec += videoTimeArray[i] * Math.pow(60, videoTimeArray.length - i - 1);
+              }
+              window.location.search = window.location.search + '&t=' + Math.floor(videoTimeInSec * progress) + 's';
+            }
           }
         }, '.scrubber')
         .on({
