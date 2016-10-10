@@ -32,27 +32,11 @@ var Preview = function(Profile, config) {
       _this.delegateOnVideoThumb();
 
       $(document)
-        .off('mouseenter mouseleave mousemove')
-        .on({
-          mousemove: function(evt) {
-            var progress = evt.offsetX / evt.currentTarget.clientWidth;
-            _this.isPlay = false;
-            _this.storyboard.setFrame(progress);
-            _this.storyboard.playingFrames();
-          },
-          mouseleave: function() {
-            _this.isPlay = true;
-            _this.framesPlaying();
-          }
-        }, '.scrubber')
-        .on({
-          mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
-          mouseleave: _this.mouseLeaveEvent,
-        }, Profile.listenerSelector);
+        .off('mouseenter mouseleave mousemove click')
+        .on(scrubberEventHandler, Profile.scrubber)
+        .on(thumbLinkEventHandler, Profile.thumbLinkSelector);
 
       _this.videoBookmark = new VideoBookmark(Profile);
-
-      return this;
     },
     onDOMNodeInserted: function(evt) {
       var el = evt.target,
@@ -111,44 +95,6 @@ var Preview = function(Profile, config) {
         }
       });
     },
-    mouseEnterEvent: function() {
-      console.log('mouseenter');
-
-      var videoUrl = Profile.getVideoURL(this);
-      var imgEl = Profile.getImgElement(this);
-      _this.isPlay = true;
-      _this.storyboard && _this.storyboard.reset();
-
-      if (cache[videoUrl]) {
-        _this.storyboard = cache[videoUrl];
-        _this.loadPreviewImg(_this.storyboard, imgEl);
-      } else {
-        $.ajax({
-          dataType: 'html',
-          url: videoUrl,
-          success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html);
-            if (storyboard && !cache[this.url]) {
-              _this.storyboard = storyboard;
-              cache[this.url] = storyboard;
-              _this.loadPreviewImg(_this.storyboard, imgEl);
-            }
-          },
-          fail: function() {
-            var noPreview = new NoPreview();
-            _this.storyboard = noPreview;
-            cache[this.url] = noPreview;
-            _this.loadPreviewImg(_this.storyboard, imgEl);
-          }
-        });
-      }
-    },
-    mouseLeaveEvent: function() {
-      console.log('mouseleave');
-      _this.storyboard && _this.storyboard.reset();
-      _this.isPlay = false;
-      clearTimeout(timeout);
-    },
     getStoryboardDetails: function(html) {
       var storyboard = null;
       var storyboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"');
@@ -188,10 +134,80 @@ var Preview = function(Profile, config) {
           _this.framesPlaying();
         }, config.previewInterval);
       } else {
-        _this.mouseLeaveEvent();
+        thumbLinkEventHandler.mouseleave();
+      }
+    }
+  };
+
+  var thumbLinkEventHandler = {
+    mouseenter: debounce(function() {
+      console.log('mouseenter');
+
+      var videoUrl = Profile.getVideoURL(this);
+      var imgEl = Profile.getImgElement(this);
+      _this.isPlay = true;
+      _this.storyboard && _this.storyboard.reset();
+
+      if (cache[videoUrl]) {
+        _this.storyboard = cache[videoUrl];
+        _this.loadPreviewImg(_this.storyboard, imgEl);
+      } else {
+        $.ajax({
+          dataType: 'html',
+          url: videoUrl,
+          success: function(html) {
+            var storyboard = _this.getStoryboardDetails(html);
+            if (storyboard && !cache[this.url]) {
+              _this.storyboard = storyboard;
+              cache[this.url] = storyboard;
+              _this.loadPreviewImg(_this.storyboard, imgEl);
+            }
+          },
+          fail: function() {
+            var noPreview = new NoPreview();
+            _this.storyboard = noPreview;
+            cache[this.url] = noPreview;
+            _this.loadPreviewImg(_this.storyboard, imgEl);
+          }
+        });
+      }
+    }, config.delayPreview),
+    mouseleave: function() {
+      console.log('mouseleave');
+      _this.storyboard && _this.storyboard.reset();
+      _this.isPlay = false;
+      clearTimeout(timeout);
+    },
+  };
+
+  var scrubberEventHandler = {
+    mousemove: function(evt) {
+      var progress = evt.offsetX / evt.currentTarget.clientWidth;
+      _this.isPlay = false;
+      _this.storyboard.setFrame(progress);
+      _this.storyboard.playingFrames();
+    },
+    mouseleave: function() {
+      _this.isPlay = true;
+      _this.framesPlaying();
+    },
+    click: function(evt) {
+      evt.preventDefault();
+      var progress = evt.offsetX / evt.currentTarget.clientWidth;
+      var listener = $(evt.currentTarget).parents(Profile.thumbLinkSelector);
+      var videoTimeString = listener.find('.video-time').text() || listener.next('.video-time').text();
+      if (videoTimeString) {
+        var videoTimeArray = videoTimeString.split(':');
+        var videoTimeInSec = 0;
+        for(var i = 0; i < videoTimeArray.length; i++) {
+          videoTimeInSec += videoTimeArray[i] * Math.pow(60, videoTimeArray.length - i - 1);
+        }
+        window.location.search = window.location.search + '&t=' + Math.floor(videoTimeInSec * progress) + 's';
       }
     }
   };
 
   _this.initialize();
+
+  return _this;
 };
