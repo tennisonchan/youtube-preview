@@ -20,7 +20,7 @@ Profiles.youtube = function() {
     bookmarksToggled: 'action-button-bookmarks-toggled',
     hideVideoControlClass: 'ytp-autohide',
     imgElement: 'img, .videowall-still-image',
-    listenerSelector: 'a[href^=\'/watch\'], a[href*=\'/watch?v=\']',
+    listenerSelector: 'a[href^=\'/watch\']:has(img), a[href*=\'/watch?v=\']:has(img)',
     mainVideo: 'video',
     moviePlayer: '#movie_player, .html5-video-player',
     progressBarList: '.ytp-progress-bar .ytp-progress-list',
