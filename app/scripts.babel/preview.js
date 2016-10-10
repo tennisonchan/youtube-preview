@@ -34,10 +34,7 @@ var Preview = function(Profile, config) {
       $(document)
         .off('mouseenter mouseleave mousemove click')
         .on(scrubberEventHandler, Profile.scrubber)
-        .on({
-          mouseenter: debounce(_this.mouseEnterEvent, config.delayPreview),
-          mouseleave: _this.mouseLeaveEvent,
-        }, Profile.listenerSelector);
+        .on(thumbLinkEventHandler, Profile.thumbLinkSelector);
 
       _this.videoBookmark = new VideoBookmark(Profile);
     },
@@ -98,44 +95,6 @@ var Preview = function(Profile, config) {
         }
       });
     },
-    mouseEnterEvent: function() {
-      console.log('mouseenter');
-
-      var videoUrl = Profile.getVideoURL(this);
-      var imgEl = Profile.getImgElement(this);
-      _this.isPlay = true;
-      _this.storyboard && _this.storyboard.reset();
-
-      if (cache[videoUrl]) {
-        _this.storyboard = cache[videoUrl];
-        _this.loadPreviewImg(_this.storyboard, imgEl);
-      } else {
-        $.ajax({
-          dataType: 'html',
-          url: videoUrl,
-          success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html);
-            if (storyboard && !cache[this.url]) {
-              _this.storyboard = storyboard;
-              cache[this.url] = storyboard;
-              _this.loadPreviewImg(_this.storyboard, imgEl);
-            }
-          },
-          fail: function() {
-            var noPreview = new NoPreview();
-            _this.storyboard = noPreview;
-            cache[this.url] = noPreview;
-            _this.loadPreviewImg(_this.storyboard, imgEl);
-          }
-        });
-      }
-    },
-    mouseLeaveEvent: function() {
-      console.log('mouseleave');
-      _this.storyboard && _this.storyboard.reset();
-      _this.isPlay = false;
-      clearTimeout(timeout);
-    },
     getStoryboardDetails: function(html) {
       var storyboard = null;
       var storyboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"');
@@ -175,9 +134,50 @@ var Preview = function(Profile, config) {
           _this.framesPlaying();
         }, config.previewInterval);
       } else {
-        _this.mouseLeaveEvent();
+        thumbLinkEventHandler.mouseleave();
       }
     }
+  };
+
+  var thumbLinkEventHandler = {
+    mouseenter: debounce(function() {
+      console.log('mouseenter');
+
+      var videoUrl = Profile.getVideoURL(this);
+      var imgEl = Profile.getImgElement(this);
+      _this.isPlay = true;
+      _this.storyboard && _this.storyboard.reset();
+
+      if (cache[videoUrl]) {
+        _this.storyboard = cache[videoUrl];
+        _this.loadPreviewImg(_this.storyboard, imgEl);
+      } else {
+        $.ajax({
+          dataType: 'html',
+          url: videoUrl,
+          success: function(html) {
+            var storyboard = _this.getStoryboardDetails(html);
+            if (storyboard && !cache[this.url]) {
+              _this.storyboard = storyboard;
+              cache[this.url] = storyboard;
+              _this.loadPreviewImg(_this.storyboard, imgEl);
+            }
+          },
+          fail: function() {
+            var noPreview = new NoPreview();
+            _this.storyboard = noPreview;
+            cache[this.url] = noPreview;
+            _this.loadPreviewImg(_this.storyboard, imgEl);
+          }
+        });
+      }
+    }, config.delayPreview),
+    mouseleave: function() {
+      console.log('mouseleave');
+      _this.storyboard && _this.storyboard.reset();
+      _this.isPlay = false;
+      clearTimeout(timeout);
+    },
   };
 
   var scrubberEventHandler = {
@@ -194,7 +194,7 @@ var Preview = function(Profile, config) {
     click: function(evt) {
       evt.preventDefault();
       var progress = evt.offsetX / evt.currentTarget.clientWidth;
-      var listener = $(evt.currentTarget).parents(Profile.listenerSelector);
+      var listener = $(evt.currentTarget).parents(Profile.thumbLinkSelector);
       var videoTimeString = listener.find('.video-time').text() || listener.next('.video-time').text();
       if (videoTimeString) {
         var videoTimeArray = videoTimeString.split(':');
