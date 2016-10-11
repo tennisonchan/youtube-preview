@@ -31,6 +31,7 @@
       "scripts/options.js",
       "scripts/env.js",
       "scripts/profiles.youtube.js",
+      "scripts/rewind-button.js",
       "scripts/progress-bar.js",
       "scripts/video-bookmark.js",
       "scripts/preview.js",
@@ -51,6 +52,7 @@
     "images/close.png",
     "images/add.png",
     "images/search.png",
-    "images/bg_2048.png"
+    "images/bg_2048.png",
+    "rewind-button.html"
   ]
 }

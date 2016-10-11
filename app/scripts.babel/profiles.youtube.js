@@ -30,6 +30,7 @@ Profiles.youtube = function() {
     ytpPlayProgress: '.ytp-play-progress',
     ytpScrubberButton: '.ytp-scrubber-button',
     ytpTimeCurrent: '.ytp-time-current',
+    ytpLeftControls: '.ytp-left-controls',
     getBookmarkPanelHook: function() {
       return $(this.bookmarkPanelHook);
     },
