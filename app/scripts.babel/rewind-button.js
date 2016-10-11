@@ -9,15 +9,15 @@ var RewindButton = function(Profile) {
   }
 
   _this.create = function(target) {
-    $.ajax(chrome.extension.getURL('rewind-button.html')).then((el) => {
-      _this.el = $(el).on({
-        click: function() {
-          console.log('hello');
-          _this.video.currentTime = _this.video.currentTime - 10;
-          _this.video.play();
-        }
-      }).appendTo(target);
-    });
+    $.ajax(chrome.extension.getURL('rewind-button.html'))
+      .then(function(el) {
+        _this.el = $(el).on({
+          click: function() {
+            _this.video.currentTime = _this.video.currentTime - 10;
+            _this.video.play();
+          }
+        }).appendTo(target);
+      });
   };
 
   initialize(Profile);
