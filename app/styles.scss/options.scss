@@ -42,7 +42,7 @@ body.option-page .preview-options {
   transform: translateY(50%);
 }
 .mdl-card {
-  width: 334px;
+  min-width: 334px;
 }
 .mdl-card .mdl-card__title {
   color: #fff;
@@ -388,6 +388,7 @@ body.option-page .preview-options {
 /* Fixes for IE 10 */
 .mdl-grid {
   display: flex !important;
+  flex-wrap: nowrap !important;
 }
 .preview-options .mdl-mini-footer {
   align-items: center;
@@ -396,4 +397,16 @@ body.option-page .preview-options {
   height: 120px;
   margin-top: 80px;
   padding: 40px;
+}
+
+.rewind-button {
+  .background {
+    background-color: #c13d33;
+    background-repeat: no-repeat;
+    background-size: 322px 236.5px;
+    height: 236.5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 322px;
+  }
 }
