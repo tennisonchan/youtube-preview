@@ -38,11 +38,12 @@ body.option-page .preview-options {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 .preview-options__posts {
+  align-items: center;
+  height: 100%;
   justify-content: center;
-  transform: translateY(50%);
 }
 .mdl-card {
-  width: 334px;
+  min-width: 334px;
 }
 .mdl-card .mdl-card__title {
   color: #fff;
@@ -119,6 +120,7 @@ body.option-page .preview-options {
   width: 100%;
 }
 .preview-options.mdl-layout .mdl-layout__content {
+  height: 100%;
   -webkit-overflow-scrolling: touch;
 }
 .preview-options .mdl-card {
@@ -388,6 +390,7 @@ body.option-page .preview-options {
 /* Fixes for IE 10 */
 .mdl-grid {
   display: flex !important;
+  flex-wrap: nowrap !important;
 }
 .preview-options .mdl-mini-footer {
   align-items: center;
@@ -396,4 +399,16 @@ body.option-page .preview-options {
   height: 120px;
   margin-top: 80px;
   padding: 40px;
+}
+
+.rewind-button {
+  .background {
+    background-color: #d21216;
+    background-repeat: no-repeat;
+    background-size: 322px 236.5px;
+    height: 236.5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 322px;
+  }
 }

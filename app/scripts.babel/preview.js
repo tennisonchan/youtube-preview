@@ -36,6 +36,10 @@ var Preview = function(Profile, config) {
         .on(scrubberEventHandler, Profile.scrubber)
         .on(thumbLinkEventHandler, Profile.thumbLinkSelector);
 
+      if (config.showRewindButton) {
+        _this.rewindButton = new RewindButton(Profile).create(Profile.ytpLeftControls);
+      }
+
       _this.videoBookmark = new VideoBookmark(Profile);
     },
     onDOMNodeInserted: function(evt) {

@@ -10,17 +10,19 @@
   function restore_options() {
     chrome.storage.sync.get({
       previewInterval: 200,
-      showRatingBar: false
+      showRatingBar: false,
+      showRewindButton: false,
     }, function(data) {
       var previewInterval = Number(data.previewInterval);
       var showRatingBar = Boolean(data.showRatingBar);
+      var showRewindButton = Boolean(data.showRewindButton);
+
       clearInterval(timeInterval);
       timeInterval = setInterval(animate, previewInterval);
       $('#preview-intervals-slide').val(previewInterval);
       $('#rating-bar-switch').prop('checked', showRatingBar);
-      if (showRatingBar) {
-        $('.rating-bar').addClass('on');
-      }
+      $('.rating-bar').toggleClass('on', showRatingBar);
+      $('#rewind-button-switch').prop('checked', showRewindButton);
     });
   }
 
@@ -64,6 +66,13 @@
       let message = this.checked ? 'Show rating bar' : 'Hide rating bar';
       $('.rating-bar').toggleClass('on', this.checked);
       save_option('showRatingBar', this.checked, message);
+    });
+
+  $('#rewind-button-switch')
+    .on('change', function() {
+      console.log('showRewindButton', this.checked);
+      let message = this.checked ? 'Show rewind button' : 'Hide rewind button';
+      save_option('showRewindButton', this.checked, message);
     });
 
 })(jQuery);
