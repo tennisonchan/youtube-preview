@@ -106,14 +106,15 @@ $enlarged-video-image-top-reset: 0;
 /*
   Preview Sparkbars
 */
-.radio-playlist .preview-sparkbars {
-  margin: $playlist-preview-sparkbars-margin-in-radio-playlist !important;
-}
+.watch-queue-item .preview-sparkbars,
 .playlist-video .preview-sparkbars {
   float: left;
   background-color: $preview-sparkbars-dislikes-background-color;
   margin: $playlist-preview-sparkbars-margin-in-video-playlist;
   width: $playlist-preview-sparkbars-width;
+}
+.radio-playlist .preview-sparkbars {
+  margin: $playlist-preview-sparkbars-margin-in-radio-playlist !important;
 }
 .preview-sparkbars {
   clear: both;
