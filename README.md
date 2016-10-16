@@ -17,12 +17,6 @@ Youtube just got easier. Fast-forward through videos all before you have to watc
 
 [![YouTube Preview Demo](https://raw.githubusercontent.com/tennisonchan/youtube-preview/78ed272/assets/obama-10-sec-rewind-button.png)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=demo)
 
-### Screenshots
-[![YouTube Preview Demo](https://raw.githubusercontent.com/tennisonchan/youtube-preview/bbccdb2bb2662f5311fb5d68a5ec89e697a1eb1e/assets/preview-progress-bar.gif)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=demo)
-
-[![youtube-preview-screenshots-1-640x400](https://raw.githubusercontent.com/tennisonchan/youtube-preview/bbccdb2bb2662f5311fb5d68a5ec89e697a1eb1e/assets/youtube-preview-screenshots-1-640x400.png)](https://chrome.google.com/webstore/detail/youtube-preview/gbkgikkleehfibaknfmdphhhacjfkdap?utm_source=github&utm_campaign=screenshots_1)
-
-
 ### Setup
 ```sh
 # Place your YouTube API key inside the env.js file
