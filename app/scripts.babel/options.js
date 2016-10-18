@@ -11,7 +11,7 @@
     chrome.storage.sync.get({
       previewInterval: 200,
       showRatingBar: false,
-      showRewindButton: false,
+      showRewindButton: true,
     }, function(data) {
       var previewInterval = Number(data.previewInterval);
       var showRatingBar = Boolean(data.showRatingBar);

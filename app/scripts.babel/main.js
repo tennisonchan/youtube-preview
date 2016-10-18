@@ -12,7 +12,7 @@
       delayPreview: 20,
       previewInterval: 200,
       showRatingBar: false,
-      showRewindButton: false
+      showRewindButton: true
     };
 
   chrome.storage.sync.get(config, function(config) {
