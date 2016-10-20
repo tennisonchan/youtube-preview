@@ -31,6 +31,7 @@ Profiles.youtube = function() {
     ytpScrubberButton: '.ytp-scrubber-button',
     ytpTimeCurrent: '.ytp-time-current',
     ytpLeftControls: '.ytp-left-controls',
+    ytpRewindButton: '.ytp-rewind-button',
     getBookmarkPanelHook: function() {
       return $(this.bookmarkPanelHook);
     },

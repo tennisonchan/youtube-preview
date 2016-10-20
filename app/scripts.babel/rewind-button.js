@@ -11,12 +11,14 @@ var RewindButton = function(Profile) {
   _this.create = function(target) {
     $.ajax(chrome.extension.getURL('rewind-button.html'))
       .then(function(el) {
-        _this.el = $(el).on({
-          click: function() {
-            _this.video.currentTime = _this.video.currentTime - 10;
-            _this.video.play();
-          }
-        }).appendTo(target);
+        if ($(Profile.ytpRewindButton).length === 0) {
+          _this.el = $(el).on({
+            click: function() {
+              _this.video.currentTime = _this.video.currentTime - 10;
+              _this.video.play();
+            }
+          }).appendTo(target);
+        }
       });
   };
 

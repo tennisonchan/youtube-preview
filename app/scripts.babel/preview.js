@@ -27,6 +27,7 @@ var Preview = function(Profile, config) {
     isPlay: false,
     storyboard: null,
     imgEl: null,
+    rewindButton: null,
     initialize: function() {
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
       _this.delegateOnVideoThumb();
@@ -36,7 +37,7 @@ var Preview = function(Profile, config) {
         .on(scrubberEventHandler, Profile.scrubber)
         .on(thumbLinkEventHandler, Profile.thumbLinkSelector);
 
-      if (config.showRewindButton) {
+      if (config.showRewindButton && !_this.rewindButton) {
         _this.rewindButton = new RewindButton(Profile).create(Profile.ytpLeftControls);
       }
 
