@@ -10,7 +10,7 @@
   function restore_options() {
     chrome.storage.sync.get({
       previewInterval: 200,
-      showRatingBar: false,
+      showRatingBar: true,
       showRewindButton: true,
     }, function(data) {
       var previewInterval = Number(data.previewInterval);

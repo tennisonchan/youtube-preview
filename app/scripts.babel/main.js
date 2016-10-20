@@ -11,7 +11,7 @@
     config = {
       delayPreview: 20,
       previewInterval: 200,
-      showRatingBar: false,
+      showRatingBar: true,
       showRewindButton: true
     };
 
