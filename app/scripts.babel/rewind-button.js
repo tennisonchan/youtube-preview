@@ -22,6 +22,10 @@ var RewindButton = function(Profile) {
       });
   };
 
+  _this.remove = function() {
+    _this.el.remove();
+  };
+
   initialize(Profile);
 
   return _this;

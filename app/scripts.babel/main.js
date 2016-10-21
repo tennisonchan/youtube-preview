@@ -5,7 +5,7 @@
 
   'use strict';
 
-  var list = {
+  var App, list = {
       'www.youtube.com': 'youtube'
     },
     config = {
@@ -21,7 +21,10 @@
     config.showRatingBar = config.showRatingBar;
     config.showRewindButton = config.showRewindButton;
     var profile = Profiles[list[window.location.host] || 'youtube']();
-    var App = Preview(profile, config);
+
+    App = Preview(profile, config);
+    chrome.storage.onChanged.addListener(App.updateConfigs);
   });
+
 
 })(window, Preview, Profiles);

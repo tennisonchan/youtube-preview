@@ -28,20 +28,33 @@ var Preview = function(Profile, config) {
     storyboard: null,
     imgEl: null,
     rewindButton: null,
+    updateConfigs: function(changes) {
+      for (var key in changes) {
+        config[key] = changes[key].newValue;
+      }
+
+      _this.injectRewindButton();
+      _this.delegateOnVideoThumb();
+    },
     initialize: function() {
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
       _this.delegateOnVideoThumb();
+      _this.injectRewindButton();
 
       $(document)
         .off('mouseenter mouseleave mousemove click')
         .on(scrubberEventHandler, Profile.scrubber)
         .on(thumbLinkEventHandler, Profile.thumbLinkSelector);
 
-      if (config.showRewindButton && !_this.rewindButton) {
-        _this.rewindButton = new RewindButton(Profile).create(Profile.ytpLeftControls);
-      }
-
       _this.videoBookmark = new VideoBookmark(Profile);
+    },
+    injectRewindButton: function() {
+      if (config.showRewindButton) {
+          _this.rewindButton = new RewindButton(Profile);
+          _this.rewindButton.create(Profile.ytpLeftControls);
+      } else {
+        _this.rewindButton && _this.rewindButton.remove();
+      }
     },
     onDOMNodeInserted: function(evt) {
       var el = evt.target,
@@ -49,6 +62,8 @@ var Preview = function(Profile, config) {
 
       if (nodeName === 'video') {
         _this.videoBookmark.delegateOnVideoBookmark(el);
+
+        _this.injectRewindButton();
       }
 
       if (['#comment', '#text', 'script', 'style', 'input', 'iframe', 'embed', 'button', 'video', 'link'].indexOf(nodeName) === -1) {
