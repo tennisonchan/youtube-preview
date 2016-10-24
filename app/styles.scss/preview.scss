@@ -25,8 +25,17 @@ $enlarged-playlist-video-image-height: 118px;
 $enlarged-playlist-video-image-width: 160px;
 $enlarged-video-image-top-adjustment: -14px;
 $enlarged-video-image-top-reset: 0;
+
 .thumb-wrapper, .yt-thumb-clip, .yt-lockup-thumbnail, .ytp-videowall-still {
   &:hover {
+    .watched-badge {
+      display: none;
+    }
+
+    .watched .video-thumb {
+      opacity: 1;
+    }
+
     .no-preview{
       display: block;
     }
