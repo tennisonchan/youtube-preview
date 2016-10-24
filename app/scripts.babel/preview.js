@@ -123,17 +123,21 @@ var Preview = function(Profile, config) {
         var result = storyboard_spec[1].split('|');
         var baseUrl = result.shift();
         var lastIndex = result.length - 1;
-        storyboard = new Storyboard(result[lastIndex], baseUrl, lastIndex);
+        return {
+          str: result[lastIndex],
+          baseUrl: baseUrl,
+          index: lastIndex
+        };
       } else {
-        storyboard = new NoPreview();
+        return {
+          isNoPreview: true
+        };
       }
-
-      return storyboard;
     },
     loadPreviewImg: function(storyboard, imgEl) {
       console.log('storyboard', storyboard);
       var parent = Profile.getVideoThumb(imgEl);
-      storyboard.set('target', imgEl);
+      // storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());
       storyboard.set('frameheight', parent.height() || imgEl.height());
       if (storyboard.isNoPreview) {
@@ -141,8 +145,8 @@ var Preview = function(Profile, config) {
       } else {
         var img = new Image();
         img.src = storyboard.url();
+        storyboard.appendThumbTo();
         img.onload = function() {
-          storyboard.appendThumbTo();
           _this.framesPlaying();
         };
       }
@@ -172,15 +176,17 @@ var Preview = function(Profile, config) {
         _this.storyboard = cache[videoUrl];
         _this.loadPreviewImg(_this.storyboard, imgEl);
       } else {
+        _this.storyboard = new Storyboard(imgEl);
+
         $.ajax({
           dataType: 'html',
           url: videoUrl,
           success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html);
-            if (storyboard && !cache[this.url]) {
-              _this.storyboard = storyboard;
+            let storyboardDetails = _this.getStoryboardDetails(html);
+            if (storyboardDetails && !cache[this.url]) {
+              let storyboard = _this.storyboard.setStory(storyboardDetails);
               cache[this.url] = storyboard;
-              _this.loadPreviewImg(_this.storyboard, imgEl);
+              _this.loadPreviewImg(storyboard, imgEl);
             }
           },
           fail: function() {

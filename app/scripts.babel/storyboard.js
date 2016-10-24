@@ -1,10 +1,40 @@
-var Storyboard = function(str, baseUrl, index) {
+var Storyboard = function(target) {
+  this.baseUrl = null;
+  this.col = null;
+  this.count = null;
+  this.el = null;
+  this.frameheight = null;
+  this.frameWidth = null;
+  this.height = null;
+  this.index = null;
+  this.isPlaying = false;
+  this.maxPage = null;
+  this.ms = null;
+  this.row = null;
+  this.sigh = null;
+  this.totalFrames = null;
+  this.unit = null;
+  this.width = null;
+  this.isNoPreview = false;
+
+  this.target = target;
+  this.progressBar = new ProgressBar().insertAfter(target);
+};
+
+Storyboard.prototype.setStory = function({ isNoPreview, str, baseUrl, index }) {
+  this.completeLoading();
+
+  if (isNoPreview) {
+    this.isNoPreview = true;
+
+    return this;
+  }
+
   var arr = str.split('#');
 
   this.baseUrl = baseUrl;
   this.col = Number(arr[4]);
   this.count = 0;
-  this.el = null;
   this.frameheight = Number(arr[1]);
   this.frameWidth = Number(arr[0]);
   this.height = Number(arr[1]);
@@ -15,8 +45,6 @@ var Storyboard = function(str, baseUrl, index) {
   this.totalFrames = Number(arr[2]);
   this.unit = arr[6];
   this.width = Number(arr[0]);
-  this.target = null;
-  this.progressBar = null;
   this.isPlaying = false;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
@@ -34,22 +62,34 @@ Storyboard.prototype.set = function(key, value) {
 Storyboard.prototype.appendThumbTo = function() {
   if (!this.el &&
       this.target.prevAll('.no-preview, .storyboard').length === 0) {
-    this.el = $('<div/>', {
-      class: 'storyboard'
-    })
-    .css({
-      width: this.frameWidth,
-      height: this.frameheight,
-    })
-    .append(this.getProgressBar().getElement())
-    .insertBefore(this.target);
+
+    if(this.isNoPreview) {
+      this.el = $('<div/>', {
+        class: 'no-preview',
+        text: 'No Preview'
+      })
+      .css({
+        lineHeight: this.frameheight + 'px',
+        width: this.frameWidth,
+        height: this.frameheight,
+      }).insertBefore(this.target);
+    } else {
+      this.el = $('<div/>', {
+        class: 'storyboard'
+      })
+      .css({
+        width: this.frameWidth,
+        height: this.frameheight,
+      })
+      .insertBefore(this.target);
+    }
   }
 
   return this.el;
 };
 
 Storyboard.prototype.playingFrames = function(target) {
-  if (!this.el) return false;
+  if (!this.el || this.isNoPreview) return false;
 
   var pos = this.getPosition();
   this.el.css({
@@ -99,12 +139,8 @@ Storyboard.prototype.reset = function() {
   this.count = 0;
 };
 
-Storyboard.prototype.getProgressBar = function() {
-  if(!this.progressBar) {
-    this.progressBar = new ProgressBar();
-  }
-
-  return this.progressBar;
+Storyboard.prototype.completeLoading = function() {
+  this.progressBar.completeLoading();
 };
 
 Storyboard.prototype.setFrame = function(progress) {

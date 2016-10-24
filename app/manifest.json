@@ -48,6 +48,7 @@
     "run_at": "document_end"
   }],
   "web_accessible_resources": [
+    "images/loading.gif",
     "images/bookmark-icon.png",
     "images/close.png",
     "images/add.png",
