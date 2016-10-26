@@ -12,7 +12,7 @@ ProgressBar.prototype.getElement = function() {
 
 
     this.el = $('<div/>', {
-      class: 'preview-scrubber'
+      class: 'preview-scrubber loading'
     })
     .wrapInner(this.scrubber);
   }

@@ -380,27 +380,97 @@ $enlarged-video-image-top-reset: 0;
   top: auto;
 }
 
+// div.preview-scrubber {
+//   position: absolute;
+//   z-index: 3;
+//   top: 8px;
+//   left: 15px;
+//   right: 15px;
+//   height: 4px;
+//   border-radius: 4px;
+//   background: #111;
+//   background: linear-gradient(#000000,#222222);
+//   box-shadow: rgba(255,255,255,0.2) 0 0 0 1px;
+//   transition: opacity 0.2s linear;
+//   padding: 1px;
+//   display: block;
+// }
+
+// div.preview-scrubber .preview-scrubbed {
+//   background: #ffb7b7;
+//   background: linear-gradient(to bottom, #ffb7b7 0%,#f00000 50%,#f00000 100%);
+//   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb7b7', endColorstr='#f00000',GradientType=0 );
+//   height: 4px;
+//   border-radius: 4px;
+//   min-width: 6px;
+// }
+
+@keyframes progressBar-bg {
+  0% {
+    background-position:0 0
+  }
+  100% {
+    background-position:-16px 0
+  }
+}
+
 div.preview-scrubber {
   position: absolute;
   z-index: 3;
-  top: 8px;
-  left: 15px;
-  right: 15px;
-  height: 4px;
-  border-radius: 4px;
-  background: #111;
-  background: linear-gradient(#000000,#222222);
-  box-shadow: rgba(255,255,255,0.2) 0 0 0 1px;
-  transition: opacity 0.2s linear;
-  padding: 1px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
   display: block;
+
+  &.loading {
+    animation: progressBar-bg 0.8s linear 0s infinite;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    background-size: 16px 8px;
+    background-color: #666;
+    background-image: linear-gradient(315deg,transparent,transparent 33%,rgba(0,0,0,.12) 33%,rgba(0,0,0,.12) 66%,transparent 66%,transparent);
+  }
 }
 
 div.preview-scrubber .preview-scrubbed {
-  background: #ffb7b7;
-  background: linear-gradient(to bottom, #ffb7b7 0%,#f00000 50%,#f00000 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb7b7', endColorstr='#f00000',GradientType=0 );
-  height: 4px;
-  border-radius: 4px;
-  min-width: 6px;
+  width: 100%;
+  background-color: #b91f1f;
+  height: 5px;
+}
+
+.irc_pgb .progress-bar-thumb {
+  background-color: #666;
+  width: 100%;
+}
+
+.jfk-progressBar-blocking .progress-bar-thumb {
+    animation: jfk-progressBar-bg 0.8s linear 0s infinite;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    background-size: 16px 8px;
+    background-color: #6188f5;
+    background-image: linear-gradient(315deg,transparent,transparent 33%,rgba(0,0,0,.12) 33%,rgba(0,0,0,.12) 66%,transparent 66%,transparent);
+}
+
+.jfk-progressBar-blocking .progress-bar-thumb {
+    background-color: #6188f5;
+    height: 5px;
+}
+
+@keyframes jfk-progressBar-bg {
+  0%{
+    background-position:0 0
+  }
+  100%{
+    background-position:-16px 0
+  }
+}
+
+.jfk-progressbar .progress-bar-horizontal,
+.jfk-progressbar .progress-bar-vertical {
+  border-color:#999
+}
+.jfk-progressbar .progress-bar-thumb {
+  background-color:#ccc
 }
