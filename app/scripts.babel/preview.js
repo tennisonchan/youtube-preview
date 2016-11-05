@@ -22,12 +22,32 @@ function requestUrl(baseURL, paramsObject) {
   return baseURL;
 }
 
+function reduceStringToObject (str) {
+  return str && str
+    .split('&')
+    .reduce((prev, curr) => (curr = curr.split('='), Object.assign(prev, {[curr[0]]: decodeURIComponent(curr[1])})), {});
+}
+
+function getVideoUrls (str) {
+  return str && str.split(',')
+    .map(item => item
+      .split('&')
+      .reduce((prev, curr) => (curr = curr.split('='),
+        Object.assign(prev, {[curr[0]]: decodeURIComponent(curr[1])})
+      ), {})
+    )
+    .reduce((prev, curr) => Object.assign(prev, {
+      [curr.type.split(';')[0] + ':' + curr.quality]: curr
+    }), {});
+}
+
 var Preview = function(Profile, config) {
   var _this = {
     isPlay: false,
     storyboard: null,
     imgEl: null,
     rewindButton: null,
+    imgElMap: {},
     updateConfigs: function(changes) {
       for (var key in changes) {
         config[key] = changes[key].newValue;
@@ -127,8 +147,9 @@ var Preview = function(Profile, config) {
 
       return storyboard;
     },
-    loadPreviewImg: function(storyboard, imgEl) {
+    loadPreviewImg: function(storyboard, videoId) {
       console.log('storyboard', storyboard);
+      let imgEl = _this.imgElMap[videoId];
       var parent = Profile.getVideoThumb(imgEl);
       storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());
@@ -142,6 +163,16 @@ var Preview = function(Profile, config) {
           storyboard.appendThumbTo();
           _this.framesPlaying();
         };
+      }
+    },
+    loadPreviewVideo: function(storyboard, videoId) {
+      let imgEl = _this.imgElMap[videoId];
+      var parent = Profile.getVideoThumb(imgEl);
+      storyboard.set('target', imgEl);
+      if (storyboard.isNoPreview) {
+        storyboard.appendThumbTo();
+      } else {
+        storyboard.appendVideoTo();
       }
     },
     framesPlaying: function() {
@@ -161,32 +192,57 @@ var Preview = function(Profile, config) {
       console.log('mouseenter');
 
       var videoUrl = Profile.getVideoURL(this);
+      var videoId = Profile.getVideoIdFromElement(this);
       var imgEl = Profile.getImgElement(this);
+
+      _this.imgElMap[videoId] = imgEl;
+
       _this.isPlay = true;
       _this.storyboard && _this.storyboard.reset();
 
-      if (cache[videoUrl]) {
-        _this.storyboard = cache[videoUrl];
-        _this.loadPreviewImg(_this.storyboard, imgEl);
+      if (cache[videoId]) {
+        _this.storyboard = cache[videoId];
+        _this.loadPreviewVideo(_this.storyboard, videoId);
       } else {
         $.ajax({
-          dataType: 'html',
-          url: videoUrl,
-          success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html);
-            if (storyboard && !cache[this.url]) {
+          url: `//www.youtube.com/get_video_info?&video_id=${videoId}`,
+          success: function(response) {
+            let obj = reduceStringToObject(response);
+            let videoUrls = getVideoUrls(obj.url_encoded_fmt_stream_map);
+            let storyboard = obj.storyboard_spec ? new Storyboard(obj.storyboard_spec, videoUrls) : new NoPreview();
+            if (storyboard && !cache[videoId]) {
               _this.storyboard = storyboard;
-              cache[this.url] = storyboard;
-              _this.loadPreviewImg(_this.storyboard, imgEl);
+              cache[videoId] = storyboard;
+              _this.loadPreviewVideo(_this.storyboard, videoId);
+              // _this.loadPreviewImg(_this.storyboard, videoId);
             }
           },
           fail: function() {
             var noPreview = new NoPreview();
             _this.storyboard = noPreview;
-            cache[this.url] = noPreview;
-            _this.loadPreviewImg(_this.storyboard, imgEl);
+            cache[videoId] = noPreview;
+            _this.loadPreviewImg(_this.storyboard, videoId);
           }
         });
+
+        // $.ajax({
+        //   dataType: 'html',
+        //   url: videoUrl,
+        //   success: function(html) {
+        //     var storyboard = _this.getStoryboardDetails(html);
+        //     if (storyboard && !cache[videoId]) {
+        //       _this.storyboard = storyboard;
+        //       cache[videoId] = storyboard;
+        //       _this.loadPreviewImg(_this.storyboard, videoId);
+        //     }
+        //   },
+        //   fail: function() {
+        //     var noPreview = new NoPreview();
+        //     _this.storyboard = noPreview;
+        //     cache[videoId] = noPreview;
+        //     _this.loadPreviewImg(_this.storyboard, videoId);
+        //   }
+        // });
       }
     }, config.delayPreview),
     mouseleave: function() {

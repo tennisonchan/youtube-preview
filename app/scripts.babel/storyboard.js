@@ -1,9 +1,10 @@
-var Storyboard = function(storyboardSpec) {
-  var result = storyboardSpec[1].split('|');
+var Storyboard = function(storyboardSpec, videoUrls) {
+  var result = storyboardSpec.split('|');
   var baseUrl = result.shift();
   var index = result.length - 1;
   var arr = result[index].split('#');
 
+  this.videoUrls = videoUrls;
   this.init(arr, baseUrl, index);
 
   return this;
@@ -36,6 +37,25 @@ Storyboard.prototype.set = function(key, value) {
     this[key] = value;
   }
   return this;
+};
+
+Storyboard.prototype.appendVideoTo = function() {
+  let videoUrlObj = this.videoUrls['video/mp4:medium'];
+
+  if (!this.el &&
+      this.target.prevAll('.no-preview, .storyboard').length === 0) {
+
+    this.el = $('<video/>', {
+      class: 'storyboard',
+      src: videoUrlObj.url,
+      autoplay: true,
+      width: this.target.width(),
+      height: this.target.height()
+    })
+    .insertBefore(this.target);
+  }
+
+  return this.el;
 };
 
 Storyboard.prototype.appendThumbTo = function() {

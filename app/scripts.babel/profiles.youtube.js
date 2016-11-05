@@ -50,6 +50,9 @@ Profiles.youtube = function() {
       el = el || _target;
       return $(el).attr('href');
     },
+    getVideoIdFromElement: function(videoThumbEl) {
+      return $(videoThumbEl).closest('[data-context-item-id]').attr('data-context-item-id');
+    },
     getVideoId: function(videoThumbEl) {
       return $('[itemprop=videoId]').attr('content') || $('[data-video-id]').attr('data-video-id');
     },
