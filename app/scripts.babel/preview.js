@@ -119,11 +119,8 @@ var Preview = function(Profile, config) {
       var storyboard = null;
       var storyboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"');
       if (storyboardRegExp.test(html)) {
-        var storyboard_spec = storyboardRegExp.exec(html);
-        var result = storyboard_spec[1].split('|');
-        var baseUrl = result.shift();
-        var lastIndex = result.length - 1;
-        storyboard = new Storyboard(result[lastIndex], baseUrl, lastIndex);
+        let storyboardSpec = storyboardRegExp.exec(html)[1];
+        storyboard = new Storyboard(storyboardSpec);
       } else {
         storyboard = new NoPreview();
       }

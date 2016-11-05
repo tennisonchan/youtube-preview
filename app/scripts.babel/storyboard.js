@@ -1,6 +1,15 @@
-var Storyboard = function(str, baseUrl, index) {
-  var arr = str.split('#');
+var Storyboard = function(storyboardSpec) {
+  var result = storyboardSpec[1].split('|');
+  var baseUrl = result.shift();
+  var index = result.length - 1;
+  var arr = result[index].split('#');
 
+  this.init(arr, baseUrl, index);
+
+  return this;
+};
+
+Storyboard.prototype.init = function(arr, baseUrl, index) {
   this.baseUrl = baseUrl;
   this.col = Number(arr[4]);
   this.count = 0;
@@ -20,8 +29,6 @@ var Storyboard = function(str, baseUrl, index) {
   this.isPlaying = false;
 
   this.maxPage = Math.ceil(this.totalFrames / (this.row * this.col));
-
-  return this;
 };
 
 Storyboard.prototype.set = function(key, value) {
