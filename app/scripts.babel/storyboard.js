@@ -83,7 +83,6 @@ Storyboard.prototype.url = function(l, m) {
 };
 
 Storyboard.prototype.getPosition = function() {
-  console.log('getPosition', this.count);
   var row = this.row;
   if(this.maxPage === this.page() + 1) {
     var rest = this.totalFrames % (this.col * this.row);

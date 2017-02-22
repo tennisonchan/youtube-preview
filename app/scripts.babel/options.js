@@ -56,13 +56,11 @@
       timeInterval = setInterval(animate, this.value);
     })
     .on('change', function() {
-      console.log('previewInterval', this.value);
       save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms');
     });
 
   $('#rating-bar-switch')
     .on('change', function() {
-      console.log('showRatingBar', this.checked);
       let message = this.checked ? 'Show rating bar' : 'Hide rating bar';
       $('.rating-bar').toggleClass('on', this.checked);
       save_option('showRatingBar', this.checked, message);
@@ -70,7 +68,6 @@
 
   $('#rewind-button-switch')
     .on('change', function() {
-      console.log('showRewindButton', this.checked);
       let message = this.checked ? 'Show rewind button' : 'Hide rewind button';
       save_option('showRewindButton', this.checked, message);
     });

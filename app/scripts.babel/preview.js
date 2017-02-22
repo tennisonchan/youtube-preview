@@ -128,7 +128,6 @@ var Preview = function(Profile, config) {
       return storyboard;
     },
     loadPreviewImg: function(storyboard, imgEl) {
-      console.log('storyboard', storyboard);
       var parent = Profile.getVideoThumb(imgEl);
       storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());
@@ -190,7 +189,6 @@ var Preview = function(Profile, config) {
       }
     }, config.delayPreview),
     mouseleave: function() {
-      console.log('mouseleave');
       _this.storyboard && _this.storyboard.reset();
       _this.isPlay = false;
       clearTimeout(timeout);
