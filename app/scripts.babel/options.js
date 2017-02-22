@@ -54,8 +54,6 @@
     .on('input', function(e) {
       clearInterval(timeInterval);
       timeInterval = setInterval(animate, this.value);
-    })
-    .on('change', function() {
       save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms');
     });
 

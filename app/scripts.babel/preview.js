@@ -157,8 +157,6 @@ var Preview = function(Profile, config) {
 
   var thumbLinkEventHandler = {
     mouseenter: debounce(function() {
-      console.log('mouseenter');
-
       var videoUrl = Profile.getVideoURL(this);
       var imgEl = Profile.getImgElement(this);
       _this.isPlay = true;
@@ -169,8 +167,8 @@ var Preview = function(Profile, config) {
         _this.loadPreviewImg(_this.storyboard, imgEl);
       } else {
         $.ajax({
-          dataType: 'html',
           url: videoUrl,
+          dataType: 'text',
           success: function(html) {
             var storyboard = _this.getStoryboardDetails(html);
             if (storyboard && !cache[this.url]) {
