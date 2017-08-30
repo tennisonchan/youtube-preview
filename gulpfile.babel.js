@@ -158,7 +158,7 @@ gulp.task('build', ['clean'], (cb) => {
   runSequence(
     'lint', 'babel', 'chromeManifest',
     ['html', 'build-styles', 'images', 'extras'],
-    'size', cb);
+    cb);
 });
 
 gulp.task('default', ['clean'], cb => {

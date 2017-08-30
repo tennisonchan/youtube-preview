@@ -26,7 +26,8 @@ $enlarged-playlist-video-image-width: 160px;
 $enlarged-video-image-top-adjustment: -14px;
 $enlarged-video-image-top-reset: 0;
 
-.thumb-wrapper, .yt-thumb-clip, .yt-lockup-thumbnail, .ytp-videowall-still {
+
+.ytd-thumbnail {
   &:hover {
     .watched-badge {
       display: none;
@@ -46,6 +47,13 @@ $enlarged-video-image-top-reset: 0;
       & + img {
         display: none;
       }
+      & + .ytd-thumbnail > img {
+        display: none;
+      }
+    }
+
+    .storyboard ~ #mouseover-overlay {
+      display: none !important;
     }
   }
 }
@@ -93,7 +101,7 @@ $enlarged-video-image-top-reset: 0;
   }
 }
 .yt-thumb-120 .yt-thumb-clip {
-  .storyboard + img {
+  .storyboard + .ytd-thumbnail {
     top: $video-image-top-reset;
   }
   img {
@@ -123,6 +131,7 @@ $enlarged-video-image-top-reset: 0;
   margin: $playlist-preview-sparkbars-margin-in-radio-playlist !important;
 }
 .preview-sparkbars {
+  position: relative;
   clear: both;
   height: $preview-sparkbars-height;
   overflow: hidden;
@@ -133,7 +142,7 @@ $enlarged-video-image-top-reset: 0;
   > .preview-sparkbar-dislikes {
     background: $preview-sparkbars-dislikes-background-color;
   }
-   > .preview-sparkbar-dislikes,
+  > .preview-sparkbar-dislikes,
   > .preview-sparkbar-likes {
     float: left;
     height: $preview-sparkbars-height;

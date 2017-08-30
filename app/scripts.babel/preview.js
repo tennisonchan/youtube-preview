@@ -138,7 +138,7 @@ var Preview = function(Profile, config) {
         var img = new Image();
         img.src = storyboard.url();
         img.onload = function() {
-          storyboard.appendThumbTo();
+          storyboard.appendThumbTo(parent);
           _this.framesPlaying();
         };
       }

@@ -19,14 +19,14 @@ Profiles.youtube = function() {
     bookmarksScrollbox: '.bookmarks-scrollbox',
     bookmarksToggled: 'action-button-bookmarks-toggled',
     hideVideoControlClass: 'ytp-autohide',
-    imgElement: 'img, .ytp-videowall-still-image',
+    imgElement: 'img.yt-img-shadow, .ytp-videowall-still-image',
     thumbLinkSelector: 'a[href^=\'/watch\']:has(img), a[href*=\'/watch?v=\']:has(img), a[href*=\'/watch?v=\']:has(.ytp-videowall-still-image)',
     mainVideo: 'video',
     scrubber: '.preview-scrubber',
     moviePlayer: '#movie_player, .html5-video-player',
     progressBarList: '.ytp-progress-bar .ytp-progress-list',
     secondaryActions: '#watch8-secondary-actions, .watch-secondary-actions',
-    videoThumb: '.video-thumb, .yt-uix-simple-thumb-wrap',
+    videoThumb: 'yt-img-shadow.ytd-thumbnail, .video-thumb, .yt-uix-simple-thumb-wrap',
     ytpPlayProgress: '.ytp-play-progress',
     ytpScrubberButton: '.ytp-scrubber-button',
     ytpTimeCurrent: '.ytp-time-current',
@@ -39,7 +39,7 @@ Profiles.youtube = function() {
       return $(this.mainVideo);
     },
     getImgElement: function(el) {
-      var imgEl = $(el).find(this.imgElement);
+      var imgEl = $(el).andSelf().find(this.imgElement);
       if (imgEl.length) {
         _target = $(el);
         _imgEl = imgEl;
