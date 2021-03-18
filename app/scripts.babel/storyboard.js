@@ -78,7 +78,7 @@ Storyboard.prototype.page = function() {
 Storyboard.prototype.url = function(l, m) {
   l = this.index || 2;
   m = m || this.page();
-  return this.baseUrl.replace(/\\/g, '').replace('$L', l).replace('$N', 'M' + m) + '?sigh=' + this.sigh;
+  return this.baseUrl.replace(/\\/g, '').replace('$L', l).replace('$N', 'M' + m) + '&sigh=' + this.sigh;
 };
 
 Storyboard.prototype.getPosition = function() {
