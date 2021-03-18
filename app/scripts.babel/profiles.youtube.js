@@ -6,7 +6,8 @@ Profiles.youtube = function() {
     imageIdRegEx = new RegExp('vi(_webp)?\\/([a-z0-9-_=]+)\\/([a-z]*default)\\.([a-z]+)*', 'i'),
     imageIdRegExV2 = new RegExp('vi(_webp)?\\/([a-z0-9-_=]+)\\/*', 'i'),
     videoIdRegEx = new RegExp('v=([a-z0-9-_=]+)', 'i'),
-    channelImageIdRegEx = new RegExp('yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*', 'i');
+    channelImageIdRegEx = new RegExp('yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*', 'i'),
+    storyboardRegExp = new RegExp('playerStoryboardSpecRenderer":{"spec":"(.*?)\"', 'i');
 
   var _this = {
     bookmarkBtn: '.add-bookmark-btn',
@@ -79,7 +80,10 @@ Profiles.youtube = function() {
     },
     getVideoThumb: function(el) {
       return $(el).parents(this.videoThumb);
-    }
+    },
+    getStoryboardSpec: function(html) {
+      return storyboardRegExp.test(html) ? storyboardRegExp.exec(html)[1] : null;
+    },
   };
 
   return _this;

@@ -115,17 +115,8 @@ var Preview = function(Profile, config) {
         }
       });
     },
-    getStoryboardDetails: function(html) {
-      var storyboard = null;
-      var storyboardRegExp = new RegExp('\"storyboard_spec\": ?\"(.*?)\"');
-      if (storyboardRegExp.test(html)) {
-        let storyboardSpec = storyboardRegExp.exec(html)[1];
-        storyboard = new Storyboard(storyboardSpec);
-      } else {
-        storyboard = new NoPreview();
-      }
-
-      return storyboard;
+    getStoryboard: function(storyboardSpec) {
+      return storyboardSpec ? new Storyboard(storyboardSpec) : new NoPreview();
     },
     loadPreviewImg: function(storyboard, imgEl) {
       var parent = Profile.getVideoThumb(imgEl);
@@ -170,7 +161,8 @@ var Preview = function(Profile, config) {
           url: videoUrl,
           dataType: 'text',
           success: function(html) {
-            var storyboard = _this.getStoryboardDetails(html);
+            var storyboardSpec = Profile.getStoryboardSpec(html);
+            var storyboard = _this.getStoryboard(storyboardSpec);
             if (storyboard && !cache[this.url]) {
               _this.storyboard = storyboard;
               cache[this.url] = storyboard;
