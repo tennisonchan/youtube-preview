@@ -2,7 +2,7 @@
   "name": "youtube-preview",
   "private": true,
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4.9.1"
   },
   "scripts": {
     "pre-install": "npm install && bower install && npm run setup-env",
