@@ -21,9 +21,10 @@ Rewind 10-second in one click
 
 ### Setup
 ```sh
+npm run pre-install
 # Place your YouTube API key inside the env.js file
-cp app/scripts.babel/env-example.js app/scripts.babel/env.js
-npm install && bower install
+# cp app/scripts.babel/env-example.js app/scripts.babel/env.js
+# npm install && bower install
 
 # Re-compile the sources code automatically and Livereload(chromereload.js) reloads the extension
 npm start

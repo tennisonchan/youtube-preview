@@ -5,7 +5,10 @@
     "node": ">=0.8.0"
   },
   "scripts": {
+    "pre-install": "npm install && bower install && npm run setup-env",
+    "setup-env": "cp app/scripts.babel/env-example.js app/scripts.babel/env.js",
     "start": "gulp watch",
+    "build": "gulp build --production",
     "package": "gulp build --production && gulp package"
   },
   "devDependencies": {
