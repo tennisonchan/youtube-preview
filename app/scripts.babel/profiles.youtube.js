@@ -4,6 +4,7 @@ Profiles.youtube = function() {
   var _target = null,
     _imgEl = null,
     imageIdRegEx = new RegExp('vi(_webp)?\\/([a-z0-9-_=]+)\\/([a-z]*default)\\.([a-z]+)*', 'i'),
+    imageIdRegExV2 = new RegExp('vi(_webp)?\\/([a-z0-9-_=]+)\\/*', 'i'),
     videoIdRegEx = new RegExp('v=([a-z0-9-_=]+)', 'i'),
     channelImageIdRegEx = new RegExp('yts/img/pixel-([a-z0-9-_=]+)\\.([a-z]+)*', 'i');
 
@@ -60,6 +61,9 @@ Profiles.youtube = function() {
         videoId = videoThumbEl.dataset.vid;
       } else if (imageIdRegEx.test(imgSrc)) {
         result = imageIdRegEx.exec(imgSrc);
+        videoId = result[2];
+      } else if (imageIdRegExV2.test(imgSrc)) {
+        result = imageIdRegExV2.exec(imgSrc);
         videoId = result[2];
       } else if (videoIdRegEx.test(imgSrc)) {
         result = videoIdRegEx.exec(imgSrc);
