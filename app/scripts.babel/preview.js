@@ -38,10 +38,10 @@ var Preview = function(Profile, config) {
       return config;
     },
     initialize: function() {
-      document.removeEventListener('DOMNodeInserted', _this.onDOMNodeInserted);
-      document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
-      _this.delegateOnVideoThumb();
-      _this.injectRewindButton();
+      // document.removeEventListener('DOMNodeInserted', _this.onDOMNodeInserted);
+      // document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
+      // _this.delegateOnVideoThumb();
+      // _this.injectRewindButton();
 
       $(document)
         .off('mouseenter mouseleave mousemove click')
