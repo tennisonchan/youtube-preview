@@ -22,21 +22,23 @@ function requestUrl(baseURL, paramsObject) {
   return baseURL;
 }
 
+var chunk = (arr, n) => arr.length ? [arr.slice(0, n), ...chunk(arr.slice(n), n)] : [];
+
 var Preview = function(Profile, config) {
   var _this = {
     isPlay: false,
     storyboard: null,
     imgEl: null,
     rewindButton: null,
+    videoList: {},
     updateConfigs: function(changes) {
       for (var key in changes) {
         config[key] = changes[key].newValue;
       }
-
-      _this.injectRewindButton();
-      _this.delegateOnVideoThumb();
+      return config;
     },
     initialize: function() {
+      document.removeEventListener('DOMNodeInserted', _this.onDOMNodeInserted);
       document.addEventListener('DOMNodeInserted', _this.onDOMNodeInserted, true);
       _this.delegateOnVideoThumb();
       _this.injectRewindButton();
@@ -71,49 +73,53 @@ var Preview = function(Profile, config) {
       }
       return false;
     },
+    appendRatingTo: function(item) {
+      var videoSparkbar = new VideoSparkbar(item.id, item.statistics);
+      videoSparkbar.appendRatingTo($(item.el));
+    },
     delegateOnVideoThumb: function(el) {
       if (!config.showRatingBar) { return false; }
 
-      var videoList = {};
-      Profile.getVideoThumbs(el || document)
-        .each(function(i, videoThumbEl) {
-          if (videoThumbEl.offsetWidth === 0 || videoThumbEl.offsetWidth > 50) {
-            var id = Profile.getVideoIdByElement(videoThumbEl);
-            if (id) {
-              if (videoList[id]) {
-                videoList[id].push(videoThumbEl);
-              } else {
-                videoList[id] = [videoThumbEl];
-              }
-            }
+      var videoElementIdMap = Array.from(Profile.getVideoThumbs(el || document))
+        .filter((videoThumbEl) => videoThumbEl.offsetWidth === 0 || videoThumbEl.offsetWidth > 50)
+        .reduce((acc, videoThumbEl) => {
+          var id = Profile.getVideoIdByElement(videoThumbEl);
+          if (id && _this.videoList[id]) {
+            _this.appendRatingTo(_this.videoList[id]);
+            return acc;
           }
+          return id ? Object.assign(acc, { [id]: videoThumbEl }) : acc;
+        }, {});
+
+      var videoIds = Object.keys(videoElementIdMap);
+      if (!videoIds.length) return;
+
+      _this.retrieveVideoData(videoIds)
+        .then((items) => {
+          items
+            .filter(item => !!item.statistics)
+            .forEach(item => {
+              _this.videoList[item.id] = {
+                id: item.id,
+                statistics: item.statistics,
+                el: videoElementIdMap[item.id]
+              };
+              _this.appendRatingTo(_this.videoList[item.id]);
+            })
         });
-
-      _this.retrieveVideoData(videoList);
     },
-    retrieveVideoData: function(videoList) {
-      var videoIds = Object.keys(videoList);
-      if (!videoIds.length) return false;
-
-      $.ajax({
-        url: requestUrl('//www.googleapis.com/youtube/v3/videos?', {
-          part: 'statistics',
-          id: videoIds.splice(0, 50).join(','),
-          key: API_KEY
-        }),
-        dataType: 'json',
-        success: function(resp) {
-          resp.items.forEach(function(item, index) {
-            (videoList[item.id] || []).forEach(function(el) {
-              var videoSparkbar = new VideoSparkbar(item.id, item.statistics);
-              videoSparkbar.appendRatingTo($(el));
-            });
-            delete videoList[item.id];
-          });
-
-          _this.retrieveVideoData(videoList);
-        }
-      });
+    retrieveVideoData: function(videoIds) {
+      return Promise.all(chunk(videoIds, 50)
+        .map((chunkedVideoIds) =>
+          $.ajax({
+            url: requestUrl('//www.googleapis.com/youtube/v3/videos?', {
+              part: 'statistics',
+              id: chunkedVideoIds.join(','),
+              key: API_KEY
+            }),
+            dataType: 'json',
+          })
+      )).then(promises => promises.reduce((acc, resp) => [...acc, ...resp.items], []));
     },
     getStoryboard: function(storyboardSpec) {
       return storyboardSpec ? new Storyboard(storyboardSpec) : new NoPreview();

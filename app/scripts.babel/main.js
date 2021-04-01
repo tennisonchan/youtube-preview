@@ -23,7 +23,10 @@
     var profile = Profiles[list[window.location.host] || 'youtube']();
 
     App = Preview(profile, config);
-    chrome.storage.onChanged.addListener(App.updateConfigs);
+    chrome.storage.onChanged.addListener((changes) => {
+      App.updateConfigs(changes);
+      App.initialize();
+    });
   });
 
 

@@ -8,14 +8,22 @@ var VideoSparkbar = function(id, statistics) {
   this.commentCount = Number(statistics.commentCount);
 };
 
-VideoSparkbar.prototype.appendRatingTo = function(target) {
-  if (target.length && this.ratingCount) {
-    var sparkbar = this.createSparkbar();
-    sparkbar.insertAfter(target);
+VideoSparkbar.prototype.appendRatingTo = function($target) {
+  if (!$target.length || !this.ratingCount) return;
 
-    setTimeout(function() {
-      sparkbar.removeClass('loading');
-    }, 500);
+  var sparkbar = this.createSparkbar();
+  this.upsertSparkbar($target, sparkbar);
+
+  setTimeout(function() {
+    sparkbar.removeClass('loading');
+  }, 500);
+};
+
+VideoSparkbar.prototype.upsertSparkbar = function ($target, sparkbar) {
+  if($target.siblings('.preview-sparkbars').length) {
+    $target.siblings('.preview-sparkbars').replaceWith(sparkbar);
+  } else {
+    $target.after(sparkbar);
   }
 };
 

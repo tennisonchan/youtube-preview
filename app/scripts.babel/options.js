@@ -53,8 +53,10 @@
   $('#preview-intervals-slide')
     .on('input', function(e) {
       clearInterval(timeInterval);
-      timeInterval = setInterval(animate, this.value);
-      save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms');
+      timeInterval = setInterval(() => {
+        save_option('previewInterval', this.value, 'Saved preview interval as ' + this.value + ' ms');
+        animate();
+      }, this.value);
     });
 
   $('#rating-bar-switch')

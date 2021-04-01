@@ -57,7 +57,7 @@ Profiles.youtube = function() {
     },
     getVideoIdByElement: function(videoThumbEl) {
       var result, videoId = null,
-        imgSrc = this.getImgElement(videoThumbEl).attr('data-thumb') || this.getImgElement(videoThumbEl).attr('src');
+        imgSrc = this.getImgElement(videoThumbEl).attr('data-thumb') || this.getImgElement(videoThumbEl).attr('src') || videoThumbEl.baseURI;
       if (videoThumbEl.dataset.vid) {
         videoId = videoThumbEl.dataset.vid;
       } else if (imageIdRegEx.test(imgSrc)) {
