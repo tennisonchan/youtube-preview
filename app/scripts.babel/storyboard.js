@@ -38,17 +38,18 @@ Storyboard.prototype.set = function(key, value) {
 };
 
 Storyboard.prototype.appendThumbTo = function(target) {
-  if (!this.el &&
-      target.prevAll('.no-preview, .storyboard').length === 0) {
-    this.el = $('<div/>', {
+  if (!this.el) {
+    const prevElment = target.prevAll('.no-preview, .storyboard');
+    this.el = prevElment.length ? prevElment : $('<div/>', {
       class: 'storyboard'
-    })
-    .css({
+    }).css({
       width: this.frameWidth,
       height: this.frameheight,
-    })
-    .append(this.getProgressBar().getElement())
-    .insertBefore(target);
+    });
+    
+    this.el
+      .append(this.getProgressBar().getElement())
+      .insertBefore(target);
   }
 
   return this.el;
