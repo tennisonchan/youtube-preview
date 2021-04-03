@@ -2,28 +2,30 @@ var Storyboard = function(storyboardSpec) {
   var result = storyboardSpec.split('|');
   var baseUrl = result.shift();
   var index = result.length - 1;
-  var arr = result[index].split('#');
+  var resolution = result[index].split('#');
 
-  this.init(arr, baseUrl, index);
+  this.init(resolution, baseUrl, index);
 
+  console.log(this);
   return this;
 };
 
-Storyboard.prototype.init = function(arr, baseUrl, index) {
+Storyboard.prototype.init = function(resolution, baseUrl, index) {
   this.baseUrl = baseUrl;
-  this.col = Number(arr[4]);
+  this.col = Number(resolution[4]);
   this.count = 0;
   this.el = null;
-  this.frameheight = Number(arr[1]);
-  this.frameWidth = Number(arr[0]);
-  this.height = Number(arr[1]);
+  this.resolution = resolution;
+  this.frameWidth = Number(resolution[0]);
+  this.frameHeight = Number(resolution[1]);
+  this.height = Number(resolution[1]);
   this.index = index;
-  this.ms = Number(arr[5]);
-  this.row = Number(arr[3]);
-  this.sigh = arr[7];
-  this.totalFrames = Number(arr[2]);
-  this.unit = arr[6];
-  this.width = Number(arr[0]);
+  this.ms = Number(resolution[5]);
+  this.row = Number(resolution[3]);
+  this.sigh = resolution[7];
+  this.totalFrames = Number(resolution[2]);
+  this.unit = resolution[6];
+  this.width = Number(resolution[0]);
   this.progressBar = null;
   this.isPlaying = false;
 
@@ -37,14 +39,22 @@ Storyboard.prototype.set = function(key, value) {
   return this;
 };
 
+Storyboard.prototype.getScale = function() {
+  const proportionWidth = this.frameWidth / this.width;
+  const proportionHeight = this.frameHeight / this.height;
+  return Math.min(proportionWidth, proportionHeight);
+};
+
 Storyboard.prototype.appendThumbTo = function(target) {
   if (!this.el) {
+    const scale = this.getScale();
     const prevElment = target.prevAll('.no-preview, .storyboard');
     this.el = prevElment.length ? prevElment : $('<div/>', {
       class: 'storyboard'
     }).css({
-      width: this.frameWidth,
-      height: this.frameheight,
+      width: this.width * scale,
+      height: this.height * scale,
+      margin: 'auto',
     });
     
     this.el
@@ -76,23 +86,27 @@ Storyboard.prototype.page = function() {
   return page % this.maxPage;
 };
 
-Storyboard.prototype.url = function(l, m) {
-  l = this.index || 2;
-  m = m || this.page();
-  return this.baseUrl.replace(/\\/g, '').replace('$L', l).replace('$N', 'M' + m) + '&sigh=' + this.sigh;
+Storyboard.prototype.url = function() {
+  const $L = this.index;
+  const $M = this.page();
+  const $N = this.unit.replace('$M', $M);
+  return this.baseUrl.replace(/\\/g, '').replace('$L', $L).replace('$N', $N) + '&sigh=' + this.sigh;
 };
 
 Storyboard.prototype.getPosition = function() {
   var row = this.row;
+  const scale = this.getScale();
+
   if(this.maxPage === this.page() + 1) {
     var rest = this.totalFrames % (this.col * this.row);
     row = Math.ceil(rest / this.col);
   }
   return {
-    left: -1 * this.frameWidth * (this.count % this.col),
-    top: -1 * this.frameheight * (Math.floor((this.count / row)) % row),
-    width: (this.frameWidth * (this.width * this.col) / this.width),
-    height: (this.frameheight * row)
+    scale,
+    left: -1 * this.width * scale * (this.count % this.col),
+    top: -1 * this.height * scale * (Math.floor((this.count / row)) % row),
+    width: this.width * this.col * scale,
+    height: this.height * row * scale,
   };
 };
 

@@ -1,6 +1,6 @@
 var NoPreview = function() {
   this.el = null;
-  this.frameheight = 0;
+  this.frameHeight = 0;
   this.frameWidth = 0;
   this.height = 0;
   this.width = 0;
@@ -28,9 +28,9 @@ NoPreview.prototype.appendThumbTo = function(target) {
       text: 'No Preview'
     })
     .css({
-      lineHeight: this.frameheight + 'px',
+      lineHeight: this.frameHeight + 'px',
       width: this.frameWidth,
-      height: this.frameheight,
+      height: this.frameHeight,
     }).insertBefore(this.target);
   }
 

@@ -128,7 +128,7 @@ var Preview = function(Profile, config) {
       var parent = Profile.getVideoThumb(imgEl);
       storyboard.set('target', imgEl);
       storyboard.set('frameWidth', parent.width() || imgEl.width());
-      storyboard.set('frameheight', parent.height() || imgEl.height());
+      storyboard.set('frameHeight', parent.height() || imgEl.height());
       if (storyboard.isNoPreview) {
         storyboard.appendThumbTo();
       } else {
